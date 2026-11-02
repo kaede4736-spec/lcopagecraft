@@ -5,8 +5,12 @@
 :root { --bg-a:#f6f8fc; --bg-b:#cdd6ea; --ink:#25234a; --ink-soft:#5e6785; --chip-bg:rgba(255,255,255,.92); --chip-line:#cbd3e6; --accent:#4287cc; --accent-ink:#fff; --panel:#ffffff; --mk1:#4287cc; --mk2:#e4622e; --hov:rgba(66,135,204,.1); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg-a:#26264a; --bg-b:#0c0c1e; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#7ec8dc; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; } }
 :root[data-theme="dark"] { --bg-a:#26264a; --bg-b:#0c0c1e; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#7ec8dc; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; }
-html, body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
-body { background: radial-gradient(ellipse at 50% 38%, var(--bg-a), var(--bg-b)); color: var(--ink); font-family: "Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif; -webkit-tap-highlight-color: transparent; touch-action: none; }
+html, :root { --veil: rgba(0,0,0,0); }
+html { height: 100%; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --veil: rgba(18,14,20,.58); } }
+:root[data-theme="dark"] { --veil: rgba(18,14,20,.58); }
+body { height: 100%; margin: 0; padding: 0; overflow: hidden; }
+body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) center / cover no-repeat fixed, #c9a57c; min-height: 100vh; color: var(--ink); font-family: "Noto Sans KR","Malgun Gothic","Apple SD Gothic Neo",system-ui,sans-serif; -webkit-tap-highlight-color: transparent; touch-action: none; }
 :root { padding: 0; }
 #gl { position: fixed; inset: 0; width: 100%; height: 100%; display: block; }
 #brand { position: fixed; top: calc(14px + env(safe-area-inset-top, 0px)); left: max(16px, env(safe-area-inset-left, 0px)); margin: 0; font-weight: 700; font-size: 16px; display: flex; align-items: center; gap: 8px; z-index: 3; }
@@ -526,6 +530,7 @@ body { background: radial-gradient(ellipse at 50% 38%, var(--bg-a), var(--bg-b))
     pen.rotation.z = Math.PI / 2; pen.rotation.y = .5; pen.position.set(-W / 2 - 2.6, .21, 1.8); pen.scale.setScalar(.8); props.add(pen);
     var mugG = new THREE.Group(); [mug, cof, hd, sau].forEach(function (m) { props.remove(m); mugG.add(m); }); mugG.position.set(W / 2 + 4.6, 0, -2.4); mugG.scale.setScalar(.62); props.add(mugG);
   })();
+  desk.visible = false; props.visible = false; // desk photo is the page background (desk.jpg)
   var deskBB = new THREE.Box3(), deskDark = false, deskChk = 0;
   function deskIsDark() { var r = document.documentElement.getAttribute("data-theme"); if (r === "dark") return true; if (r === "light") return false; return !!(window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches); }
 
