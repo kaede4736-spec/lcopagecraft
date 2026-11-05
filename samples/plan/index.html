@@ -1,3 +1,4 @@
+<!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
 <title>LCO Pagecraft 기획서</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap">
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -54,7 +55,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
 </style>
 <canvas id="gl" aria-label="가로형 3D 기획서 책"></canvas><div id="vig"></div>
 <p id="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z" style="fill:var(--mk1)"/><path d="M21 5.5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" style="fill:var(--mk2)"/></svg><span>LCO Pagecraft<small>가로 3D 기획서 · 샘플</small></span></p>
-<div id="tools"><button class="tool" id="vidBtn" type="button" hidden>영상 보기</button><button class="tool" id="origBtn" type="button">원문 보기</button></div>
+<div id="tools"><button class="tool" id="qrBtn" type="button">QR</button><button class="tool" id="vidBtn" type="button" hidden>영상 보기</button><button class="tool" id="origBtn" type="button">원문 보기</button></div>
 <p id="hint">위로 쓸어 올리거나 ▶ 를 눌러 한 장씩 넘겨 보세요</p>
 <div id="bar" role="toolbar" aria-label="책 조작">
   <button id="tocBtn" type="button" aria-label="목차">☰</button>
@@ -727,3 +728,12 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
   label(); requestAnimationFrame(frame);
 })();
 </script>
+
+<div id="qrm" class="modal" role="dialog" aria-modal="true" aria-label="QR" hidden><div style="background:#fff;border-radius:18px;padding:20px;text-align:center;max-width:300px;color:#1f3a44"><div style="font-weight:700;margin-bottom:10px">휴대폰으로 열기</div><div id="qrbox" style="display:grid;place-items:center;padding:6px"></div><p style="font-size:12px;color:#5d7480;margin:10px 0 12px">카메라로 스캔하면 같은 책자가 휴대폰에서 열립니다.</p><button type="button" id="qrClose" class="mbtn" style="color:#1f3a44;border-color:#c3d6da;background:#f2f6f7">닫기</button></div></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>(function(){var b=document.getElementById("qrBtn"),m=document.getElementById("qrm"),made=false;
+b.addEventListener("click",function(){m.hidden=false;if(!made&&window.QRCode){new QRCode(document.getElementById("qrbox"),{text:"https://lcopagecraft.com/samples/plan/",width:200,height:200,colorDark:"#1f3a44",correctLevel:QRCode.CorrectLevel.M});made=true;}});
+document.getElementById("qrClose").addEventListener("click",function(){m.hidden=true;});
+m.addEventListener("click",function(e){if(e.target===m)m.hidden=true;});})();</script>
+
+</body></html>
