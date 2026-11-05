@@ -1,0 +1,602 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>보험 보장분석 3D 책자</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#0E2A47;--soft:#4B5F78;--glass:rgba(255,255,255,.88);--line:rgba(14,42,71,.14);--acc:#0E2A47;--hi:#FFC301;--hov:rgba(14,42,71,.08)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--glass:rgba(255,255,255,.88)}}
+:root[data-theme="dark"]{--glass:rgba(255,255,255,.88)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#C79E72 url("desk.jpg") center/cover no-repeat;font-family:"Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-tap-highlight-color:transparent;user-select:none;touch-action:none}
+#vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,rgba(255,255,255,.10) 0%,rgba(0,0,0,0) 42%,rgba(24,20,28,.30) 100%);z-index:3}
+#stage{position:fixed;inset:0;z-index:2}
+canvas{display:block}
+.brand{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:16px;z-index:5;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--line);box-shadow:0 8px 24px rgba(40,25,10,.18)}
+.brand img{height:28px;width:auto;display:block}
+.brand small{font-size:12px;color:var(--soft);border-left:1px solid var(--line);padding-left:10px;white-space:nowrap}
+.tools{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:16px;z-index:5;display:flex;gap:8px}
+.tool{height:40px;min-width:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font:700 14px "Noto Sans KR";cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 8px 24px rgba(40,25,10,.16)}
+.tool:hover{background:#fff}
+.tool svg{width:17px;height:17px}
+.bar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:4px;padding:6px 8px;border-radius:999px;background:var(--glass);border:1px solid var(--line);box-shadow:0 10px 30px rgba(40,25,10,.25);max-width:calc(100vw - 24px)}
+.bar button{width:40px;height:40px;border:0;border-radius:50%;background:transparent;color:var(--ink);font-size:18px;cursor:pointer;display:grid;place-items:center;flex:none}
+.bar button:hover{background:var(--hov)}
+.bar button:disabled{opacity:.28;cursor:default}
+.bar button.pri{background:var(--ink);color:#fff}
+.bar button.pri:disabled{background:var(--ink)}
+.lab{min-width:200px;text-align:center;line-height:1.25;padding:0 6px}
+.lab b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;margin:0 auto}
+.lab i{font-style:normal;font-size:12px;color:var(--soft)}
+.lab i em{font-style:normal;color:var(--ink);background:var(--hi);padding:0 6px;border-radius:5px;font-weight:700}
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:4;padding:8px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--line);font-size:13px;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis;transition:opacity .6s}
+.hint.off{opacity:0;pointer-events:none}
+.panel{position:fixed;top:64px;right:16px;width:310px;max-width:calc(100vw - 32px);max-height:calc(100vh - 170px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;z-index:6;display:none;box-shadow:0 18px 40px rgba(40,25,10,.3)}
+.panel.on{display:block}
+.panel h4{font-size:13px;color:var(--soft);margin:2px 4px 8px}
+.toc a{display:flex;gap:10px;align-items:center;padding:8px;border-radius:9px;cursor:pointer;font-size:14px}
+.toc a:hover{background:var(--hov)}
+.toc a b{width:26px;height:22px;border-radius:6px;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center;flex:none}
+#qrbox{padding:12px;display:grid;place-items:center}
+.note{font-size:12px;color:var(--soft);line-height:1.5}
+#load{position:fixed;inset:0;display:grid;place-items:center;z-index:9;background:#C79E72 url("desk.jpg") center/cover;transition:opacity .6s}
+#load div{padding:10px 18px;border-radius:999px;background:var(--glass);font-weight:700}
+@media (max-width:640px){.brand small{display:none}.brand img{height:18px}.lab{min-width:120px}.lab b{max-width:150px;font-size:13px}.bar .s{display:none}.tool span{display:none}.tool{padding:0 11px}}
+</style>
+</head>
+<body>
+<div id="stage"></div><div id="vig"></div>
+<div id="load"><div>책자를 준비하는 중…</div></div>
+<div class="brand"><img src="logo.png" alt="LCO Pagecraft"><small>보험 보장분석 · 3D 샘플</small></div>
+<div class="tools">
+  <button class="tool" id="bToc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
+  <button class="tool" id="bQr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg><span>QR</span></button>
+  <button class="tool" id="bSnd" title="효과음">♪</button>
+</div>
+<div class="hint" id="hint">책을 끌어서 돌려 보세요 · ▶ 를 누르면 펼쳐집니다</div>
+<div class="panel" id="pToc"><h4>목차</h4><div class="toc" id="toc"></div></div>
+<div class="panel" id="pQr"><h4>QR로 휴대폰에서 열기</h4><div id="qrbox"></div><p class="note">휴대폰 카메라로 스캔하면 같은 책자가 열립니다. 휴대폰 카메라로 스캔하면 같은 책자가 열립니다. 본 책자는 가상의 보장분석 샘플이며 실제 보험 가입정보·상품이 아닙니다.</p></div>
+<div class="bar">
+  <button class="s" id="bFirst" title="처음으로">⏮</button>
+  <button id="bPrev" title="이전">‹</button>
+  <div class="lab"><b id="labT">표지</b><i id="labM">요약</i></div>
+  <button class="pri" id="bNext" title="다음">›</button>
+  <button class="s" id="bLast" title="끝으로">⏭</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const BOOK={
+  title:"보험 보장분석 보고서", pageTitle:"보험 보장분석 3D 책자", brandSub:"보험 보장분석 · 3D 샘플",
+  qrNote:"휴대폰 카메라로 스캔하면 같은 책자가 열립니다. 본 책자는 가상의 보장분석 샘플이며 실제 보험 가입정보·상품이 아닙니다.",
+  share:"https://lcopagecraft.com/samples/insurance/",
+  TW:1500, TH:2100, ink:"#0E2A47", accent:"#F5C842", live:[8],
+  titles:["종합 보장분석 현황","계약 및 보험료 현황","전체 담보별 보장 비교표","사망·후유장해 보장 분석","암·뇌·심장 진단비 분석","실손·입원·수술비 보장 분석","운전자·기타 보장 분석","신체 부위별 보장 연결도","보장 진단 및 주요 현황","종합 분석결과 및 점검 과제"],
+  cover:{tag:"INSURANCE COVERAGE REPORT", lines:["보험 보장분석","보고서"], sub:"2개 계약 · 23개 담보를 충족·부족·미가입으로 진단", date:"2026.11",
+    art(g,b){ const cx=b.x+b.w/2+40, cy=b.y+360, Ro=290, Ri=185; let a0=-Math.PI/2; const GR="#2F8466",RD="#C94B50",GY="#8A97A6";
+      g.save(); g.shadowColor="rgba(0,0,0,.45)"; g.shadowBlur=50; g.shadowOffsetY=26; g.beginPath(); g.arc(cx,cy,Ro,0,7); g.fillStyle="#0A2038"; g.fill(); g.restore();
+      [[12,GR],[3,RD],[8,GY]].forEach(([v,c])=>{const a1=a0+v/23*Math.PI*2; for(let k=14;k>=0;k-=2){g.beginPath();g.arc(cx,cy+k,Ro,a0,a1);g.arc(cx,cy+k,Ri,a1,a0,true);g.closePath();g.fillStyle=k?"rgba(0,0,0,.25)":c;g.fill();} a0=a1;});
+      T(g,"23",cx,cy+40,FN(900,150),"#fff","center"); T(g,"보장 항목",cx,cy+100,FN(500,40),"rgba(255,255,255,.75)","center");
+      [["충족","12",GR],["부족","3",RD],["미가입","8",GY]].forEach(([t,v,c],i)=>{const x=cx+(i-1)*390,y=b.y+800;
+        R(g,x-165,y-70,330,150,22);g.fillStyle="rgba(255,255,255,.08)";g.fill();g.fillStyle=c;g.fillRect(x-165,y-70,330,8);
+        T(g,v+"개",x,y+30,FN(900,72),"#fff","center");T(g,t,x,y+68,FN(500,34),"rgba(255,255,255,.75)","center");}); } },
+  back:{lines:["본 자료는 형식 확인을 위한","가상의 분석 샘플입니다"], notes:["실제 평가는 보험증권·약관·연령·소득·가족상황·","가입목적 확인이 필요합니다.","비교금액·충족 판정은 설명용 임의 가정입니다."]}
+};
+
+const SHARE_URL = BOOK.share || location.href.split("?")[0].split("#")[0];
+const TITLES = BOOK.titles.slice(); if(TITLES.length%2) TITLES.push("");
+const NP=TITLES.length, TW=BOOK.TW, TH=BOOK.TH, W=1, H=TH/TW, NL=NP/2+1, LAST=NP+1, LAND=TW>TH;
+const INK=BOOK.ink||"#0E2A47", ACC=BOOK.accent||"#FFC301";
+const FN=(w,s)=>`${w} ${s}px "Noto Sans KR"`;
+const cl=x=>x<0?0:x>1?1:x, pr=(t,d,u)=>cl((t-d)/u), eO=x=>1-Math.pow(1-x,3), eB=x=>{x=cl(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+function T(g,s,x,y,f,c,a){g.font=f;g.fillStyle=c||"#1F2A37";g.textAlign=a||"left";g.textBaseline="alphabetic";g.fillText(s,x,y);}
+function R(g,x,y,w,h,r){r=Math.min(r,w/2,h/2);g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function fitFont(g,txt,maxW,size,weight){let z=size;g.font=FN(weight,z);while(g.measureText(txt).width>maxW&&z>12){z-=2;g.font=FN(weight,z);}return z;}
+let P=[];
+/* ===== live report pages: 1500x2100 canvas, drawn at time t (s) ===== */
+const K={navy:"#0E2A47",yel:"#F5C842",grn:"#2F8466",red:"#C94B50",gry:"#66717F",blu:"#246A9F",teal:"#1A88A8",bg:"#F6F8FA",bd:"#D6DEE8",alt:"#F1F4F7",txt:"#1F2A37",sub:"#5B6573",line:"#E1E7EE"};
+const SC={"충족":K.grn,"부족":K.red,"미가입":K.gry};
+const n2=(v)=>Math.round(v).toLocaleString("ko-KR");
+function edge(g,x,y,w,h,r,c1,c2,d){for(let k=d;k>=1;k--){R(g,x+k*.35,y+k,w,h,r);g.fillStyle=k>d*.5?c1:c2;g.fill();}}
+function box(g,x,y,w,h,stripe){g.save();g.shadowColor="rgba(14,42,71,.22)";g.shadowBlur=26;g.shadowOffsetY=16;R(g,x,y+6,w,h,18);g.fillStyle="#C9D3DE";g.fill();g.restore();
+  edge(g,x,y,w,h,18,"#C3CDD9","#D9E1EA",10);
+  const gr=g.createLinearGradient(x,y,x+w*.3,y+h);gr.addColorStop(0,"#FFFFFF");gr.addColorStop(1,"#F4F7FA");R(g,x,y,w,h,18);g.fillStyle=gr;g.fill();g.strokeStyle=K.bd;g.lineWidth=2;g.stroke();
+  g.save();g.strokeStyle="rgba(255,255,255,.9)";g.lineWidth=3;g.beginPath();g.moveTo(x+18,y+2);g.lineTo(x+w-18,y+2);g.stroke();g.restore();
+  if(stripe){g.save();R(g,x,y,w,h,18);g.clip();g.fillStyle=stripe;g.fillRect(x,y,w,10);g.restore();}}
+function badge(g,cx,cy,s,k,w){k=k===undefined?1:k;if(k<=0)return;w=w||124;g.save();g.translate(cx,cy);g.scale(k,k);const c=SC[s]||K.gry;g.globalAlpha*=1;R(g,-w/2,-23+6,w,46,11);g.fillStyle='rgba(0,0,0,.28)';g.fill();R(g,-w/2,-23,w,46,11);g.fillStyle=c;g.fill();g.fillStyle='rgba(255,255,255,.22)';R(g,-w/2+3,-21,w-6,14,8);g.fill();T(g,s,0,10,FN(700,26),"#fff","center");g.restore();}
+function head(g,no,title,intro){
+  g.fillStyle=K.bg;g.fillRect(0,0,1500,2100);
+  g.fillStyle=K.navy;g.fillRect(0,0,1500,176);g.fillStyle=K.yel;g.fillRect(0,176,1500,14);
+  T(g,"보험 보장분석 보고서",70,68,FN(500,32),"rgba(255,255,255,.88)");
+  T(g,title,68,142,FN(900,58),"#fff");
+  R(g,1290,48,140,64,22);g.fillStyle=K.yel;g.fill();T(g,String(no).padStart(2,"0")+" / 10",1360,92,FN(700,30),K.navy,"center");
+  T(g,intro,72,245,FN(400,28),K.sub);
+  g.fillStyle=K.bd;g.fillRect(65,2000,1370,3);
+  T(g,"가상 샘플 | 실제 보험 가입정보·보험사 상품이 아닙니다",70,2048,FN(400,24),K.sub);
+  T(g,"2026.11.04  |  SAMPLE ONLY",1430,2048,FN(400,24),K.sub,"right");
+}
+function sec(g,y,s,t,d){const a=eO(pr(t,d||0,.4));R(g,70,y+6,1360*Math.max(.02,a),54,14);g.fillStyle='#061A2E';g.fill();R(g,70,y,1360*Math.max(.02,a),54,14);g.fillStyle=K.navy;g.fill();g.fillStyle=K.yel;R(g,70,y,10,54,5);g.fill();g.save();g.globalAlpha=a;T(g,s,94,y+37,FN(700,30),"#fff");g.restore();}
+function kpi(g,x,y,w,h,lab,val,sub,col,t,d){const a=eO(pr(t,d,.5));g.save();g.globalAlpha=a;g.translate(0,(1-a)*24);box(g,x,y,w,h,col);
+  T(g,lab,x+26,y+60,FN(400,30),K.sub);T(g,typeof val==="function"?val(eO(pr(t,d+.1,1.1))):val,x+24,y+130,FN(900,62),col);T(g,sub,x+26,y+165,FN(400,24),K.sub);g.restore();}
+function note(g,y,h,lines,t,d,bold){const a=eO(pr(t,d,.5));g.save();g.globalAlpha=a;R(g,70,y,1360,h,18);g.fillStyle="#FFF5D6";g.fill();
+  let yy=y+60;lines.forEach((s,i)=>{if(i===0&&bold){T(g,s,100,yy,FN(700,32),K.txt);yy+=58;}else{g.fillStyle=K.blu;R(g,100,yy-22,22,22,4);g.fill();T(g,s,136,yy,FN(400,28),K.txt);yy+=56;}});g.restore();}
+function bullets(g,x,y,lines,t,d){lines.forEach((s,i)=>{const a=eO(pr(t,d+i*.15,.4));g.save();g.globalAlpha=a;g.translate((1-a)*30,0);g.fillStyle=K.blu;R(g,x,y+i*62-22,22,22,4);g.fill();T(g,s,x+36,y+i*62,FN(400,30),K.txt);g.restore();});}
+/* table: cols widths sum 1360 */
+function table(g,y,cols,hd,rows,rh,t,o){o=o||{};const st=o.st||.06,fs=o.fs||32,x0=70,hh=54,H=hh+rows.length*rh;
+  g.save();g.shadowColor='rgba(14,42,71,.2)';g.shadowBlur=24;g.shadowOffsetY=14;R(g,x0,y+6,1360,H,14);g.fillStyle='#C9D3DE';g.fill();g.restore();edge(g,x0,y,1360,H,14,'#C3CDD9','#D9E1EA',9);
+  g.save();R(g,x0,y,1360,H,14);g.clip();g.fillStyle="#fff";g.fillRect(x0,y,1360,H);
+  g.fillStyle=K.navy;g.fillRect(x0,y,1360,hh);let x=x0;cols.forEach((w,j)=>{T(g,hd[j],x+w/2,y+37,FN(700,27),"#fff","center");x+=w;});
+  rows.forEach((r,i)=>{const yy=y+hh+i*rh,a=eO(pr(t,.15+i*st,.45));if(i%2){g.fillStyle=K.alt;g.fillRect(x0,yy,1360,rh);}
+    g.save();g.globalAlpha=a;g.translate((1-a)*36,0);x=x0;
+    r.forEach((c,j)=>{const w=cols[j],cy=yy+rh/2;
+      if(SC[c]&&j>0){badge(g,x+w/2,cy,c,eB(pr(t,.45+i*st,.4)),Math.min(124,w-30));}
+      else if(j===0) T(g,c,x+16,cy+fs*.36,FN(700,fs),K.txt);
+      else T(g,c,x+w/2,cy+fs*.36,FN(400,fs),c==="—"?"#9AA4B0":K.txt,"center");
+      x+=w;});
+    g.restore();g.fillStyle=K.line;g.fillRect(x0,yy+rh-1,1360,2);});
+  x=x0;cols.slice(0,-1).forEach(w=>{x+=w;g.fillStyle=K.line;g.fillRect(x-1,y+hh,2,H-hh);});
+  g.restore();R(g,x0,y,1360,H,14);g.strokeStyle=K.bd;g.lineWidth=2;g.stroke();return y+H;}
+
+const C6=[400,165,180,180,230,205];
+P=[];
+/* 1 */
+P.push((g,t)=>{head(g,1,"종합 보장분석 현황","2개 가상 보험사 계약을 항목별로 비교한 샘플 보고서입니다.");
+  const w=(1360-72)/3;
+  kpi(g,70,285,w,178,"보험 계약",e=>Math.round(2*e)+"건","A손해보험 1건 · B생명보험 1건",K.blu,t,0);
+  kpi(g,70+w+36,285,w,178,"월 납입보험료",e=>n2(144710*e)+"원","연 납입액 1,736,520원",K.teal,t,.1);
+  kpi(g,70+2*(w+36),285,w,178,"비교 항목",e=>Math.round(23*e)+"개","비교 기준은 샘플용 가정",K.grn,t,.2);
+  sec(g,515,"보장 충족 현황",t,.2);box(g,70,590,1360,490);
+  const cx=345,cy=835,Ro=200,Ri=120,seg=[[12,K.grn],[3,K.red],[8,K.gry]],sw=eO(pr(t,.4,1.3));let a0=-Math.PI/2,acc=0;
+  seg.forEach(([v,c])=>{const a1=-Math.PI/2+Math.min(acc+v,23*sw)/23*Math.PI*2;if(a1>a0){g.beginPath();g.arc(cx,cy,Ro,a0,a1);g.arc(cx,cy,Ri,a1,a0,true);g.closePath();g.fillStyle=c;g.fill();}acc+=v;a0=Math.max(a0,a1);});
+  T(g,Math.round(23*sw)+"개",cx,cy+18,FN(900,66),K.navy,"center");T(g,"보장항목",cx,cy+62,FN(400,28),K.sub,"center");
+  [["충족",12,K.grn],["부족",3,K.red],["미가입",8,K.gry]].forEach(([s,v,c],i)=>{const y=700+i*120,e=eO(pr(t,.6+i*.2,.8));g.save();g.globalAlpha=pr(t,.6+i*.2,.3);
+    R(g,660,y-34,40,40,8);g.fillStyle=c;g.fill();T(g,`${s}: ${Math.round(v*e)}개`,725,y,FN(700,40),K.txt);T(g,(v/23*100*e).toFixed(1)+"%",1360,y,FN(700,44),c,"right");
+    g.fillStyle=K.line;R(g,725,y+24,635,10,5);g.fill();g.fillStyle=c;R(g,725,y+24,635*v/23*e,10,5);g.fill();g.restore();});
+  sec(g,1135,"주요 보장 항목 요약",t,.4);
+  table(g,1210,[480,320,340,220],["주요 항목","가입금액","예시 비교금액","상태"],[["상해사망","1억 8,000만","2억","부족"],["일반암 진단비","3,000만","5,000만","부족"],["뇌혈관질환 진단비","0원","3,000만","미가입"],["허혈성심장질환 진단비","0원","3,000만","미가입"],["질병 수술비","400만","200만","충족"],["교통사고처리지원금","2억 1,000만","2억","충족"]],92,t-.5);
+});
+/* 2 */
+P.push((g,t)=>{head(g,2,"계약 및 보험료 현황","계약별 보험회사·상품명·납입보험료·가입상태를 확인합니다.");
+  sec(g,285,"계약 목록",t,0);
+  table(g,360,[120,240,480,250,270],["번호","보험회사","보험 상품명","월 보험료","계약 상태"],[["01","A손해보험","운전자·상해 보험(가상)","17,000원","정상 / 예시"],["02","B생명보험","종합건강보험(가상)","127,710원","정상 / 예시"]],108,t);
+  const w=(1360-36)/2;
+  kpi(g,70,640,w,178,"월 납입보험료",e=>n2(144710*e)+"원","두 계약 합산",K.blu,t,.3);
+  kpi(g,70+w+36,640,w,178,"연 환산 보험료",e=>n2(1736520*e)+"원","월 보험료 × 12개월",K.teal,t,.4);
+  sec(g,875,"보험사별 월 납입 보험료",t,.4);box(g,70,950,1360,370);
+  [["A손해보험",17000,K.yel],["B생명보험",127710,K.blu]].forEach(([s,v,c],i)=>{const y=1040+i*130,e=eO(pr(t,.7+i*.25,1.1));
+    T(g,s,120,y,FN(700,34),K.txt);T(g,`${n2(v*e)}원 · ${(v/144710*100*e).toFixed(1)}%`,1380,y,FN(700,32),i?K.blu:"#B88A00","right");
+    g.fillStyle=K.line;R(g,120,y+24,1260,26,13);g.fill();g.fillStyle=c;R(g,120,y+24,Math.max(26,1260*v/144710*e),26,13);g.fill();});
+  T(g,"막대 길이 = 월 보험료 합계(144,710원) 대비 비중",120,1290,FN(400,24),K.sub);
+  sec(g,1375,"계약별 기재된 담보 구분",t,.6);box(g,70,1450,1360,360);
+  [["A손해보험","운전자 비용·배상책임·상해사망(일부)",6],["B생명보험","사망·진단비·수술비·입원일당 등",10]].forEach(([s,d,n],i)=>{const y=1555+i*160,a=eO(pr(t,.9+i*.2,.5));g.save();g.globalAlpha=a;g.translate((1-a)*30,0);
+    T(g,s,110,y,FN(700,40),K.blu);T(g,d,360,y,FN(400,34),K.txt);R(g,1190,y-40,200,54,27);g.fillStyle="#E7F0F8";g.fill();T(g,`담보 ${Math.round(n*eO(pr(t,1+i*.2,.8)))}개`,1290,y-3,FN(700,28),K.blu,"center");g.restore();
+    if(!i){g.fillStyle=K.line;g.fillRect(110,1632,1280,2);}});
+});
+/* 3 */
+const ALL=[["상해사망","3,000","15,000","18,000","20,000","부족"],["질병사망","—","5,000","5,000","10,000","부족"],["상해80%이상 후유장해","—","5,000","5,000","5,000","충족"],["질병80%이상 후유장해","—","—","—","5,000","미가입"],["일반암 진단비","—","3,000","3,000","5,000","부족"],["유사암 진단비","—","2,100","2,100","2,000","충족"],["고액암 진단비","—","—","—","3,000","미가입"],["뇌혈관질환 진단비","—","—","—","3,000","미가입"],["뇌졸중 진단비","—","2,000","2,000","2,000","충족"],["허혈성심장질환 진단비","—","—","—","3,000","미가입"],["급성심근경색증 진단비","—","2,000","2,000","2,000","충족"],["실손 입원의료비","—","—","—","○","미가입"],["실손 통원의료비","—","—","—","○","미가입"],["3대 비급여 특약","—","—","—","○","미가입"],["상해 수술비","—","—","—","100","미가입"],["질병 수술비","—","400","400","200","충족"],["상해 입원일당","—","3만/일","3만/일","3만/일","충족"],["질병 입원일당","—","4만/일","4만/일","3만/일","충족"],["벌금(대인)","3,500","—","3,500","3,000","충족"],["교통사고처리지원금","21,000","—","21,000","20,000","충족"],["변호사선임비용","5,000","—","5,000","5,000","충족"],["자동차사고부상치료비","30","—","30","30","충족"],["가족일상생활배상책임","10,000","—","10,000","10,000","충족"]];
+P.push((g,t)=>{head(g,3,"전체 담보별 보장 비교표","단위: 만원(일당은 만원/일)  |  가입형 특약은 가입 여부로 표시");
+  sec(g,285,"보험회사별 담보 가입금액 및 예시 비교 기준",t,0);
+  table(g,360,C6,["담보명","A손보","B생명","가입합계","비교금액","결과"],ALL,58,t,{st:.045,fs:28});
+  note(g,1800,96,["※ 비교금액·충족 판정은 설명용 임의 가정이며 보험 가입 권고 기준이 아닙니다."],t,1.3,true);
+});
+/* 4 */
+P.push((g,t)=>{head(g,4,"사망·후유장해 보장 분석","사망·고도후유장해 4개 담보의 회사별 금액을 비교합니다.");
+  sec(g,285,"사망·후유장해 담보별 가입금액",t,0);
+  table(g,360,C6,["담보명","A손보","B생명","가입합계","비교금액","결과"],[["상해사망","3,000만","1억 5,000만","1억 8,000만","2억","부족"],["질병사망","0만","5,000만","5,000만","1억","부족"],["상해80%이상 후유장해","0만","5,000만","5,000만","5,000만","충족"],["질병80%이상 후유장해","0만","0만","0만","5,000만","미가입"]],108,t,{fs:30});
+  sec(g,915,"비교금액 대비 가입 비율",t,.4);box(g,70,990,1360,520);
+  [["상해사망",18000,20000,"부족"],["질병사망",5000,10000,"부족"],["상해80%이상 후유장해",5000,5000,"충족"],["질병80%이상 후유장해",0,5000,"미가입"]].forEach(([s,v,c,st],i)=>{const y=1075+i*112,e=eO(pr(t,.6+i*.2,1.1)),col=SC[st];
+    T(g,s,120,y,FN(700,32),K.txt);T(g,`${n2(v*e)} / ${n2(c)}만 · ${Math.round(v/c*100*e)}%`,1380,y,FN(700,30),col,"right");
+    g.fillStyle=K.line;R(g,120,y+22,1260,24,12);g.fill();if(v>0){g.fillStyle=col;R(g,120,y+22,Math.max(24,1260*v/c*e),24,12);g.fill();}});
+  sec(g,1565,"보장분석 메모",t,.8);box(g,70,1640,1360,280);
+  bullets(g,110,1715,["상해사망: 가상 가입합계 1억 8,000만 원(두 계약에 담보 존재)","질병사망: 가상 비교금액보다 5,000만 원 적음","질병 80% 이상 후유장해: 샘플 계약에 기재 없음"],t,1.1);
+});
+/* 5 */
+P.push((g,t)=>{head(g,5,"암·뇌·심장 진단비 분석","질병군별 진단비는 보장 범위와 지급 조건을 함께 확인해야 합니다.");
+  sec(g,285,"진단비 7개 담보 비교",t,0);
+  table(g,360,C6,["담보명","A손보","B생명","가입합계","비교금액","결과"],[["일반암 진단비","0만","3,000만","3,000만","5,000만","부족"],["유사암 진단비","0만","2,100만","2,100만","2,000만","충족"],["고액암 진단비","0만","0만","0만","3,000만","미가입"],["뇌혈관질환 진단비","0만","0만","0만","3,000만","미가입"],["뇌졸중 진단비","0만","2,000만","2,000만","2,000만","충족"],["허혈성심장질환 진단비","0만","0만","0만","3,000만","미가입"],["급성심근경색증 진단비","0만","2,000만","2,000만","2,000만","충족"]],96,t,{fs:30});
+  sec(g,1135,"진단비 보장 범위 점검",t,.5);box(g,70,1210,1360,640);
+  [["암",K.red,"일반암 3,000만 / 유사암 2,100만","일반암 비교금액 대비 부족",3000,5000],["뇌",K.gry,"뇌졸중 2,000만","뇌혈관질환 담보 미가입",2000,3000],["심장",K.gry,"급성심근경색 2,000만","허혈성심장질환 담보 미가입",2000,3000]].forEach(([ic,c,a,b,v,m],i)=>{const y=1240+i*200,e=eO(pr(t,.7+i*.2,.6));g.save();g.globalAlpha=e;g.translate((1-e)*40,0);
+    R(g,105,y,1290,175,18);g.fillStyle="#F6F8FA";g.fill();g.strokeStyle=K.bd;g.lineWidth=2;g.stroke();
+    R(g,125,y+28,145,120,16);g.fillStyle=c;g.fill();T(g,ic,197,y+108,FN(700,46),"#fff","center");
+    T(g,a,300,y+75,FN(700,38),K.txt);T(g,b,300,y+128,FN(400,30),i?K.sub:K.red);
+    const bx=1010,bw=350,f=eO(pr(t,1+i*.2,1));T(g,"보장 범위 커버율",bx,y+62,FN(400,22),K.sub);T(g,Math.round(v/m*100*f)+"%",bx+bw,y+62,FN(700,26),c,"right");
+    g.fillStyle=K.line;R(g,bx,y+80,bw,20,10);g.fill();g.fillStyle=c;R(g,bx,y+80,Math.max(20,bw*v/m*f),20,10);g.fill();
+    T(g,i?"뇌·심장 질환군 합계 기준(가정)":"가입 3,000 / 비교 5,000만",bx,y+138,FN(400,22),K.sub);g.restore();});
+});
+/* 6 */
+P.push((g,t)=>{head(g,6,"실손·입원·수술비 보장 분석","실손과 정액형 입원·수술 담보를 구분해 비교합니다.");
+  sec(g,285,"실손·입원·수술 7개 항목",t,0);
+  table(g,360,C6,["담보명","A손보","B생명","가입합계","비교기준","결과"],[["실손 입원의료비","미가입","미가입","미가입","가입","미가입"],["실손 통원의료비","미가입","미가입","미가입","가입","미가입"],["3대 비급여 특약","미가입","미가입","미가입","가입","미가입"],["상해 수술비","0만","0만","0만","100만","미가입"],["질병 수술비","0만","400만","400만","200만","충족"],["상해 입원일당","0만","3만","3만","3만","충족"],["질병 입원일당","0만","4만","4만","3만","충족"]],96,t,{fs:30});
+  sec(g,1135,"현재 샘플 보장의 구조",t,.5);
+  const w=(1360-72)/3;
+  [["실손보험",e=>"0개",K.gry,"입원·통원·3대 비급여 특약 미기재"],["질병수술비",e=>n2(400*e)+"만 원",K.grn,"예시 비교금액 200만 원 이상"],["입원일당",e=>`상해 ${Math.round(3*e)}만 / 질병 ${Math.round(4*e)}만`,K.blu,"일당형 담보는 면책·지급일수 확인"]].forEach(([h,v,c,s],i)=>{const x=70+i*(w+36),a=eO(pr(t,.7+i*.15,.5));g.save();g.globalAlpha=a;g.translate(0,(1-a)*30);box(g,x,1210,w,380);
+    T(g,h,x+28,1285,FN(700,38),K.txt);g.font=FN(900,56);let fs=56;const vs=v(eO(pr(t,.9+i*.15,1)));while(g.measureText(vs).width>w-56&&fs>30){fs-=2;g.font=FN(900,fs);}T(g,vs,x+28,1390,FN(900,fs),c);T(g,s,x+28,1470,FN(400,26),K.sub);
+    g.fillStyle=c;R(g,x+28,1520,(w-56)*eO(pr(t,1+i*.15,1))*(i===0?.04:1),10,5);g.fill();g.restore();});
+  note(g,1645,250,["지급조건 확인 사항","실손보험은 급여·비급여·자기부담금·세대별 약관 확인이 필요합니다.","수술비·입원일당은 보장 종류, 면책사항, 지급 횟수를 확인해야 합니다."],t,1.2,true);
+});
+/* 7 */
+P.push((g,t)=>{head(g,7,"운전자·기타 보장 분석","운전자 비용성 담보 및 일상생활배상책임 항목을 확인합니다.");
+  sec(g,285,"운전자·배상책임 5개 담보",t,0);
+  table(g,360,C6,["담보명","A손보","B생명","가입합계","비교금액","결과"],[["벌금(대인)","3,500만","0만","3,500만","3,000만","충족"],["교통사고처리지원금","2억 1,000만","0만","2억 1,000만","2억","충족"],["변호사선임비용","5,000만","0만","5,000만","5,000만","충족"],["자동차사고부상치료비","30만","0만","30만","30만","충족"],["가족일상생활배상책임","1억","0만","1억","1억","충족"]],104,t,{fs:30});
+  sec(g,990,"주요 금액 요약",t,.5);
+  const w=(1360-72)/3;
+  [["교통사고처리지원금",21000,20000,"사고·합의·형사절차별 지급조건 확인"],["변호사선임비용",5000,5000,"선임시점·보장 범위·한도 확인"],["가족일상생활배상책임",10000,10000,"가족 범위·자기부담금·중복 확인"]].forEach(([h,v,c,s],i)=>{const x=70+i*(w+36),a=eO(pr(t,.7+i*.15,.5)),e=eO(pr(t,.9+i*.15,1.1));g.save();g.globalAlpha=a;g.translate(0,(1-a)*30);box(g,x,1065,w,410);
+    T(g,h,x+26,1140,FN(700,34),K.txt);const vv=v*e,txt=vv>=10000?`${Math.floor(vv/10000)}억${Math.round(vv%10000)?" "+n2(vv%10000)+"만":""} 원`:n2(vv)+"만 원";T(g,txt,x+26,1235,FN(900,52),K.blu);
+    T(g,"비교금액 대비",x+26,1300,FN(400,24),K.sub);T(g,Math.round(v/c*100*e)+"%",x+w-26,1300,FN(700,26),K.grn,"right");
+    g.fillStyle=K.line;R(g,x+26,1318,w-52,16,8);g.fill();g.fillStyle=K.grn;R(g,x+26,1318,(w-52)*Math.min(1,v/c)*e,16,8);g.fill();
+    g.font=FN(400,25);const words=s;T(g,words,x+26,1405,FN(400,25),K.sub);g.restore();});
+  sec(g,1535,"검토 시 유의사항",t,.9);box(g,70,1610,1360,290);
+  bullets(g,110,1700,["가입금액이 같아도 실제 지급액은 사고 유형·약관·면책에 따라 달라집니다.","배상책임은 다른 보험과의 비례보상 여부 등 중복 처리 조건을 확인해야 합니다."],t,1.1);
+});
+/* 8 body map */
+P.push((g,t)=>{head(g,8,"신체 부위별 보장 연결도","보장항목을 신체 부위별로 연결한 시각화입니다.");
+  sec(g,285,"신체 부위와 관련된 주요 보장",t,0);
+  const bo=eO(pr(t,.2,.8));g.save();g.globalAlpha=bo;
+  const cx=750,sk1="#E7B79A",sk2="#F0C9B2",sk3="#D9AE95";
+  const poly=(pts,c)=>{g.beginPath();pts.forEach(([x,y],i)=>i?g.lineTo(x,y):g.moveTo(x,y));g.closePath();g.fillStyle=c;g.fill();};
+  [-1,1].forEach(s=>{poly([[cx+s*110,700],[cx+s*190,720],[cx+s*250,900],[cx+s*190,1100],[cx+s*130,1085],[cx+s*170,910],[cx+s*110,800]],sk3);
+    poly([[cx+s*8,1090],[cx+s*112,1090],[cx+s*118,1390],[cx+s*16,1395]],sk3);});
+  R(g,cx-115,650,230,470,110);g.fillStyle=sk2;g.fill();g.strokeStyle="#D6A68C";g.lineWidth=3;g.stroke();
+  g.beginPath();g.arc(cx,545,92,0,7);g.fillStyle=sk1;g.fill();g.stroke();
+  g.fillStyle="#D98E98";g.beginPath();g.ellipse(cx,535,40,24,0,0,7);g.fill();
+  g.fillStyle="#E3A0A5";[-1,1].forEach(s=>{g.beginPath();g.ellipse(cx+s*48,800,34,58,0,0,7);g.fill();});
+  const hb=1+.08*Math.sin(t*6);g.fillStyle="#D84B5E";g.beginPath();g.arc(cx+5,830,30*hb,0,7);g.fill();
+  R(g,cx-55,930,110,140,22);g.fillStyle="#D9958F";g.fill();g.strokeStyle="#B9767A";g.lineWidth=7;g.beginPath();g.ellipse(cx,1010,62,46,0,0,7);g.stroke();
+  g.restore();
+  const cards=[["L",450,"사망·장해",K.navy,["상해사망 1억 8,000만","질병사망 5,000만"],[cx,700]],["L",760,"뇌 관련",K.gry,["뇌혈관질환 0원","뇌졸중 2,000만"],[cx,535]],["L",1080,"수술·입원",K.grn,["질병수술비 400만","질병입원일당 4만/일"],[cx,995]],
+    ["R",450,"암 진단비",K.red,["일반암 3,000만","유사암 2,100만"],[cx+48,790]],["R",760,"심장 관련",K.blu,["허혈성심장 0원","급성심근경색 2,000만"],[cx+5,830]],["R",1080,"실손의료비",K.gry,["입원 실손 0개","통원 실손 0개"],[cx,1030]]];
+  cards.forEach(([sd,y,h,c,ls,pt],i)=>{const a=eO(pr(t,.4+i*.12,.5)),x=sd==="L"?75:980,w=445;g.save();g.globalAlpha=a;g.translate((1-a)*(sd==="L"?-40:40),0);
+    box(g,x,y,w,250);g.fillStyle=c;R(g,x,y,12,250,6);g.fill();T(g,h,x+34,y+70,FN(700,40),c===K.navy?K.txt:c);ls.forEach((s,j)=>T(g,s,x+34,y+140+j*60,FN(400,32),K.txt));g.restore();
+    const lp=eO(pr(t,.8+i*.12,.7));if(lp>0){const ex=sd==="L"?x+w:x,ey=y+125,mx=sd==="L"?ex+45:ex-45,pts=[[ex,ey],[mx,ey],pt];
+      const L1=Math.abs(mx-ex),L2=Math.hypot(pt[0]-mx,pt[1]-ey),tot=(L1+L2)*lp;g.strokeStyle="#C98235";g.lineWidth=5;g.beginPath();g.moveTo(ex,ey);
+      if(tot<=L1)g.lineTo(ex+(mx-ex)*tot/L1,ey);else{g.lineTo(mx,ey);const k=(tot-L1)/L2;g.lineTo(mx+(pt[0]-mx)*k,ey+(pt[1]-ey)*k);}g.stroke();
+      if(lp>=1){const ph=(t*1.4+i*.17)%1;g.beginPath();g.arc(pt[0],pt[1],14+ph*26,0,7);g.fillStyle=`rgba(245,200,66,${.5*(1-ph)})`;g.fill();g.beginPath();g.arc(pt[0],pt[1],13,0,7);g.fillStyle=K.yel;g.fill();g.strokeStyle="#fff";g.lineWidth=4;g.stroke();}}});
+  sec(g,1440,"신체 도식에 표시하지 않은 운전자·배상책임",t,.9);
+  table(g,1515,[650,415,295],["담보","가입금액","상태"],[["교통사고처리지원금","2억 1,000만","충족"],["변호사선임비용","5,000만","충족"],["가족일상생활배상책임","1억","충족"]],100,t-1);
+});
+/* 9 */
+P.push((g,t)=>{head(g,9,"보장 진단 및 주요 현황","각 보장군의 충족·부족·미가입 분포를 요약해 확인합니다.");
+  sec(g,285,"진단 결과 분포",t,0);const w=(1360-72)/3;
+  [["충족 항목",12,K.grn],["부족 항목",3,K.red],["미가입 항목",8,K.gry]].forEach(([l,v,c],i)=>kpi(g,70+i*(w+36),360,w,178,l,e=>Math.round(v*e)+"개",`${(v/23*100).toFixed(1)}% / 23개`,c,t,.1*i));
+  sec(g,595,"보장군별 항목 충족 현황",t,.3);box(g,70,670,1360,560);
+  [["사망·장해",[1,2,1]],["암·진단",[3,1,3]],["실손·입원·수술",[3,0,4]],["운전자·기타",[5,0,0]]].forEach(([l,v],i)=>{const y=770+i*105,n=v[0]+v[1]+v[2],bx=440,bw=800,e=eO(pr(t,.5+i*.2,1));
+    T(g,l,115,y+12,FN(700,36),K.txt);let x=bx;g.fillStyle=K.line;g.fillRect(bx,y-25,bw,52);
+    v.forEach((k,j)=>{if(!k)return;const ww=bw*k/n*e;g.fillStyle=[K.grn,K.red,K.gry][j];g.fillRect(x,y-25,ww,52);if(ww>40)T(g,String(k),x+ww/2,y+12,FN(700,30),"#fff","center");x+=ww;});
+    T(g,`${Math.round(v[0]*e)}/${n} 충족`,1385,y+12,FN(700,28),K.txt,"right");});
+  [["충족",K.grn],["부족",K.red],["미가입",K.gry]].forEach(([s,c],i)=>{R(g,190+i*250,1160,30,30,6);g.fillStyle=c;g.fill();T(g,s,232+i*250,1186,FN(400,28),K.sub);});
+  sec(g,1290,"주요 질병군별 가입·비교 금액",t,.7);box(g,70,1365,1360,575);
+  [["일반암",3000,5000],["뇌혈관질환",0,3000],["허혈성심장질환",0,3000],["뇌졸중",2000,2000],["급성심근경색",2000,2000]].forEach(([l,v,c],i)=>{const y=1450+i*100,bx=470,bw=640,e=eO(pr(t,.9+i*.15,1)),sc=bw/5000;
+    T(g,l,110,y+12,FN(700,32),K.txt);g.fillStyle=K.line;g.fillRect(bx,y-14,bw,30);g.fillStyle=v>=c?K.grn:v?K.blu:K.gry;if(v)g.fillRect(bx,y-14,v*sc*e,30);
+    const mk=eO(pr(t,1.2+i*.15,.4));g.globalAlpha=mk;g.fillStyle=K.red;g.fillRect(bx+c*sc-3,y-30,6,62);g.globalAlpha=1;
+    T(g,`${n2(v*e)} / ${n2(c)}만`,1395,y+12,FN(400,28),K.sub,"right");});
+  T(g,"막대 = 가입금액 · 빨간 선 = 예시 비교금액 (축 최대 5,000만)",110,1910,FN(400,22),K.sub);
+});
+/* 10 */
+P.push((g,t)=>{head(g,10,"종합 분석결과 및 점검 과제","가상의 보험계약 2건을 바탕으로 한 보장 비교 예시 결과입니다.");
+  sec(g,285,"요약 결과",t,0);const w=(1360-72)/3;
+  kpi(g,70,360,w,178,"월 보험료",e=>n2(144710*e)+"원","2개 가상 계약",K.blu,t,0);
+  kpi(g,70+w+36,360,w,178,"충족 / 부족",e=>`${Math.round(12*e)} / ${Math.round(3*e)}개`,"23개 중",K.blu,t,.1);
+  kpi(g,70+2*(w+36),360,w,178,"미가입",e=>Math.round(8*e)+"개","예시 비교 기준",K.red,t,.2);
+  sec(g,595,"우선 검토가 필요한 항목",t,.3);
+  [["실손의료비 가입 여부","입원·통원·3대 비급여 항목이 샘플에 기재되지 않음","미가입"],["뇌혈관·허혈성심장질환","뇌졸중·급성심근경색 보장과 보장 범위가 다를 수 있음","미가입"],["암 진단비","일반암 3,000만 원 / 샘플 비교 5,000만 원","부족"],["사망 보장","상해사망 1억 8,000만 원 / 샘플 비교 2억 원","부족"],["질병·상해 후유장해","질병 80% 이상 후유장해 미가입","미가입"]].forEach(([h,d,s],i)=>{const y=670+i*185,a=eO(pr(t,.5+i*.15,.5));g.save();g.globalAlpha=a;g.translate((1-a)*50,0);
+    box(g,70,y,1360,165);R(g,100,y+42,76,76,16);g.fillStyle=K.yel;g.fill();T(g,String(i+1),138,y+96,FN(700,40),K.navy,"center");
+    T(g,h,210,y+70,FN(700,38),K.txt);T(g,d,210,y+128,FN(400,30),K.sub);g.restore();badge(g,1330,y+60,s,eB(pr(t,.8+i*.15,.4)),150);});
+  note(g,1630,200,["중요: 본 자료는 형식 확인을 위한 가상의 분석 샘플입니다.","실제 평가는 보험증권·약관·연령·소득·가족상황·가입목적 확인이 필요합니다."],t,1.4,true);
+});
+
+
+
+/* ---------- sound ---------- */
+let AC=null, soundOn=true;
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){} } if(AC&&AC.state!=="running") AC.resume().catch(()=>{}); return AC;}
+["pointerdown","touchstart","mousedown","keydown","click"].forEach(ev=>window.addEventListener(ev,()=>ac(),{capture:true,passive:true}));
+function flipSound(){ if(!soundOn) return; const a=ac(); if(!a) return;
+  try{ const d=.42,n=Math.floor(a.sampleRate*d),b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0); for(let i=0;i<n;i++) x[i]=Math.random()*2-1;
+  const s=a.createBufferSource(); s.buffer=b; const f=a.createBiquadFilter(); f.type="bandpass"; f.Q.value=.9; const g=a.createGain(), t=a.currentTime;
+  f.frequency.setValueAtTime(700,t); f.frequency.exponentialRampToValueAtTime(3200,t+.32); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.5,t+.06); g.gain.exponentialRampToValueAtTime(.0001,t+.4);
+  s.connect(f); f.connect(g); g.connect(a.destination); s.start(t); s.stop(t+.45);}catch(e){} }
+document.getElementById("bSnd").onclick=e=>{soundOn=!soundOn; e.currentTarget.style.opacity=soundOn?1:.5;};
+
+/* ---------- covers ---------- */
+let LOGO=null, LOGOW=null;
+function whiteLogo(img){const c=document.createElement("canvas");c.width=img.width;c.height=img.height;const g=c.getContext("2d");g.drawImage(img,0,0);g.globalCompositeOperation="source-in";g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);return c;}
+function linen(g,base){g.fillStyle=base;g.fillRect(0,0,TW,TH);g.save();g.globalAlpha=.05;for(let y=0;y<TH;y+=3){g.fillStyle=y%6?"#000":"#fff";g.fillRect(0,y,TW,1);}for(let x=0;x<TW;x+=4){g.fillStyle=x%8?"#000":"#fff";g.fillRect(x,0,1,TH);}g.restore();
+  const v=g.createRadialGradient(TW*.35,TH*.3,100,TW*.5,TH*.5,TH*.8);v.addColorStop(0,"rgba(255,255,255,.08)");v.addColorStop(1,"rgba(0,0,0,.25)");g.fillStyle=v;g.fillRect(0,0,TW,TH);}
+function drawCover(){
+  const cv=document.createElement("canvas"); cv.width=TW; cv.height=TH; const g=cv.getContext("2d"), C=BOOK.cover||{};
+  linen(g,INK); g.fillStyle="rgba(255,255,255,.06)"; g.fillRect(0,0,TW*.047,TH); g.fillStyle="rgba(0,0,0,.18)"; g.fillRect(TW*.047,0,6,TH);
+  const u=LAND?TH/900:TW/1500, x0=LAND?110:150, maxW=LAND?TW*.5:TW-300;
+  let y=LAND?140:205;
+  T(g,C.tag||"",x0,y,FN(700,40*u),"rgba(255,255,255,.7)"); g.fillStyle=ACC; g.fillRect(x0,y+35*u,120*u,12*u);
+  y+=(LAND?120:215)*u; const fs=(LAND?92:150)*u;
+  (C.lines||[BOOK.title]).forEach(l=>{const z=fitFont(g,l,maxW,fs,900); T(g,l,x0-8,y,FN(900,z),"#fff"); y+=z*1.13;});
+  y+=(LAND?10:-60)*u; g.font=FN(400,(LAND?30:46)*u); T(g,C.sub||"",x0,y,FN(400,fitFont(g,C.sub||"",maxW,(LAND?30:46)*u,400)),"rgba(255,255,255,.82)");
+  const box=LAND?{x:TW*.58,y:TH*.16,w:TW*.36,h:TH*.62}:{x:150,y:800,w:TW-300,h:950};
+  if(C.art) C.art(g,box); else defaultArt(g,box);
+  const pw=330*u,ph=62*u; R(g,TW-pw-140*u,TH-(LAND?150:340)*u,pw,ph,ph/2); g.fillStyle=ACC; g.fill(); T(g,C.badge||"가상 샘플 · SAMPLE",TW-pw/2-140*u,TH-(LAND?150:340)*u+ph*.68,FN(700,30*u),INK,"center");
+  g.fillStyle="rgba(255,255,255,.18)"; g.fillRect(x0,TH-(LAND?70:230)*u-12,TW-x0-140*u,2);
+  if(LOGOW){const h=(LAND?56:88)*u,w=h*LOGOW.width/LOGOW.height; g.drawImage(LOGOW,x0,TH-(LAND?62:175)*u,w,h);}
+  T(g,C.date||"",TW-140*u,TH-(LAND?28:115)*u,FN(400,32*u),"rgba(255,255,255,.6)","right");
+  return cv;
+}
+function defaultArt(g,b){ // stacked report cards
+  const cx=b.x+b.w/2, cy=b.y+b.h/2, cw=Math.min(b.w*.7,b.h*.62), chh=cw*.78;
+  [[-.08,.10,"rgba(255,255,255,.10)"],[-.04,.05,"rgba(255,255,255,.18)"],[0,0,"#fff"]].forEach(([r,o,c],i)=>{g.save();g.translate(cx+o*cw,cy+o*chh);g.rotate(r);
+    g.shadowColor="rgba(0,0,0,.35)";g.shadowBlur=30;g.shadowOffsetY=16;R(g,-cw/2,-chh/2,cw,chh,22);g.fillStyle=c;g.fill();g.shadowColor="transparent";
+    if(i===2){g.fillStyle=INK;R(g,-cw/2+cw*.08,-chh/2+chh*.1,cw*.45,chh*.08,8);g.fill();
+      [.55,.85,.4].forEach((v,k)=>{g.fillStyle="#E4E9EF";R(g,-cw/2+cw*.08,-chh/2+chh*(.3+k*.18),cw*.84,chh*.1,10);g.fill();g.fillStyle=[ACC,"#64A9BB","#57BEA2"][k];R(g,-cw/2+cw*.08,-chh/2+chh*(.3+k*.18),cw*.84*v,chh*.1,10);g.fill();});}
+    g.restore();});
+}
+function drawBack(){
+  const cv=document.createElement("canvas"); cv.width=TW; cv.height=TH; const g=cv.getContext("2d"), B=BOOK.back||{}, u=LAND?TH/900:TW/1500, cx=TW/2;
+  linen(g,INK); g.fillStyle="rgba(255,255,255,.06)"; g.fillRect(TW*.953,0,TW*.047,TH);
+  let y=LAND?150*u:520; g.fillStyle=ACC; g.fillRect(cx-60*u,y,120*u,10*u); y+=(LAND?80:140)*u;
+  (B.lines||["본 자료는 형식 확인을 위한","가상 샘플입니다"]).forEach(l=>{T(g,l,cx,y,FN(700,(LAND?46:64)*u),"#fff","center"); y+=(LAND?60:90)*u;});
+  y+=(LAND?10:40)*u; (B.notes||[]).forEach(l=>{T(g,l,cx,y,FN(400,(LAND?26:40)*u),"rgba(255,255,255,.72)","center"); y+=(LAND?40:64)*u;});
+  const lw=(LAND?560:840)*u, lh=(LAND?150:250)*u, ly=LAND?TH-330*u:1330; R(g,cx-lw/2,ly,lw,lh,28*u); g.fillStyle="#fff"; g.fill();
+  if(LOGO){const w=lw*.86,h=w*LOGO.height/LOGO.width; g.drawImage(LOGO,cx-w/2,ly+lh/2-h/2,w,h);}
+  T(g,"보고서를 책처럼 펼쳐 보는 3D 디지털 출판",cx,ly+lh+(LAND?50:100)*u,FN(500,(LAND?26:40)*u),"rgba(255,255,255,.8)","center");
+  T(g,BOOK.contact||"thelcoworks@gmail.com",cx,ly+lh+(LAND?90:165)*u,FN(400,(LAND?22:34)*u),"rgba(255,255,255,.6)","center");
+  T(g,"Made with LCO Pagecraft · SAMPLE ONLY",cx,TH-(LAND?30:115)*u,FN(400,(LAND?20:30)*u),"rgba(255,255,255,.45)","center");
+  return cv;
+}
+function blankPage(){const cv=document.createElement("canvas");cv.width=TW;cv.height=TH;const g=cv.getContext("2d");g.fillStyle="#FAFAF8";g.fillRect(0,0,TW,TH);
+  if(LOGO){g.globalAlpha=.25;const w=TW*.35,h=w*LOGO.height/LOGO.width;g.drawImage(LOGO,TW/2-w/2,TH/2-h/2,w,h);g.globalAlpha=1;}return cv;}
+function shade(g,k){ if(k===0||k===LAST) return; const sg=g.createLinearGradient(0,0,110,0); sg.addColorStop(0,"rgba(0,0,0,.22)"); sg.addColorStop(1,"rgba(0,0,0,0)"); g.setTransform(1,0,0,1,0,0); g.fillStyle=sg; g.fillRect(0,0,110,TH);
+  g.fillStyle="rgba(0,0,0,.05)"; g.fillRect(TW-3,0,3,TH); }
+const FACE=[]; const anim=new Array(NP+2).fill(-1e9);
+function makeFace(k,st){const cv=document.createElement("canvas"); cv.width=TW; cv.height=TH; FACE[k]={cv,g:cv.getContext("2d"),flip:(k%2===1&&k!==LAST),st,tex:null,lastT:-1}; drawFace(k,0);}
+function drawFace(k,t){const F=FACE[k],g=F.g; g.setTransform(1,0,0,1,0,0); g.globalAlpha=1; g.globalCompositeOperation="source-over";
+  if(F.flip){g.translate(TW,0); g.scale(-1,1);}
+  if(F.st) g.drawImage(F.st,0,0,TW,TH); else { g.save(); P[k-1](g,t); g.restore(); }
+  shade(g,k); if(F.tex) F.tex.needsUpdate=true; F.lastT=t;}
+
+/* ---------- three ---------- */
+const stage=document.getElementById("stage");
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputEncoding=THREE.sRGBEncoding;
+stage.appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(30,1,.1,80);
+scene.add(new THREE.AmbientLight(0xfff6ec,.72));
+const dl=new THREE.DirectionalLight(0xfff1dc,.5); dl.position.set(-1.2,1.6,2.4); scene.add(dl);
+const rig=new THREE.Group(); scene.add(rig);
+const book=new THREE.Group(); rig.add(book);
+const ANI=renderer.capabilities.getMaxAnisotropy();
+function makeTex(cv){const t=new THREE.CanvasTexture(cv); t.encoding=THREE.sRGBEncoding; t.anisotropy=ANI; t.minFilter=THREE.LinearFilter; t.generateMipmaps=false; return t;}
+function gradTex(w,h,draw){const c=document.createElement("canvas");c.width=w;c.height=h;draw(c.getContext("2d"),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;}
+
+// soft contact shadow on the desk
+const shT=gradTex(256,256,(g,w,h)=>{const r=g.createRadialGradient(w/2,h/2,10,w/2,h/2,w/2);r.addColorStop(0,"rgba(45,25,8,.62)");r.addColorStop(.55,"rgba(45,25,8,.32)");r.addColorStop(1,"rgba(45,25,8,0)");g.fillStyle=r;g.fillRect(0,0,w,h);});
+const shadow=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:shT,transparent:true,depthWrite:false}));
+shadow.renderOrder=1; scene.add(shadow);
+/* desk: light wood planks (same desk as the Pagecraft report sample) */
+function seeded(s){return function(){s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+function woodTex(){const c=document.createElement("canvas");c.width=c.height=1024;const g=c.getContext("2d"),rnd=seeded(7),PH=128;
+  for(let p=0;p<8;p++){const y0=p*PH,tone=214+Math.floor(rnd()*14-7);g.fillStyle=`rgb(${tone},${tone-3},${tone-8})`;g.fillRect(0,y0,1024,PH);
+    for(let k=0;k<70;k++){const yy=y0+4+rnd()*(PH-8),amp=1+rnd()*3,ph=rnd()*6.28,fr=.004+rnd()*.008,dark=rnd()<.75;
+      g.strokeStyle=dark?`rgba(110,98,86,${.05+rnd()*.11})`:`rgba(255,255,255,${.10+rnd()*.12})`;g.lineWidth=.6+rnd()*1.4;
+      g.beginPath();for(let x=0;x<=1024;x+=16){const yv=yy+Math.sin(x*fr+ph)*amp;if(x===0)g.moveTo(x,yv);else g.lineTo(x,yv);}g.stroke();}
+    if(rnd()<.6){const kx=rnd()*900+60,ky=y0+30+rnd()*70;for(let r=5;r>0;r--){g.strokeStyle="rgba(100,88,76,.13)";g.lineWidth=1.2;g.beginPath();g.ellipse(kx,ky,r*7,r*2.2,0,0,6.28);g.stroke();}}
+    g.fillStyle="rgba(70,60,52,.34)";g.fillRect(0,y0,1024,2.4);g.fillStyle="rgba(255,255,255,.22)";g.fillRect(0,y0+2.4,1024,1.4);
+    const jx=rnd()*900+60;g.fillStyle="rgba(70,60,52,.28)";g.fillRect(jx,y0,2,PH);}
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(16,16);t.anisotropy=renderer.capabilities.getMaxAnisotropy();t.encoding=THREE.sRGBEncoding;return t;}
+const DW=9.2, DH=DW*941/1672;
+const deskTex=new THREE.TextureLoader().load("desk.jpg",t=>{t.needsUpdate=true;}); deskTex.encoding=THREE.sRGBEncoding; deskTex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+const desk=new THREE.Group(); scene.add(desk);
+const deskMain=new THREE.Mesh(new THREE.PlaneGeometry(DW,DH),new THREE.MeshBasicMaterial({map:deskTex})); deskMain.position.y=.25; desk.add(deskMain);
+// mirrored skirts so the desk never ends when the book is rotated
+[[-1,0],[1,0],[0,-1],[0,1]].forEach(([sx,sy])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(DW,DH),new THREE.MeshBasicMaterial({map:deskTex,color:0xf2f2f2})); m.position.set(sx*DW,.25+sy*DH,0); m.scale.set(sx?-1:1,sy?-1:1,1); m.material.side=THREE.DoubleSide; desk.add(m);});
+const props=new THREE.Group(); scene.add(props); props.visible=false;
+(function(){
+  const mugM=new THREE.MeshStandardMaterial({color:new THREE.Color("#0E2A47"),roughness:.45,metalness:.05});
+  const mug=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(.105,.095,.2,40),mugM); body.rotation.x=Math.PI/2; body.position.z=.11; mug.add(body);
+  const cof=new THREE.Mesh(new THREE.CircleGeometry(.09,32),new THREE.MeshBasicMaterial({color:0x3a2518})); cof.position.z=.2; mug.add(cof);
+  const hd=new THREE.Mesh(new THREE.TorusGeometry(.06,.016,10,20,Math.PI),mugM); hd.rotation.set(Math.PI/2,0,-Math.PI/2); hd.position.set(.115,0,.11); mug.add(hd);
+  const sau=new THREE.Mesh(new THREE.CylinderGeometry(.19,.19,.012,40),new THREE.MeshStandardMaterial({color:0xf2f2f4,roughness:.5})); sau.rotation.x=Math.PI/2; sau.position.z=.006; mug.add(sau);
+  mug.position.set(W*2.25,.95,0); props.add(mug);
+  const pen=new THREE.Group();
+  const pb=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.72,6),new THREE.MeshStandardMaterial({color:new THREE.Color("#FFC301"),roughness:.5})); pen.add(pb);
+  const tip=new THREE.Mesh(new THREE.ConeGeometry(.02,.07,6),new THREE.MeshStandardMaterial({color:0xe8d2b0})); tip.position.y=-.395; tip.rotation.x=Math.PI; pen.add(tip);
+  const er=new THREE.Mesh(new THREE.CylinderGeometry(.021,.021,.045,6),new THREE.MeshStandardMaterial({color:0xe56b7a})); er.position.y=.38; pen.add(er);
+  pen.rotation.z=1.15; pen.position.set(-W*1.5,-.55,.021); props.add(pen);
+})();
+const BB=new THREE.Box3();
+
+// page-block edges
+const edgeT=gradTex(8,256,(g,w,h)=>{g.fillStyle="#F3F1EC";g.fillRect(0,0,w,h);for(let i=0;i<h;i+=3){g.fillStyle=i%6?"rgba(150,135,115,.35)":"rgba(255,255,255,.8)";g.fillRect(0,i,w,1);}});
+edgeT.wrapS=edgeT.wrapT=THREE.RepeatWrapping;
+const edgeM=new THREE.MeshLambertMaterial({map:edgeT}), paperM=new THREE.MeshLambertMaterial({color:0xF7F6F2});
+const blockR=new THREE.Mesh(new THREE.BoxGeometry(W-.02,H-.03,1),[edgeM,edgeM,edgeM,edgeM,paperM,paperM]); book.add(blockR);
+const blockL=new THREE.Mesh(new THREE.BoxGeometry(W-.02,H-.03,1),[edgeM,edgeM,edgeM,edgeM,paperM,paperM]); book.add(blockL);
+const boardM=new THREE.MeshStandardMaterial({color:0x0E2A47,roughness:.55,metalness:.05});
+
+const SEG=36, KTH=.032, leaves=[];
+function buildLeaves(){
+  for(let i=0;i<NL;i++){
+    const g=new THREE.Group(); book.add(g);
+    const L={g,i,p:0,from:0,to:0,t0:0,dur:950,delay:0,rigid:(i===0||i===NL-1)};
+    if(L.rigid){
+      const front=i===0;
+      const mats=[boardM,boardM,boardM,boardM,boardM,boardM];
+      const ct=FACE[front?0:LAST].tex=makeTex(FACE[front?0:LAST].cv);
+      const cm=new THREE.MeshStandardMaterial({map:ct,roughness:.6,metalness:0});
+      if(front) mats[4]=cm; else mats[5]=cm;
+      const bx=new THREE.Mesh(new THREE.BoxGeometry(W+.035,H+.05,.03),mats); bx.position.set(W/2+.012,0,front?.016:-.016); g.add(bx);
+      const pk=front?1:NP; FACE[pk].tex=makeTex(FACE[pk].cv);
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshLambertMaterial({map:FACE[pk].tex,side:front?THREE.BackSide:THREE.FrontSide}));
+      pl.position.set(W/2,0,front?-.001:.001); g.add(pl);
+    } else {
+      const geo=new THREE.PlaneGeometry(W,H,SEG,1); geo.translate(W/2,0,0);
+      const u=[]; const pp=geo.attributes.position; for(let k=0;k<pp.count;k++) u.push(pp.getX(k));
+      FACE[2*i].tex=makeTex(FACE[2*i].cv); FACE[2*i+1].tex=makeTex(FACE[2*i+1].cv);
+      g.add(new THREE.Mesh(geo,new THREE.MeshLambertMaterial({map:FACE[2*i].tex,side:THREE.FrontSide})));
+      g.add(new THREE.Mesh(geo,new THREE.MeshLambertMaterial({map:FACE[2*i+1].tex,side:THREE.BackSide})));
+      L.geo=geo; L.u=u;
+    }
+    leaves.push(L); shapeLeaf(L,0);
+  }
+}
+window._bend=(i,p)=>{const L=leaves[i];L.p=L.to=p;};
+function shapeLeaf(L,p){
+  const th=Math.PI*p;
+  if(L.rigid){ L.g.rotation.y=-th; return; }
+  const k=1.15*Math.sin(Math.PI*p)/W, pos=L.geo.attributes.position;
+  for(let j=0;j<pos.count;j++){const s=L.u[j]; let x,z;
+    if(Math.abs(k)<1e-5){x=s*Math.cos(th); z=s*Math.sin(th);} else { x=(Math.sin(th-k*s)-Math.sin(th))/(-k); z=(Math.cos(th)-Math.cos(th-k*s))/(-k); }
+    pos.setX(j,x); pos.setZ(j,z);}
+  pos.needsUpdate=true; L.geo.computeVertexNormals();
+}
+function stackLayout(){
+  // z of each leaf from the stack under it on its side
+  for(let i=0;i<NL;i++){ const L=leaves[i]; let zr=0, zl=0;
+    for(let j=i+1;j<NL;j++) zr+=(1-leaves[j].p)*KTH;
+    for(let j=0;j<i;j++) zl+=leaves[j].p*KTH;
+    L.g.position.z = zr+(zl-zr)*L.p + Math.sin(Math.PI*L.p)*.06; }
+  let dr=0, dl2=0; for(let j=1;j<NL;j++) dr+=(1-leaves[j].p)*KTH; for(let j=0;j<NL-1;j++) dl2+=leaves[j].p*KTH;
+  dr-=KTH; dl2-=KTH;
+  blockR.visible=dr>.004; blockR.scale.z=Math.max(.001,dr-.006); blockR.position.set(W/2,0,dr/2-.003);
+  blockL.visible=dl2>.004; blockL.scale.z=Math.max(.001,dl2-.006); blockL.position.set(-W/2,0,dl2/2-.003);
+}
+
+/* ---------- steps ---------- */
+function buildSteps(){const st=[]; for(let f=0;f<=NL;f++){ if(f===0||f===NL) st.push([f,"S"]); else {st.push([f,"S"]); st.push([f,"L"]); st.push([f,"R"]);}} return st;}
+let steps=buildSteps(), si=0, curF=0, scrollT0=0, zoomT=1, zoom=1; const pan={x:0,y:0};
+function pagesOf(f){ return f===0?"표지": f===NL?"뒤표지": `p.${2*f-1}–${2*f}`; }
+function label(){
+  const [f,m]=steps[si], Tl=document.getElementById("labT"), M=document.getElementById("labM");
+  if(f===0){Tl.textContent=BOOK.title; M.innerHTML="표지";}
+  else if(f===NL){Tl.textContent="뒤표지"; M.innerHTML="끝";}
+  else{ const a=2*f-1,b=2*f; Tl.textContent = m==="L"?`${a}. ${TITLES[a-1]}`: m==="R"?`${b}. ${TITLES[b-1]}`:`${a}–${b}. ${TITLES[a-1]}`;
+    const nm={S:"전체",L:"왼쪽",R:"오른쪽"}; M.innerHTML=`${pagesOf(f)} · `+["S","L","R"].map(x=>x===m?`<em>${nm[x]}</em>`:nm[x]).join(" / "); }
+  document.getElementById("bPrev").disabled=si===0; document.getElementById("bNext").disabled=si===steps.length-1;
+  document.getElementById("bFirst").disabled=si===0; document.getElementById("bLast").disabled=si===steps.length-1;
+  try{history.replaceState(null,"","?s="+si)}catch(e){}
+}
+function turnTo(f){
+  if(f===curF) return; const now=performance.now(), dir=f>curF?1:-1, idx=[];
+  if(dir>0) for(let i=curF;i<f;i++) idx.push(i); else for(let i=curF-1;i>=f;i--) idx.push(i);
+  idx.forEach((i,n)=>{const L=leaves[i]; L.from=L.p; L.to=dir>0?1:0; L.t0=now; L.delay=n*120+(curF===0&&dir>0?250:0); L.dur=idx.length>2?700:1050;});
+  flipSound(); if(idx.length>2) setTimeout(flipSound,240);
+  curF=f;
+}
+function go(i){ zoomT=1; pan.x=pan.y=0; orb.tx=orb.ty=0; const pf=steps[si][0]; si=Math.max(0,Math.min(steps.length-1,i)); const [f,m]=steps[si]; const moved=f!==pf; turnTo(f);
+  const now=performance.now(), a=2*f-1, b=2*f; scrollT0=now;
+  if(f>0&&f<NL){ if(moved){ anim[a]=anim[b]=now+(Math.abs(f-pf)>1?1000:800); } else if(m==="L") anim[a]=now+350; else if(m==="R") anim[b]=now+350; }
+  document.getElementById("hint").classList.add("off"); label(); }
+function gotoSpread(f){ go(steps.findIndex(s=>s[0]===f&&s[1]==="S")); }
+
+/* ---------- camera & pose ---------- */
+const eio=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const cam={x:0,y:0,d:5,tilt:.3,bx:0,rx:0,ry:0,rz:0}, camT={...cam}; const orb={x:0,y:0,tx:0,ty:0}, hov={x:0,y:0,tx:0,ty:0};
+function camTarget(now){
+  const [f,m]=steps[si], asp=innerWidth/innerHeight, vh=Math.max(.4,(innerHeight-150)/innerHeight), tf=Math.tan(THREE.MathUtils.degToRad(camera.fov/2));
+  let bx=0,w,h,x=0,y=-.02,tilt,rx=0,ry=0,rz=0;
+  if(f===0||f===NL){ bx=f===0?-W/2:W/2; w=W*(asp<.8?2.3:1.75); h=H*1.45; tilt=.32; rx=-.42; ry=f===0?-.62:.62; rz=f===0?.1:-.1; }
+  else if(m==="S"){ w=2*W*1.1; h=H*1.16; tilt=.36; }
+  else { w=W*1.06; tilt=0; x=m==="L"?-W/2:W/2; h=Math.min(H*1.03,Math.max(H*.58,w/(asp/vh)));
+    if(h<H){ const room=(H*1.03-h)/2, sp=eio(Math.min(1,Math.max(0,(now-scrollT0-1000)/6500))); y=room*(1-2*sp); } }
+  const d=Math.max(h/2/(tf*vh), w/2/(tf*asp));
+  Object.assign(camT,{x,y,d:d*1.02,tilt,bx,rx,ry,rz});
+}
+function resize(){ renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+addEventListener("resize",resize);
+
+let lastNow=performance.now();
+function loop(now){
+  requestAnimationFrame(loop);
+  const dt=Math.min(.05,(now-lastNow)/1000); lastNow=now;
+  leaves.forEach(L=>{ if(L.p!==L.to||L._force){ const t=Math.min(1,Math.max(0,(now-L.t0-L.delay)/L.dur)); L.p = t>=1?L.to : L.from+(L.to-L.from)*ease(t); shapeLeaf(L,L.p); L._force=false; } });
+  stackLayout();
+  for(let k=1;k<=NP;k++){ if(!FACE[k]||FACE[k].st) continue; const el=(now-anim[k])/1000, live=(BOOK.live||[]).includes(k)&&curF===Math.ceil(k/2);
+    if((el>-2&&el<3.4)||live){ const tt=Math.max(0,el); if(tt!==FACE[k].lastT) drawFace(k,live&&el>3.4?el:tt); } }
+  camTarget(now);
+  const kk=1-Math.exp(-dt*3.6); for(const key in cam) cam[key]+=(camT[key]-cam[key])*kk;
+  zoom+=(zoomT-zoom)*.15;
+  const closed=curF===0||curF===NL, idle=closed?1:0;
+  orb.x+=(orb.tx-orb.x)*.18; orb.y+=(orb.ty-orb.y)*.18; hov.x+=(hov.tx-hov.x)*.06; hov.y+=(hov.ty-hov.y)*.06;
+  rig.rotation.order="YXZ";
+  rig.rotation.set(cam.rx+orb.x+hov.y*.05+Math.sin(now/1900)*.03*idle, cam.ry+orb.y+hov.x*.08+Math.sin(now/2600)*.05*idle, cam.rz);
+  rig.position.y=Math.sin(now/1300)*.025*idle;
+  book.position.x=cam.bx;
+  // shadow follows the visible footprint
+  const open=leaves.reduce((a,L)=>a+L.p,0)>0&&leaves.reduce((a,L)=>a+L.p,0)<NL;
+  rig.updateMatrixWorld(true); BB.makeEmpty(); leaves.forEach(L=>BB.expandByObject(L.g)); BB.expandByObject(blockR); BB.expandByObject(blockL);
+  let dz=BB.min.z-.004; if(!isFinite(dz)) dz=-.12; dz=Math.max(-1.3,Math.min(-.02,dz)); desk.position.z=dz; props.position.z=dz; shadow.position.set((BB.min.x+BB.max.x)/2+.06,(BB.min.y+BB.max.y)/2-.05,dz+.002);
+  if(isFinite(BB.max.x)) shadow.scale.set(BB.max.x-BB.min.x+.55,BB.max.y-BB.min.y+.5,1);
+  const D=cam.d/zoom, cx=cam.x+pan.x, cy=cam.y+pan.y;
+  camera.position.set(cx, cy-Math.sin(cam.tilt)*D-.05, Math.cos(cam.tilt)*D); camera.lookAt(cx, cy-.05, 0);
+  renderer.render(scene,camera);
+}
+
+/* ---------- input ---------- */
+document.getElementById("bNext").onclick=()=>go(si+1);
+document.getElementById("bPrev").onclick=()=>go(si-1);
+document.getElementById("bFirst").onclick=()=>go(0);
+document.getElementById("bLast").onclick=()=>go(steps.length-1);
+addEventListener("pointermove",e=>{ if(e.pointerType==="mouse"){ hov.tx=e.clientX/innerWidth*2-1; hov.ty=e.clientY/innerHeight*2-1; } });
+addEventListener("keydown",e=>{ if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();go(si+1);} if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(si-1);} if(e.key==="Home")go(0); if(e.key==="End")go(steps.length-1); });
+let sx=null,sy=null,st0=0,lx=0,ly=0,lastTap=0; const ptrs=new Map(); let pinch0=0,zoom0=1;
+const cvs=renderer.domElement;
+function clampPan(){ const lim=.75*(zoomT-1)/zoomT+.05; pan.x=Math.max(-lim,Math.min(lim,pan.x)); pan.y=Math.max(-lim*1.4,Math.min(lim*1.4,pan.y)); if(zoomT<=1.01){pan.x=pan.y=0;} }
+function wpp(){ return 2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*cam.d/zoom/innerHeight; }
+cvs.addEventListener("pointerdown",e=>{ptrs.set(e.pointerId,[e.clientX,e.clientY]); try{cvs.setPointerCapture(e.pointerId)}catch(_){}
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a[0]-b[0],a[1]-b[1]); zoom0=zoomT; sx=null; return;}
+  sx=lx=e.clientX;sy=ly=e.clientY;st0=Date.now(); closePanels();});
+cvs.addEventListener("pointermove",e=>{ if(!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()]; zoomT=Math.max(1,Math.min(3.5,zoom0*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch0)); clampPan(); return;}
+  if(sx!==null&&zoomT>1.05){ const k=wpp(); pan.x-=(e.clientX-lx)*k; pan.y+=(e.clientY-ly)*k; clampPan(); }
+  else if(sx!==null){ orb.ty=Math.max(-1.1,Math.min(1.1,orb.ty+(e.clientX-lx)*.006)); orb.tx=Math.max(-.75,Math.min(.6,orb.tx+(e.clientY-ly)*.005)); if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>8) document.getElementById("hint").classList.add("off"); }
+  lx=e.clientX; ly=e.clientY; });
+function up(e){ ptrs.delete(e.pointerId); if(sx===null) return; const dx=e.clientX-sx, dy=e.clientY-sy, tap=Math.abs(dx)<8&&Math.abs(dy)<8&&Date.now()-st0<400;
+  if(tap&&Date.now()-lastTap<300){ zoomT = zoomT>1.05?1:2.2; if(zoomT>1){const k=wpp(); pan.x=(e.clientX-innerWidth/2)*k; pan.y=-(e.clientY-innerHeight/2)*k; clampPan();} else {pan.x=pan.y=0;} lastTap=0; sx=null; return; }
+  if(zoomT<=1.05){
+    if(tap){ const x=e.clientX; lastTap=Date.now(); setTimeout(()=>{ if(lastTap&&Date.now()-lastTap>=280){ lastTap=0; go(si+(x>innerWidth/2?1:-1)); } },300); }
+  } else if(tap) lastTap=Date.now();
+  sx=null; }
+cvs.addEventListener("pointerup",up); cvs.addEventListener("pointercancel",e=>{ptrs.delete(e.pointerId); sx=null;});
+cvs.addEventListener("wheel",e=>{ e.preventDefault(); zoomT=Math.max(1,Math.min(3.5,zoomT*Math.exp(-e.deltaY*.0015))); clampPan(); },{passive:false});
+function closePanels(){document.querySelectorAll(".panel").forEach(p=>p.classList.remove("on"));}
+function toggle(id){const p=document.getElementById(id), on=p.classList.contains("on"); closePanels(); if(!on) p.classList.add("on");}
+document.getElementById("bToc").onclick=()=>toggle("pToc");
+let qrMade=false;
+document.getElementById("bQr").onclick=()=>{ toggle("pQr"); if(!qrMade&&window.QRCode){ new QRCode(document.getElementById("qrbox"),{text:SHARE_URL||location.href.split("?")[0],width:200,height:200,colorDark:"#0E2A47",correctLevel:QRCode.CorrectLevel.M}); qrMade=true;} };
+const toc=document.getElementById("toc");
+[["표",0,"표지"]].concat(TITLES.map((t,i)=>[String(i+1),Math.ceil((i+1)/2),t]).filter(x=>x[2])).concat([["뒤",NL,"뒤표지"]]).forEach(([n,f,t])=>{
+  const a=document.createElement("a"); a.innerHTML=`<b>${n}</b>${t}`;
+  a.onclick=()=>{ const pg=parseInt(n); closePanels(); if(isNaN(pg)) return gotoSpread(f); go(steps.findIndex(s=>s[0]===f&&s[1]===(pg%2?"L":"R"))); };
+  toc.appendChild(a);
+});
+
+/* ---------- boot ---------- */
+(async()=>{
+  const wait=(p,ms)=>Promise.race([p,new Promise(r=>setTimeout(r,ms))]);
+  try{ await wait(Promise.all(['900 150px "Noto Sans KR"','700 70px "Noto Sans KR"','500 40px "Noto Sans KR"','400 40px "Noto Sans KR"'].map(f=>document.fonts.load(f,"보고서가상AB"))),2500); }catch(e){}
+  await wait(new Promise(res=>{const im=new Image(); im.onload=()=>{LOGO=im; try{LOGOW=whiteLogo(im);}catch(e){} res();}; im.onerror=res; im.src="logo.png";}),2500);
+  try{
+  const IM=await Promise.all((BOOK.imgs||[]).map(src=>src?wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000):null));
+  makeFace(0,drawCover()); for(let k=1;k<=NP;k++){ if(P[k-1]) makeFace(k); else makeFace(k, IM[k-1]||blankPage()); } makeFace(LAST,drawBack());
+  buildLeaves();
+  const q=new URLSearchParams(location.search).get("s");
+  si = q!==null ? Math.max(0,Math.min(steps.length-1,parseInt(q)||0)) : 0;
+  curF=steps[si][0]; leaves.forEach((L,i)=>{L.p=L.to=i<curF?1:0; shapeLeaf(L,L.p);});
+  if(curF>0&&curF<NL){ const n=performance.now(); anim[2*curF-1]=anim[2*curF]=n+300; }
+  if(si>0) document.getElementById("hint").classList.add("off");
+  label(); resize(); camTarget(performance.now()); Object.assign(cam,camT);
+  requestAnimationFrame(loop);
+  const ld=document.getElementById("load"); ld.style.opacity=0; setTimeout(()=>ld.remove(),600);
+  }catch(err){ const ld=document.getElementById("load"); if(ld) ld.firstElementChild.textContent="표시 오류: "+err.message; console.error(err); }
+})();
+window.addEventListener("error",e=>{const ld=document.getElementById("load"); if(ld) ld.firstElementChild.textContent="표시 오류: "+e.message;});
+</script>
+</body>
+</html>
+
+</body></html>
