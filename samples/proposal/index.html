@@ -1,9 +1,9 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
-<title>LCO Pagecraft 제안서</title>
+<title>NORTHLINE 물류센터 자동화 제안서 · LCO Pagecraft 샘플</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap">
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-:root { --bg-a:#f6f8fc; --bg-b:#cdd6ea; --ink:#25234a; --ink-soft:#5e6785; --chip-bg:rgba(255,255,255,.92); --chip-line:#cbd3e6; --accent:#4287cc; --accent-ink:#fff; --panel:#ffffff; --mk1:#4287cc; --mk2:#e4622e; --hov:rgba(66,135,204,.1); }
+:root { --bg-a:#f6f8fc; --bg-b:#cdd6ea; --ink:#25234a; --ink-soft:#5e6785; --chip-bg:rgba(255,255,255,.92); --chip-line:#cbd3e6; --accent:#2B3038; --accent-ink:#fff; --panel:#ffffff; --mk1:#F5C400; --mk2:#2B3038; --hov:rgba(66,135,204,.1); }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg-a:#26264a; --bg-b:#0c0c1e; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#7ec8dc; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; } }
 :root[data-theme="dark"] { --bg-a:#26264a; --bg-b:#0c0c1e; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#7ec8dc; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; }
 html, :root { --veil: rgba(0,0,0,0); }
@@ -54,7 +54,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
 @media (max-width: 520px) { #lab { min-width: 96px; font-size: 13px; } #bar button { width: 36px; } #brand small { display: none; } .tool { padding: 0 12px; font-size: 13px; } }
 </style>
 <canvas id="gl" aria-label="가로형 3D 제안서 책"></canvas><div id="vig"></div>
-<p id="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z" style="fill:var(--mk1)"/><path d="M21 5.5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" style="fill:var(--mk2)"/></svg><span>LCO Pagecraft<small>가로 3D 제안서 · 샘플</small></span></p>
+<p id="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z" style="fill:var(--mk1)"/><path d="M21 5.5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" style="fill:var(--mk2)"/></svg><span>LCO Pagecraft<small>제안서 샘플 · 물류 자동화</small></span></p>
 <div id="tools"><button class="tool" id="qrBtn" type="button">QR</button><button class="tool" id="vidBtn" type="button" hidden>영상 보기</button><button class="tool" id="origBtn" type="button">원문 보기</button></div>
 <p id="hint">위로 쓸어 올리거나 ▶ 를 눌러 한 장씩 넘겨 보세요</p>
 <div id="bar" role="toolbar" aria-label="책 조작">
@@ -74,8 +74,8 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
 <script>
 (function () {
   "use strict";
-  var D = {"theme": {"ink": "#25234A", "dark2": "#38357A", "acc": "#4287CC", "c1": "#4287CC", "c2": "#E4622E", "c3": "#7EC8DC", "c4": "#5A5A9E", "hi": "#E4622E", "paper": "#F3F5F9", "card": "#E5E9F2", "line": "#CBD3E6", "gry": "#5E6785", "lt": "#D5DEF2", "lhi": "#FBE0D3", "steel": "#98A3C4", "side": "#4287CC"}, "meta": {"tag": "PROPOSAL", "t1": "LCO Pagecraft", "t2": "3D 책 제작 제안서", "sub": "한결컨설팅 제안서를 움직이는 책으로", "by": "LCO · 2026.11 · 가상 고객사", "brand": "LCO Pagecraft 제작 제안서 (가상)", "motif": "stack"}, "titles": ["표지", "현황과 문제", "제안 요약", "제작 과정", "독자 반응 비교", "제작 범위", "납품 일정", "견적", "도입 의견", "마무리"], "pages": [{"type": "cover"}, {"type": "rows", "kicker": "PROBLEM", "title": "좋은 제안서도 첫인상에서 밀립니다", "sub": "현황과 문제 (가상 인터뷰)", "rows": [["읽히지 않음", "PDF 제안서는 열어 보기도 전에 닫히는 일이 잦음"], ["차별성", "경쟁사 제안서와 형식이 비슷해 기억에 남지 않음"], ["확인 어려움", "상대가 어디까지 읽었는지 알 수 없음"], ["수정 부담", "디자인을 바꿀 때마다 파일을 새로 만들어야 함"]]}, {"type": "stats", "kicker": "SUMMARY", "title": "끝까지 읽히는 제안서로 바꿉니다", "sub": "제안 요약", "cards": [{"v": 79, "u": "%", "l": "끝까지 읽은 비율", "s": "시범 제작 52명 중 41명", "p": 79}, {"v": 2, "u": "일", "l": "납품 기간", "s": "PPT 전달 후 링크까지", "p": 20}, {"v": 100, "u": "%", "l": "원문 링크 제공", "s": "원본 파일을 바로 전달", "p": 100}], "note": "시범 제작 결과를 기준으로 한 가상 수치입니다. 실제 제작 전 고객사 자료로 다시 확인합니다."}, {"type": "steps", "kicker": "PROCESS", "title": "네 단계로 만들어 드립니다", "sub": "제작 과정", "steps": [["자료 받기", "PPT와 로고와 원하는 색상을 받습니다"], ["화면 제작", "슬라이드를 움직이는 화면으로 다시 만듭니다"], ["책 조립", "가로 3D 책에 스프링 제본을 입힙니다"], ["영상·원문", "소개 영상과 원문 보기를 붙입니다"]]}, {"type": "bars", "kicker": "COMPARE", "title": "받는 사람의 반응이 이렇게 달라집니다", "sub": "독자 반응 비교 (%, 가상)", "legend": ["PDF 제안서", "3D 책 제안서"], "unit": "%", "max": 100, "rows": [["끝까지 읽음", 31, 79], ["요약 영상 확인", 12, 63], ["원문 요청", 8, 48]], "side": {"prefix": "", "n": 2.5, "dec": 1, "suffix": "배", "label": "끝까지 읽은 비율", "sub": "31%에서 79%로"}}, {"type": "table", "kicker": "SCOPE", "title": "제작 범위를 이렇게 정합니다", "sub": "제공 범위", "cols": [["항목", 130], ["내용", 470], ["제공", 1270]], "rows": [["3D 책 제작", "가로 책과 움직이는 화면 10장 내외", "기본"], ["영상 보기", "30초 소개 영상 1편", "기본"], ["원문 보기", "원본 슬라이드와 파일 링크", "기본"], ["영문판", "국문과 같은 구성의 영문 책", "선택"]]}, {"type": "plan", "kicker": "SCHEDULE", "title": "2일 안에 납품합니다", "sub": "납품 일정", "points": [["1일 차", "자료 확인과 색상 적용"], ["2일 차", "화면과 영상 제작과 검수"], ["납품", "링크 발행과 원본 전달"]], "side": "핵심 시점", "next": [["D+0", "자료 전달"], ["D+1", "시안 확인"], ["D+2", "링크 납품"]]}, {"type": "table", "kicker": "QUOTE", "title": "견적은 한눈에 보이게 드립니다", "sub": "견적 (1권 기준, 가상 금액)", "total": true, "cols": [["항목", 130], ["내용", 470], ["금액", 1470, "right"]], "rows": [["기본 제작", "10장 내외 3D 책과 영상·원문 보기", "40만 원"], ["색상·로고", "고객사 브랜드 색상 적용", "10만 원"], ["영문판", "영문 책 1권 추가", "15만 원"], ["합계", "부가세 별도", "65만 원"]]}, {"type": "quotes", "kicker": "VOICE", "title": "시범 제작을 본 담당자는 이렇게 말했습니다", "sub": "도입 의견 (가상 인터뷰)", "lead": "첫인상이 달라졌어요", "leadSize": 38, "label": "시범 제작 의견 (가상)", "quotes": [["PDF로 보낼 때와 반응이 달랐습니다.", "컨설팅사 A (가상)"], ["영상으로 먼저 보고 원문을 요청하셨어요.", "영업 담당 B (가상)"], ["고객사 색상으로 바꿔 주니 우리 책 같아요.", "마케팅 담당 C (가상)"]]}, {"type": "close", "title": "함께 만들어요", "lines": ["이 제안서는 LCO Pagecraft 샘플입니다.", "모든 고객사와 수치는 가상입니다."], "contact": "제작 문의  thelcoworks@gmail.com"}]};
-  var CFG = {"video": "video.mp4", "origDir": "orig/", "pptx": "orig/prop_deck.pdf", "hint": "위로 쓸어 올리거나 ▶ 를 눌러 한 장씩 넘겨 보세요"};
+  var D = {"theme": {"ink": "#25234A", "dark2": "#38357A", "acc": "#4287CC", "c1": "#4287CC", "c2": "#E4622E", "c3": "#7EC8DC", "c4": "#5A5A9E", "hi": "#E4622E", "paper": "#F3F5F9", "card": "#E5E9F2", "line": "#CBD3E6", "gry": "#5E6785", "lt": "#D5DEF2", "lhi": "#FBE0D3", "steel": "#98A3C4", "side": "#4287CC"}, "meta": {"tag": "PROPOSAL", "t1": "LCO Pagecraft", "t2": "3D 책 제작 제안서", "sub": "한결컨설팅 제안서를 움직이는 책으로", "by": "LCO · 2026.11 · 가상 고객사", "brand": "NORTHLINE 제안서", "motif": "stack"}, "titles": ["표지", "제안 요약", "현황 진단", "배치안", "주요 설비", "시뮬레이션 결과", "구축 일정", "투자비와 회수", "운영 지원과 리스크", "다음 단계"], "pages": [{"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}]};
+  var CFG = {"video": "video.mp4", "origDir": "orig/", "pptx": "orig/northline_proposal.pdf", "hint": "위로 쓸어 올리거나 ▶ 를 눌러 한 장씩 넘겨 보세요"};
   var TITLES = D.titles;
   var N = TITLES.length, W = 16, H = 9, GAP = 0.05, HINGE = H / 2, ROWS = 40;
   var $ = function (id) { return document.getElementById(id); };
@@ -403,17 +403,20 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
       };
     };
 
+    var IMGS = D.pages.map(function (pg, i) { var im = new Image(); im.decoding = "async"; im.onload = function () { if (window.__lcoRepaint) window.__lcoRepaint(i); }; im.src = CFG.origDir + "s" + (i < 9 ? "0" : "") + (i + 1) + ".jpg"; return im; });
+    LAY.img = function (pg, n) { return function (g, t) { var o_ = LS(g, 0), im = IMGS[n - 1]; if (im && im.complete && im.naturalWidth) g.drawImage(im, 0, 0, 1600, 900); else { g.fillStyle = "#f3f3f1"; g.fillRect(0, 0, 1600, 900); } LS(g, o_); }; };
     D.pages.forEach(function (pg, i) { DRAW[i] = LAY[pg.type](pg, i + 1); });
   })();
 
   // canvas textures
-  var PG = [], LW = [640, 800, 1024, 1280], DEP = [0, .16, .27, .40];
+  var PG = [], LW = [1600, 16, 16, 16], DEP = [0, .16, .27, .40];
   for (var qi = 0; qi < DRAW.length; qi++) (function (i) {
     var g = Layered(LW), tx = g.cvs.map(function (c) { var x = new THREE.CanvasTexture(c); x.encoding = THREE.sRGBEncoding; x.minFilter = THREE.LinearFilter; x.generateMipmaps = false; return x; });
     PG.push({ g: g, tx: tx });
   })(qi);
   function paint(i, t) { var Q = PG[i], g = Q.g; g.reset(); try { DRAW[i](g, t); } catch (e) { if (window.console) console.error("page " + i, e); } for (var k = 0; k < Q.tx.length; k++) Q.tx[k].needsUpdate = true; }
   function redrawFinals() { for (var i = 0; i < PG.length; i++) if (i !== cur) paint(i, 99); }
+  window.__lcoRepaint = function (i) { paint(i, 99); };
 
   // ----- pages -----
   var pages = [];
@@ -431,7 +434,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
     var cb = new THREE.BufferAttribute(colB, 3); cb.setUsage(THREE.DynamicDrawUsage); geoB.setAttribute("color", cb);
     var tex = PG[i].tx[0];
     var mF = new THREE.MeshBasicMaterial({ map: tex, vertexColors: true, side: THREE.FrontSide });
-    var mB = new THREE.MeshBasicMaterial({ color: 0xe5e9f3, vertexColors: true, side: THREE.BackSide });
+    var mB = new THREE.MeshBasicMaterial({ color: 0xe6e8eb, vertexColors: true, side: THREE.BackSide });
     var f = new THREE.Mesh(geo, mF), b2 = new THREE.Mesh(geoB, mB);
     f.frustumCulled = b2.frustumCulled = false;
     var g = new THREE.Group(); g.add(f); g.add(b2); g.position.y = HINGE; book.add(g);
@@ -474,9 +477,9 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
   var edgeTex = gradTex(function (g, w, h) { g.fillStyle = "#eef1f8"; g.fillRect(0, 0, w, h); for (var i = 0; i < h; i += 3) { g.fillStyle = i % 6 ? "rgba(150,120,135,.35)" : "rgba(255,255,255,.7)"; g.fillRect(0, i, w, 1); } }, 8, 256);
   edgeTex.wrapS = edgeTex.wrapT = THREE.RepeatWrapping;
   var edgeMat = new THREE.MeshBasicMaterial({ map: edgeTex });
-  var inner = new THREE.MeshBasicMaterial({ color: 0xdce2ef });
+  var inner = new THREE.MeshBasicMaterial({ color: 0xe6e8eb });
   var block = new THREE.Mesh(new THREE.BoxGeometry(W - .06, H - .06, 1), [edgeMat, edgeMat, edgeMat, edgeMat, inner, inner]); block.frustumCulled = false; book.add(block);
-  var boardMat = new THREE.MeshStandardMaterial({ color: 0x25234a, roughness: .6, metalness: .05 });
+  var boardMat = new THREE.MeshStandardMaterial({ color: 0x2b3038, roughness: .6, metalness: .05 });
   var board = new THREE.Mesh(new THREE.BoxGeometry(W + .3, H + .3, .16), boardMat); book.add(board);
   var ringMat = new THREE.MeshStandardMaterial({ color: 0xc4cce0, metalness: .75, roughness: .28 });
   var rings = new THREE.Group(); book.add(rings);

@@ -1,11 +1,11 @@
 <!doctype html><html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body>
-<title>LCO Pagecraft 결과 보고서</title>
+<title>모노그램 커피 3분기 사업 보고서 · LCO Pagecraft 샘플</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap">
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
-:root { --bg-a:#f7fbfb; --bg-b:#c9dde0; --ink:#1f3a44; --ink-soft:#5d7480; --chip-bg:rgba(255,255,255,.92); --chip-line:#c3d6da; --accent:#1f6f82; --accent-ink:#fff; --panel:#ffffff; --mk1:#64a9bb; --mk2:#ffc301; --hov:rgba(31,111,130,.1); }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg-a:#243a42; --bg-b:#0b1418; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#8fd0e0; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; } }
-:root[data-theme="dark"] { --bg-a:#243a42; --bg-b:#0b1418; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#8fd0e0; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; }
+:root { --bg-a:#f6f8fc; --bg-b:#cdd6ea; --ink:#25234a; --ink-soft:#5e6785; --chip-bg:rgba(255,255,255,.92); --chip-line:#cbd3e6; --accent:#D9772B; --accent-ink:#fff; --panel:#ffffff; --mk1:#D9772B; --mk2:#2A1E17; --hov:rgba(66,135,204,.1); }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg-a:#26264a; --bg-b:#0c0c1e; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#7ec8dc; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; } }
+:root[data-theme="dark"] { --bg-a:#26264a; --bg-b:#0c0c1e; --ink:#f3e9ee; --ink-soft:#b9a7b1; --chip-bg:rgba(36,26,34,.94); --chip-line:#5a4552; --accent:#7ec8dc; --accent-ink:#2a1420; --panel:#2a1d26; --hov:rgba(255,255,255,.1); color-scheme: dark; }
 html, :root { --veil: rgba(0,0,0,0); }
 html { height: 100%; }
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --veil: rgba(18,14,20,.58); } }
@@ -25,7 +25,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
 #vig { position: fixed; inset: 0; pointer-events: none; background: radial-gradient(ellipse at 50% 46%, rgba(255,255,255,.10) 0%, rgba(0,0,0,0) 42%, rgba(24,20,28,.30) 100%); }
 #hint { position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(86px + env(safe-area-inset-bottom, 0px)); margin: 0; padding: 8px 16px; border-radius: 999px; font-size: 13px; color: var(--ink); background: var(--chip-bg); border: 1px solid var(--chip-line); z-index: 3; transition: opacity .5s; white-space: nowrap; max-width: calc(100% - 32px); overflow: hidden; text-overflow: ellipsis; }
 #hint.off { opacity: 0; pointer-events: none; }
-#bar { width: max-content; position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 999px; background: var(--chip-bg); border: 1px solid var(--chip-line); box-shadow: 0 8px 28px rgba(20,50,60,.18); z-index: 4; max-width: calc(100% - 24px); }
+#bar { width: max-content; position: fixed; left: 50%; transform: translateX(-50%); bottom: calc(18px + env(safe-area-inset-bottom, 0px)); display: flex; align-items: center; gap: 4px; padding: 6px 8px; border-radius: 999px; background: var(--chip-bg); border: 1px solid var(--chip-line); box-shadow: 0 8px 28px rgba(30,35,80,.18); z-index: 4; max-width: calc(100% - 24px); }
 #bar button { font: inherit; font-size: 18px; color: var(--ink); background: transparent; border: 0; border-radius: 999px; width: 40px; height: 40px; cursor: pointer; display: grid; place-items: center; }
 #bar button:hover { background: var(--hov); }
 #bar button:disabled { opacity: .3; cursor: default; }
@@ -54,7 +54,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
 @media (max-width: 520px) { #lab { min-width: 96px; font-size: 13px; } #bar button { width: 36px; } #brand small { display: none; } .tool { padding: 0 12px; font-size: 13px; } }
 </style>
 <canvas id="gl" aria-label="가로형 3D 보고서 책"></canvas><div id="vig"></div>
-<p id="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z" style="fill:var(--mk1)"/><path d="M21 5.5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" style="fill:var(--mk2)"/></svg><span>LCO Pagecraft<small>가로 3D 보고서 · 샘플</small></span></p>
+<p id="brand"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 5.5c3-1.5 6-1.5 9 0v14c-3-1.5-6-1.5-9 0z" style="fill:var(--mk1)"/><path d="M21 5.5c-3-1.5-6-1.5-9 0v14c3-1.5 6-1.5 9 0z" style="fill:var(--mk2)"/></svg><span>LCO Pagecraft<small>보고서 샘플 · 분기 사업 보고</small></span></p>
 <div id="tools"><button class="tool" id="qrBtn" type="button">QR</button><button class="tool" id="vidBtn" type="button" hidden>영상 보기</button><button class="tool" id="origBtn" type="button">원문 보기</button></div>
 <p id="hint">위로 쓸어 올리거나 ▶ 를 눌러 한 장씩 넘겨 보세요</p>
 <div id="bar" role="toolbar" aria-label="책 조작">
@@ -74,8 +74,8 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
 <script>
 (function () {
   "use strict";
-  var D = {"theme": {"ink": "#1F3A44", "dark2": "#2B4F5C", "acc": "#1F6F82", "c1": "#64A9BB", "c2": "#57BEA2", "c3": "#C8CF21", "c4": "#FFC301", "hi": "#FFC301", "paper": "#F4F7F8", "card": "#E8EFF1", "line": "#C3D6DA", "gry": "#5D7480", "lt": "#CFE4EA", "lhi": "#FFF1B8", "steel": "#9FB6BF", "side": "#64A9BB"}, "meta": {"tag": "TEST REPORT", "t1": "LCO Pagecraft", "t2": "시범 제작 결과 보고서", "sub": "PPT를 3D 책으로 만드는 데 얼마나 걸렸나", "by": "LCO · 2026.11 · 가상 수치", "brand": "LCO Pagecraft 시범 제작 결과 보고서 (가상 수치)", "motif": "stack"}, "titles": ["표지", "요약", "테스트 개요", "테스트 방법", "결과 1 제작 시간", "결과 2 열람 반응", "열람자 의견", "문제와 개선", "결론", "마무리"], "pages": [{"type": "cover"}, {"type": "stats", "kicker": "SUMMARY", "title": "제작 시간이 77% 줄었습니다", "sub": "가상 수치 · 시범 제작 4종 · 열람자 52명", "cards": [{"v": 77, "u": "%", "l": "제작 시간 단축", "s": "22시간에서 5시간으로", "p": 77}, {"v": 79, "u": "%", "l": "끝까지 읽은 비율", "s": "52명 중 41명", "p": 79}, {"v": 100, "u": "%", "l": "원문 링크 제공", "s": "시범 제작 4종 전체", "p": 100}], "note": "결론: 지금 기능으로 판매를 시작할 수 있습니다. 모바일 성능을 보완한 뒤 정식 판매를 권고합니다."}, {"type": "rows", "kicker": "OVERVIEW", "title": "무엇을 어떻게 시험했나", "sub": "테스트 개요", "rows": [["목적", "수작업 제작과 비교해 제작 시간과 열람 반응을 확인"], ["기간", "2026.10.01 ~ 10.31 (가상)"], ["대상", "샘플 4종과 열람자 52명 (가상)"], ["평가 항목", "제작 시간, 열람 완료율, 영상·원문 사용, 만족도"]]}, {"type": "steps", "kicker": "METHOD", "title": "네 단계로 만들어 비교했습니다", "sub": "LCO Pagecraft 제작 흐름", "steps": [["PPT 읽기", "원본 PPT의 제목과 표와 차트를 읽습니다"], ["화면 재구성", "움직이는 화면으로 다시 만듭니다"], ["책 조립", "가로 3D 책과 고객 색상을 입힙니다"], ["영상·원문", "영상 보기와 원문 보기를 붙입니다"]]}, {"type": "bars", "kicker": "RESULT 1", "title": "가장 크게 줄어든 일은 화면 재구성", "sub": "작업별 소요 시간 (시간, 가상)", "legend": ["수작업", "Pagecraft"], "unit": "시간", "max": 12, "rows": [["화면 정리", 6, 1], ["모션 제작", 12, 3.5], ["영상·원문", 4, 0.5]], "side": {"prefix": "-", "n": 77, "dec": 0, "suffix": "%", "label": "총 제작 시간", "sub": "22시간에서 5시간으로"}}, {"type": "donuts", "kicker": "RESULT 2", "title": "열람자의 79%가 끝까지 읽었습니다", "sub": "열람 반응 항목별 결과 (가상)", "items": [["끝까지 읽은 비율", 79, "52명 중 41명"], ["영상 보기 사용", 63, "52명 중 33명"], ["원문 보기 사용", 48, "52명 중 25명"]]}, {"type": "quotes", "kicker": "FEEDBACK", "title": "열람자는 이렇게 말했습니다", "sub": "열람자 의견 · 가상 인터뷰", "lead": "만족도 4.6점", "leadSize": 40, "label": "5점 만점 (가상)", "quotes": [["슬라이드가 움직이니 끝까지 보게 됐어요.", "열람자 A (가상)"], ["영상으로 요약부터 보고 원문을 열었습니다.", "열람자 B (가상)"], ["책처럼 넘기는 게 새롭고 기억에 남아요.", "열람자 C (가상)"]]}, {"type": "table", "kicker": "ISSUES", "title": "아직 고칠 것이 있습니다", "sub": "발견된 문제와 조치", "cols": [["문제", 130], ["수준", 640], ["조치", 790]], "rows": [["모바일 저사양 기기 느림", "높음", "간략 화면으로 자동 전환 추가"], ["PPT 안 영상 변환 제한", "중간", "화면 단위 모션그래픽으로 재구성"], ["고객 글꼴 라이선스", "중간", "대체 글꼴과 사용 안내서 제공"]]}, {"type": "plan", "kicker": "CONCLUSION", "title": "정식 판매를 권고합니다", "sub": "결론과 다음 일정", "points": [["시간", "제작 시간을 77% 줄여 더 많은 책을 제작"], ["반응", "열람자의 79%가 끝까지 읽고 절반이 원문을 열어 봄"], ["보완", "모바일 성능과 글꼴 문제는 11월 안에 개선"]], "side": "다음 일정", "next": [["11월", "보완 개발"], ["12월", "판매 오픈"], ["1월", "홈페이지"]]}, {"type": "close", "title": "감사합니다", "lines": ["이 보고서는 LCO Pagecraft 샘플입니다.", "모든 수치와 인물은 가상입니다."], "contact": "제작 문의  thelcoworks@gmail.com"}]};
-  var CFG = {"video": "video.mp4", "origDir": "orig/", "pptx": "orig/lco_test_report.pdf", "hint": "위로 쓸어 올리거나 ▶ 를 눌러 한 장씩 넘겨 보세요"};
+  var D = {"theme": {"ink": "#25234A", "dark2": "#38357A", "acc": "#4287CC", "c1": "#4287CC", "c2": "#E4622E", "c3": "#7EC8DC", "c4": "#5A5A9E", "hi": "#E4622E", "paper": "#F3F5F9", "card": "#E5E9F2", "line": "#CBD3E6", "gry": "#5E6785", "lt": "#D5DEF2", "lhi": "#FBE0D3", "steel": "#98A3C4", "side": "#4287CC"}, "meta": {"tag": "PROPOSAL", "t1": "LCO Pagecraft", "t2": "3D 책 제작 제안서", "sub": "한결컨설팅 제안서를 움직이는 책으로", "by": "LCO · 2026.11 · 가상 고객사", "brand": "MONOGRAM 보고서", "motif": "stack"}, "titles": ["표지", "한눈에 보는 3분기", "매출", "매장별 성과", "원두 라인업", "생산과 품질", "정기구독", "손익", "생두 가격 리스크", "4분기 계획"], "pages": [{"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}, {"type": "img"}]};
+  var CFG = {"video": "video.mp4", "origDir": "orig/", "pptx": "orig/monogram_q3_report.pdf", "hint": "위로 쓸어 올리거나 ▶ 를 눌러 한 장씩 넘겨 보세요"};
   var TITLES = D.titles;
   var N = TITLES.length, W = 16, H = 9, GAP = 0.05, HINGE = H / 2, ROWS = 40;
   var $ = function (id) { return document.getElementById(id); };
@@ -403,17 +403,20 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
       };
     };
 
+    var IMGS = D.pages.map(function (pg, i) { var im = new Image(); im.decoding = "async"; im.onload = function () { if (window.__lcoRepaint) window.__lcoRepaint(i); }; im.src = CFG.origDir + "s" + (i < 9 ? "0" : "") + (i + 1) + ".jpg"; return im; });
+    LAY.img = function (pg, n) { return function (g, t) { var o_ = LS(g, 0), im = IMGS[n - 1]; if (im && im.complete && im.naturalWidth) g.drawImage(im, 0, 0, 1600, 900); else { g.fillStyle = "#f3f3f1"; g.fillRect(0, 0, 1600, 900); } LS(g, o_); }; };
     D.pages.forEach(function (pg, i) { DRAW[i] = LAY[pg.type](pg, i + 1); });
   })();
 
   // canvas textures
-  var PG = [], LW = [640, 800, 1024, 1280], DEP = [0, .16, .27, .40];
+  var PG = [], LW = [1600, 16, 16, 16], DEP = [0, .16, .27, .40];
   for (var qi = 0; qi < DRAW.length; qi++) (function (i) {
     var g = Layered(LW), tx = g.cvs.map(function (c) { var x = new THREE.CanvasTexture(c); x.encoding = THREE.sRGBEncoding; x.minFilter = THREE.LinearFilter; x.generateMipmaps = false; return x; });
     PG.push({ g: g, tx: tx });
   })(qi);
   function paint(i, t) { var Q = PG[i], g = Q.g; g.reset(); try { DRAW[i](g, t); } catch (e) { if (window.console) console.error("page " + i, e); } for (var k = 0; k < Q.tx.length; k++) Q.tx[k].needsUpdate = true; }
   function redrawFinals() { for (var i = 0; i < PG.length; i++) if (i !== cur) paint(i, 99); }
+  window.__lcoRepaint = function (i) { paint(i, 99); };
 
   // ----- pages -----
   var pages = [];
@@ -431,7 +434,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
     var cb = new THREE.BufferAttribute(colB, 3); cb.setUsage(THREE.DynamicDrawUsage); geoB.setAttribute("color", cb);
     var tex = PG[i].tx[0];
     var mF = new THREE.MeshBasicMaterial({ map: tex, vertexColors: true, side: THREE.FrontSide });
-    var mB = new THREE.MeshBasicMaterial({ color: 0xe4eef0, vertexColors: true, side: THREE.BackSide });
+    var mB = new THREE.MeshBasicMaterial({ color: 0xefe7da, vertexColors: true, side: THREE.BackSide });
     var f = new THREE.Mesh(geo, mF), b2 = new THREE.Mesh(geoB, mB);
     f.frustumCulled = b2.frustumCulled = false;
     var g = new THREE.Group(); g.add(f); g.add(b2); g.position.y = HINGE; book.add(g);
@@ -471,14 +474,14 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
   var shMat = new THREE.MeshBasicMaterial({ map: shTex, transparent: true, opacity: 0, depthWrite: false });
   var shade = new THREE.Mesh(new THREE.PlaneGeometry(W, H), shMat); shade.position.y = 0; book.add(shade);
 
-  var edgeTex = gradTex(function (g, w, h) { g.fillStyle = "#eef5f6"; g.fillRect(0, 0, w, h); for (var i = 0; i < h; i += 3) { g.fillStyle = i % 6 ? "rgba(150,120,135,.35)" : "rgba(255,255,255,.7)"; g.fillRect(0, i, w, 1); } }, 8, 256);
+  var edgeTex = gradTex(function (g, w, h) { g.fillStyle = "#eef1f8"; g.fillRect(0, 0, w, h); for (var i = 0; i < h; i += 3) { g.fillStyle = i % 6 ? "rgba(150,120,135,.35)" : "rgba(255,255,255,.7)"; g.fillRect(0, i, w, 1); } }, 8, 256);
   edgeTex.wrapS = edgeTex.wrapT = THREE.RepeatWrapping;
   var edgeMat = new THREE.MeshBasicMaterial({ map: edgeTex });
-  var inner = new THREE.MeshBasicMaterial({ color: 0xdbe7ea });
+  var inner = new THREE.MeshBasicMaterial({ color: 0xefe7da });
   var block = new THREE.Mesh(new THREE.BoxGeometry(W - .06, H - .06, 1), [edgeMat, edgeMat, edgeMat, edgeMat, inner, inner]); block.frustumCulled = false; book.add(block);
-  var boardMat = new THREE.MeshStandardMaterial({ color: 0x1f3a44, roughness: .6, metalness: .05 });
+  var boardMat = new THREE.MeshStandardMaterial({ color: 0x2a1e17, roughness: .6, metalness: .05 });
   var board = new THREE.Mesh(new THREE.BoxGeometry(W + .3, H + .3, .16), boardMat); book.add(board);
-  var ringMat = new THREE.MeshStandardMaterial({ color: 0xc2d2d6, metalness: .75, roughness: .28 });
+  var ringMat = new THREE.MeshStandardMaterial({ color: 0xc4cce0, metalness: .75, roughness: .28 });
   var rings = new THREE.Group(); book.add(rings);
   var RN = 22;
   for (var r = 0; r < RN; r++) {
@@ -516,7 +519,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
   var deskSh = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({ map: dshT, transparent: true, depthWrite: false })); deskSh.rotation.x = -Math.PI / 2; deskSh.renderOrder = 1; scene.add(deskSh);
   var props = new THREE.Group(); scene.add(props);
   (function () {
-    var mugM = new THREE.MeshStandardMaterial({ color: new THREE.Color("#1f6f82"), roughness: .45, metalness: .05 });
+    var mugM = new THREE.MeshStandardMaterial({ color: new THREE.Color("#4287cc"), roughness: .45, metalness: .05 });
     var mug = new THREE.Mesh(new THREE.CylinderGeometry(1.05, .95, 2.0, 32), mugM); mug.position.y = 1.0; props.add(mug);
     var cof = new THREE.Mesh(new THREE.CircleGeometry(.9, 32), new THREE.MeshBasicMaterial({ color: 0x3a2518 })); cof.rotation.x = -Math.PI / 2; cof.position.y = 1.9; props.add(cof);
     var hd = new THREE.Mesh(new THREE.TorusGeometry(.6, .16, 10, 20, Math.PI), mugM); hd.rotation.z = -Math.PI / 2; hd.position.set(1.15, 1.0, 0); props.add(hd);
@@ -524,7 +527,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
     mug.position.y = 1.12; cof.position.y = 2.02; hd.position.y = 1.12;
     props.userData.mug = [mug, cof, hd, sau];
     var pen = new THREE.Group();
-    var body = new THREE.Mesh(new THREE.CylinderGeometry(.2, .2, 7.2, 6), new THREE.MeshStandardMaterial({ color: new THREE.Color("#ffc301"), roughness: .5 })); pen.add(body);
+    var body = new THREE.Mesh(new THREE.CylinderGeometry(.2, .2, 7.2, 6), new THREE.MeshStandardMaterial({ color: new THREE.Color("#e4622e"), roughness: .5 })); pen.add(body);
     var tip = new THREE.Mesh(new THREE.ConeGeometry(.2, .7, 6), new THREE.MeshStandardMaterial({ color: 0xe8d2b0 })); tip.position.y = -3.95; pen.add(tip);
     var lead = new THREE.Mesh(new THREE.ConeGeometry(.07, .22, 6), new THREE.MeshBasicMaterial({ color: 0x2b2b30 })); lead.position.y = -4.3; pen.add(lead);
     var er = new THREE.Mesh(new THREE.CylinderGeometry(.21, .21, .45, 6), new THREE.MeshStandardMaterial({ color: 0xe56b7a })); er.position.y = 3.8; pen.add(er);
@@ -698,7 +701,7 @@ body { background: linear-gradient(var(--veil), var(--veil)), url(desk.jpg) cent
 <div id="qrm" class="modal" role="dialog" aria-modal="true" aria-label="QR" hidden><div style="background:#fff;border-radius:18px;padding:20px;text-align:center;max-width:300px;color:#1f3a44"><div style="font-weight:700;margin-bottom:10px">휴대폰으로 열기</div><div id="qrbox" style="display:grid;place-items:center;padding:6px"></div><p style="font-size:12px;color:#5d7480;margin:10px 0 12px">카메라로 스캔하면 같은 책자가 휴대폰에서 열립니다.</p><button type="button" id="qrClose" class="mbtn" style="color:#1f3a44;border-color:#c3d6da;background:#f2f6f7">닫기</button></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>(function(){var b=document.getElementById("qrBtn"),m=document.getElementById("qrm"),made=false;
-b.addEventListener("click",function(){m.hidden=false;if(!made&&window.QRCode){new QRCode(document.getElementById("qrbox"),{text:"https://lcopagecraft.com/samples/report/",width:200,height:200,colorDark:"#1f3a44",correctLevel:QRCode.CorrectLevel.M});made=true;}});
+b.addEventListener("click",function(){m.hidden=false;if(!made&&window.QRCode){new QRCode(document.getElementById("qrbox"),{text:"https://lcopagecraft.com/samples/proposal/",width:200,height:200,colorDark:"#1f3a44",correctLevel:QRCode.CorrectLevel.M});made=true;}});
 document.getElementById("qrClose").addEventListener("click",function(){m.hidden=true;});
 m.addEventListener("click",function(e){if(e.target===m)m.hidden=true;});})();</script>
 
