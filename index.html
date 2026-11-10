@@ -5,12 +5,15 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>LCO Pagecraft</title>
 <script>
-/* intro video: play once per browser session; skip for reduced-motion users (decided before first paint, so returning visitors never see a flash) */
+/* intro video: once per browser session (decided before first paint, so returning visitors never see a flash).
+   Reduced-motion users get a still logo splash instead of the moving clip. Add ?intro=1 to the address to force the full clip. */
 (function(){
-  var seen=false, reduce=false;
+  var seen=false, reduce=false, force=/[?&]intro=1(&|$)/.test(location.search), h=document.documentElement.classList;
   try{ seen=!!sessionStorage.getItem('lcoIntroSeen'); }catch(e){}            /* storage blocked -> treat as first visit */
   try{ reduce=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
-  document.documentElement.classList.add(seen||reduce?'no-intro':'intro-lock');
+  if(force){ seen=false; reduce=false; }
+  if(seen){ h.add('no-intro'); return; }
+  h.add('intro-lock'); if(reduce) h.add('intro-still');
 })();
 </script>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -160,7 +163,7 @@ footer{padding:36px 0 44px;color:var(--mute);font-size:13.5px;display:flex;justi
 #lcoIntro .skip:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
 html.intro-lock{overflow:hidden}
 html.no-intro #lcoIntro{display:none}
-@media (prefers-reduced-motion:reduce){#lcoIntro{display:none}}
+#lcoIntro img.still{width:100%;height:100%;object-fit:contain;background:#000;max-width:none}
 </style>
 </head>
 <body>
@@ -302,7 +305,7 @@ html.no-intro #lcoIntro{display:none}
   var el=document.getElementById('lcoIntro');
   if(!el) return;
   if(document.documentElement.classList.contains('no-intro')){ el.remove(); return; }
-  var v=el.querySelector('video'), done=false;
+  var v=el.querySelector('video'), done=false, still=document.documentElement.classList.contains('intro-still');
   function finish(){
     if(done) return; done=true;
     try{ sessionStorage.setItem('lcoIntroSeen','1'); }catch(e){}
@@ -310,10 +313,14 @@ html.no-intro #lcoIntro{display:none}
     document.documentElement.classList.remove('intro-lock');
     setTimeout(function(){ el.remove(); },1000);
   }
-  v.addEventListener('ended',function(){ setTimeout(finish,500); });   /* the clip holds its last frame, then fades out */
-  v.addEventListener('error',finish);                                    /* video can't load -> just show the page */
   el.querySelector('.skip').addEventListener('click',finish);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape') finish(); });
+  if(still){                                                             /* reduced motion: show the final logo frame for 2.5 s, no movement */
+    var im=new Image(); im.className='still'; im.alt='LCO Pagecraft'; im.src='assets/intro/lco_pagecraft_intro_poster.jpg';
+    v.replaceWith(im); setTimeout(finish,2500); return;
+  }
+  v.addEventListener('ended',function(){ setTimeout(finish,500); });   /* the clip holds its last frame, then fades out */
+  v.addEventListener('error',finish);                                    /* video can't load -> just show the page */
   var p=v.play(); if(p&&p.catch) p.catch(finish);                        /* autoplay blocked -> show the page */
   setTimeout(finish,12000);                                              /* safety net for very slow connections */
 })();
