@@ -648,7 +648,13 @@ document.getElementById("vid").addEventListener("click",e=>{if(e.target.id==="vi
   try{
   const IM=await Promise.all((BOOK.imgs||[]).map(src=>src?wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000):null));
   const IMX=await Promise.all(["pages/cover.jpg","pages/back.jpg"].map(src=>wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000)));
-  P=[]; makeFace(0,IMX[0]||drawCover()); for(let k=1;k<=NP;k++){ if(P[k-1]) makeFace(k); else makeFace(k, IM[k-1]||blankPage()); } makeFace(LAST,IMX[1]||drawBack());
+  const ANIM={"2": [{"x": 120, "y": 1080, "w": 1260, "h": 250, "dir": "right", "d": 0}], "3": [{"x": 120, "y": 1096, "w": 1260, "h": 640, "dir": "up", "d": 0}], "5": [{"x": 120, "y": 1260, "w": 1260, "h": 560, "dir": "right", "d": 0}], "6": [{"x": 120, "y": 500, "w": 1260, "h": 940, "dir": "right", "d": 0}], "9": [{"x": 120, "y": 1330, "w": 1260, "h": 420, "dir": "right", "d": 0}]};
+  const ldA=src=>wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000);
+  const AB={},ACH={}; await Promise.all(Object.keys(ANIM).map(async k=>{const n=String(k).padStart(2,'0'); AB[k]=await ldA('anim/b'+n+'.jpg'); ACH[k]=await ldA('anim/c'+n+'.png');}));
+  const easeA=x=>{x=x<0?0:x>1?1:x;return 1-Math.pow(1-x,3);};
+  P=[]; Object.keys(ANIM).forEach(k=>{ if(!AB[k]||!ACH[k]) return; P[k-1]=(g,t)=>{ g.drawImage(AB[k],0,0,TW,TH); ANIM[k].forEach((r,i)=>{ const p=easeA((t-.35-r.d-i*.12)/1.2); if(p<=0) return; g.save(); g.beginPath();
+    if(r.dir==='up') g.rect(r.x-6,r.y+r.h*(1-p)-6,r.w+12,r.h*p+12); else g.rect(r.x-6,r.y-6,r.w*p+12,r.h+12); g.clip(); g.drawImage(ACH[k],0,0,TW,TH); g.restore(); }); }; });
+  makeFace(0,IMX[0]||drawCover()); for(let k=1;k<=NP;k++){ if(P[k-1]) makeFace(k); else makeFace(k, IM[k-1]||blankPage()); } makeFace(LAST,IMX[1]||drawBack());
   buildLeaves();
   const q=new URLSearchParams(location.search).get("s");
   si = q!==null ? Math.max(0,Math.min(steps.length-1,parseInt(q)||0)) : 0;
