@@ -161,6 +161,11 @@ footer{padding:36px 0 44px;color:var(--mute);font-size:13.5px;display:flex;justi
 #lcoIntro .skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;font:500 13px/1 "Noto Sans KR",system-ui,sans-serif;cursor:pointer;backdrop-filter:blur(6px)}
 #lcoIntro .skip:hover{background:rgba(255,255,255,.22)}
 #lcoIntro .skip:focus-visible{outline:3px solid var(--orange);outline-offset:2px}
+/* "들어가기" appears when the clip ends; the page stays hidden until it is pressed */
+#lcoIntro .enter{position:absolute;left:50%;bottom:max(40px,8vh);transform:translate(-50%,10px);opacity:0;pointer-events:none;background:#0080FF;color:#fff;border:0;border-radius:999px;padding:14px 34px;font:700 17px/1 "Noto Sans KR",system-ui,sans-serif;letter-spacing:.02em;cursor:pointer;transition:opacity .8s ease,transform .8s ease,background .2s;box-shadow:0 10px 30px -10px rgba(0,128,255,.7)}
+#lcoIntro .enter.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
+#lcoIntro .enter:hover{background:#2E94FF}
+#lcoIntro .enter:focus-visible{outline:3px solid #fff;outline-offset:3px}
 html.intro-lock{overflow:hidden}
 html.no-intro #lcoIntro{display:none}
 #lcoIntro img.still{width:100%;height:100%;object-fit:contain;background:#000;max-width:none}
@@ -173,7 +178,8 @@ html.no-intro #lcoIntro{display:none}
     <source src="assets/intro/lco_pagecraft_intro.webm" type="video/webm">
     <source src="assets/intro/lco_pagecraft_intro.mp4" type="video/mp4">
   </video>
-  <button class="skip" type="button" aria-label="인트로 건너뛰기">건너뛰기</button>
+  <button class="skip" type="button" aria-label="인트로 건너뛰고 홈페이지로 들어가기">건너뛰기</button>
+  <button class="enter" type="button" aria-label="홈페이지로 들어가기">들어가기 →</button>
 </div>
 
 <nav><div class="wrap">
@@ -300,29 +306,37 @@ html.no-intro #lcoIntro{display:none}
 </script>
 
 <script>
-/* intro video: plays after load, then fades into the page. Skip button / Esc / click-through safety net included. */
+/* intro: the clip plays, holds on the logo, then a "들어가기" button appears. The homepage is revealed only when it is pressed.
+   "건너뛰기" / Esc enter straight away. Reduced motion, a blocked autoplay or a failed video show the still logo frame + the same button. */
 (function(){
   var el=document.getElementById('lcoIntro');
   if(!el) return;
-  if(document.documentElement.classList.contains('no-intro')){ el.remove(); return; }
-  var v=el.querySelector('video'), done=false, still=document.documentElement.classList.contains('intro-still');
-  function finish(){
+  var root=document.documentElement;
+  if(root.classList.contains('no-intro')){ el.remove(); return; }
+  var v=el.querySelector('video'), btn=el.querySelector('.enter'), skip=el.querySelector('.skip'), done=false, ready=false;
+  function enter(){
     if(done) return; done=true;
     try{ sessionStorage.setItem('lcoIntroSeen','1'); }catch(e){}
     el.classList.add('is-done');
-    document.documentElement.classList.remove('intro-lock');
+    root.classList.remove('intro-lock');
     setTimeout(function(){ el.remove(); },1000);
   }
-  el.querySelector('.skip').addEventListener('click',finish);
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape') finish(); });
-  if(still){                                                             /* reduced motion: show the final logo frame for 2.5 s, no movement */
-    var im=new Image(); im.className='still'; im.alt='LCO Pagecraft'; im.src='assets/intro/lco_pagecraft_intro_poster.jpg';
-    v.replaceWith(im); setTimeout(finish,2500); return;
+  function showEnter(){
+    if(ready||done) return; ready=true;
+    skip.style.display='none'; btn.classList.add('show');
+    try{ btn.focus({preventScroll:true}); }catch(e){}
   }
-  v.addEventListener('ended',function(){ setTimeout(finish,500); });   /* the clip holds its last frame, then fades out */
-  v.addEventListener('error',finish);                                    /* video can't load -> just show the page */
-  var p=v.play(); if(p&&p.catch) p.catch(finish);                        /* autoplay blocked -> show the page */
-  setTimeout(finish,12000);                                              /* safety net for very slow connections */
+  function showStill(){
+    if(v.parentNode){ var im=new Image(); im.className='still'; im.alt='LCO Pagecraft'; im.src='assets/intro/lco_pagecraft_intro_poster.jpg'; v.replaceWith(im); }
+    showEnter();
+  }
+  btn.addEventListener('click',enter); skip.addEventListener('click',enter);
+  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||(e.key==='Enter'&&ready)) enter(); });
+  if(root.classList.contains('intro-still')){ showStill(); return; }
+  v.addEventListener('ended',function(){ setTimeout(showEnter,600); });   /* last frame holds for a beat, then the button fades in */
+  v.addEventListener('error',showStill);                                    /* video can't load */
+  var p=v.play(); if(p&&p.catch) p.catch(showStill);                        /* autoplay blocked */
+  setTimeout(showEnter,20000);                                              /* very slow connection: never leave visitors waiting */
 })();
 </script>
 
