@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
-<title>보험 보장분석 3D 책자</title>
+<title>온결 보장분석 리포트 · LCO Pagecraft 샘플</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
@@ -60,7 +60,7 @@ canvas{display:block}
 <body>
 <div id="stage"></div><div id="vig"></div>
 <div id="load"><div>책자를 준비하는 중…</div></div>
-<div class="brand"><img src="logo.png" alt="LCO Pagecraft"><small>보험 보장분석 · 3D 샘플</small></div>
+<div class="brand"><img src="logo.png" alt="LCO Pagecraft"><small>보장분석 리포트 · 3D 샘플</small></div>
 <div class="tools">
   <button class="tool" id="bVid"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg><span>영상 보기</span></button>
   <button class="tool" id="bToc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
@@ -83,33 +83,14 @@ canvas{display:block}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
 const BOOK={
-  title:"보험 보장분석 보고서", pageTitle:"보험 보장분석 3D 책자", brandSub:"보험 보장분석 · 3D 샘플",
-  qrNote:"휴대폰 카메라로 스캔하면 같은 책자가 열립니다. 본 책자는 가상의 보장분석 샘플이며 실제 보험 가입정보·상품이 아닙니다.",
+  title:"보장분석 리포트", pageTitle:"온결 보장분석 리포트 · LCO Pagecraft 샘플", brandSub:"보장분석 리포트 · 3D 샘플",
+  qrNote:"휴대폰 카메라로 스캔하면 같은 책자가 열립니다. 본 책자는 가상의 고객·설계사·보험사로 만든 샘플이며 실제 보험 상품이 아닙니다.",
   share:"https://lcopagecraft.com/samples/insurance/",
-  TW:1500, TH:2100, ink:"#0E2A47", accent:"#F5C842", live:[8],
+  TW:1500, TH:2100, ink:"#12324A", accent:"#B88A44", live:[], imgs:["pages/p01.jpg","pages/p02.jpg","pages/p03.jpg","pages/p04.jpg","pages/p05.jpg","pages/p06.jpg","pages/p07.jpg","pages/p08.jpg","pages/p09.jpg","pages/p10.jpg"],
   videos:["videos/p01.mp4","videos/p02.mp4","videos/p03.mp4","videos/p04.mp4","videos/p05.mp4","videos/p06.mp4","videos/p07.mp4","videos/p08.mp4","videos/p09.mp4","videos/p10.mp4"],
-  titles:["종합 보장분석 현황","계약 및 보험료 현황","전체 담보별 보장 비교표","사망·후유장해 보장 분석","암·뇌·심장 진단비 분석","실손·입원·수술비 보장 분석","운전자·기타 보장 분석","신체 부위별 보장 연결도","보장 진단 및 주요 현황","종합 분석결과 및 점검 과제"],
-  cover:{tag:"INSURANCE COVERAGE REPORT", lines:["보험 보장분석","보고서"], sub:"2개 계약 · 23개 담보를 충족·부족·미가입으로 진단", date:"2026.11",
-    art(g,b){ const cx=b.x+b.w/2+40, cy=b.y+360, Ro=290, Ri=185; let a0=-Math.PI/2; const GR="#2F8466",RD="#C94B50",GY="#8A97A6";
-      g.save(); g.shadowColor="rgba(0,0,0,.45)"; g.shadowBlur=50; g.shadowOffsetY=26; g.beginPath(); g.arc(cx,cy,Ro,0,7); g.fillStyle="#0A2038"; g.fill(); g.restore();
-      [[12,GR],[3,RD],[8,GY]].forEach(([v,c])=>{const a1=a0+v/23*Math.PI*2; for(let k=14;k>=0;k-=2){g.beginPath();g.arc(cx,cy+k,Ro,a0,a1);g.arc(cx,cy+k,Ri,a1,a0,true);g.closePath();g.fillStyle=k?"rgba(0,0,0,.25)":c;g.fill();} a0=a1;});
-      T(g,"23",cx,cy+40,FN(900,150),"#fff","center"); T(g,"보장 항목",cx,cy+100,FN(500,40),"rgba(255,255,255,.75)","center");
-      [["충족","12",GR],["부족","3",RD],["미가입","8",GY]].forEach(([t,v,c],i)=>{const x=cx+(i-1)*390,y=b.y+800;
-        R(g,x-165,y-70,330,150,22);g.fillStyle="rgba(255,255,255,.08)";g.fill();g.fillStyle=c;g.fillRect(x-165,y-70,330,8);
-        T(g,v+"개",x,y+30,FN(900,72),"#fff","center");T(g,t,x,y+68,FN(500,34),"rgba(255,255,255,.75)","center");}); } },
-  scenes:{
-    0:["보험 보장분석 보고서|가상 계약 *2건*, 담보 *23개*를 한 권으로 정리했습니다|월 보험료 144,710원 · 가상 샘플","진단 결과|*12개 충족*, *3개 부족*, *8개 미가입*|비교 기준은 설명용 가정"],
-    1:["종합 보장분석 현황|23개 담보 중 *52.2%*가 충족입니다|부족 13.0% · 미가입 34.8%","주요 항목|상해사망과 일반암 진단비는 *비교금액보다 적습니다*|뇌혈관·허혈성심장 진단비는 미가입"],
-    2:["계약 및 보험료|월 보험료 합계 *144,710원*, 연 *1,736,520원*|A손해보험 17,000원 · B생명보험 127,710원","보험사별 비중|보험료의 *88.3%*가 B생명보험 종합건강보험입니다|A손해보험은 운전자·배상책임 중심"],
-    3:["전체 담보 비교표|23개 담보를 회사별 가입금액과 *비교금액*으로 나란히 봅니다|단위 만원 · 일당은 만원/일","눈여겨볼 곳|실손 입원·통원과 3대 비급여가 *모두 미가입*입니다|운전자·배상책임 5개는 모두 충족"],
-    4:["사망·후유장해|상해사망 *1억 8,000만*, 비교금액 2억의 90%|두 계약에 담보가 나뉘어 있음","부족과 미가입|질병사망은 *5,000만 원 부족*, 질병 80% 후유장해는 *미가입*|상해 80% 후유장해는 충족"],
-    5:["암·뇌·심장 진단비|일반암 *3,000만*으로 비교금액 5,000만보다 적습니다|유사암 2,100만은 충족","뇌·심장 범위|뇌졸중·급성심근경색만 있고 *뇌혈관·허혈성심장은 미가입*|보장 범위가 좁을 수 있음"],
-    6:["실손·입원·수술|실손보험 *0개* — 입원·통원·3대 비급여 모두 미기재|약관·세대별 조건 확인 필요","정액형 담보|질병수술비 *400만*, 입원일당 상해 3만·질병 4만|비교 기준 이상"],
-    7:["운전자·기타|교통사고처리지원금 *2억 1,000만* 등 5개 담보 *모두 충족*|벌금·변호사선임비용 포함","확인할 점|배상책임은 *다른 보험과의 중복 처리*를 확인해야 합니다|실제 지급액은 약관·면책에 따라 다름"],
-    8:["신체 부위별 연결도|머리·가슴·배로 *보장을 연결*해 빈 곳을 찾습니다|뇌·심장 관련 담보 일부 미가입","빈 곳|입원·통원 *실손 0개*가 가장 큰 공백입니다|질병수술비·입원일당은 있음"],
-    9:["보장 진단|충족 *12* · 부족 *3* · 미가입 *8*|23개 담보 기준","보장군별|운전자·기타는 *5/5 충족*, 실손·입원·수술은 *3/7*|암·진단 3/7 · 사망·장해 1/4"],
-    10:["우선 점검 과제|1순위는 *실손의료비 가입 여부* 확인입니다|입원·통원·3대 비급여 미기재","다음 순서|뇌혈관·허혈성심장 → 암 진단비 → *사망 보장* → 후유장해|실제 평가는 증권·약관 확인 필요"]
-  },
+  titles:["요약","가족과 재무 상황","가입 계약","보장 한눈에","사망 보장","3대 진단비","실손·입원·수술","운전자·배상책임","개선안","다음 단계"],
+  cover:{sub:"김지원 님 가족 · 계약 2건, 담보 23개 점검"},
+  scenes:{},
   back:{lines:["본 자료는 형식 확인을 위한","가상의 분석 샘플입니다"], notes:["실제 평가는 보험증권·약관·연령·소득·가족상황·","가입목적 확인이 필요합니다.","비교금액·충족 판정은 설명용 임의 가정입니다."]}
 };
 
@@ -666,7 +647,8 @@ document.getElementById("vid").addEventListener("click",e=>{if(e.target.id==="vi
   await wait(new Promise(res=>{const im=new Image(); im.onload=()=>{LOGO=im; try{LOGOW=whiteLogo(im);}catch(e){} res();}; im.onerror=res; im.src="logo.png";}),2500);
   try{
   const IM=await Promise.all((BOOK.imgs||[]).map(src=>src?wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000):null));
-  makeFace(0,drawCover()); for(let k=1;k<=NP;k++){ if(P[k-1]) makeFace(k); else makeFace(k, IM[k-1]||blankPage()); } makeFace(LAST,drawBack());
+  const IMX=await Promise.all(["pages/cover.jpg","pages/back.jpg"].map(src=>wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000)));
+  P=[]; makeFace(0,IMX[0]||drawCover()); for(let k=1;k<=NP;k++){ if(P[k-1]) makeFace(k); else makeFace(k, IM[k-1]||blankPage()); } makeFace(LAST,IMX[1]||drawBack());
   buildLeaves();
   const q=new URLSearchParams(location.search).get("s");
   si = q!==null ? Math.max(0,Math.min(steps.length-1,parseInt(q)||0)) : 0;
