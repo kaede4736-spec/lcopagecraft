@@ -25,7 +25,7 @@
   var seen=false, reduce=false, force=/[?&]intro=1(&|$)/.test(location.search), h=document.documentElement.classList;
   h.add('js');
   try{ seen=!!sessionStorage.getItem('lcoIntroSeen'); }catch(e){}            /* storage blocked -> treat as first visit */
-  try{ reduce=matchMedia('(prefers-reduced-motion: reduce)').matches; }catch(e){}
+  /* 인트로는 7초짜리 무음 로고 영상이라 '애니메이션 줄이기' 설정과 상관없이 재생합니다(건너뛰기 버튼 있음) */
   if(force){ seen=false; reduce=false; }
   if(seen){ h.add('no-intro'); return; }
   h.add('intro-lock'); if(reduce) h.add('intro-still');
