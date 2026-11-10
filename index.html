@@ -220,6 +220,8 @@ html.js .rv.in{opacity:1;transform:none}
 #lcoIntro video{width:100%;height:100%;object-fit:contain;background:#000;max-width:none}
 #lcoIntro.is-done{opacity:0;visibility:hidden;pointer-events:none}
 #lcoIntro .skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;font:500 13px/1 var(--font);cursor:pointer;backdrop-filter:blur(6px)}
+#lcoIntro .snd{position:absolute;left:max(16px,env(safe-area-inset-left,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;font:500 13px/1 var(--font);cursor:pointer;backdrop-filter:blur(6px)}
+#lcoIntro .snd:hover{background:rgba(255,255,255,.22)}
 #lcoIntro .skip:hover{background:rgba(255,255,255,.22)}
 /* "들어가기" appears when the clip ends; the page stays hidden until it is pressed */
 #lcoIntro .enter{position:absolute;left:50%;bottom:max(40px,8vh);transform:translate(-50%,10px);opacity:0;pointer-events:none;background:#0080FF;color:#fff;border:0;border-radius:999px;padding:14px 34px;font:700 17px/1 var(--font);letter-spacing:.02em;cursor:pointer;transition:opacity .8s ease,transform .8s ease,background .2s;box-shadow:0 10px 30px -10px rgba(0,128,255,.7)}
@@ -238,6 +240,7 @@ html.no-intro #lcoIntro{display:none}
     <source src="assets/intro/lco_pagecraft_intro.webm" type="video/webm">
     <source src="assets/intro/lco_pagecraft_intro.mp4" type="video/mp4">
   </video>
+  <button class="snd" type="button" aria-label="소리와 함께 인트로 다시 보기">🔊 소리 켜기</button>
   <button class="skip" type="button" aria-label="인트로 건너뛰고 홈페이지로 들어가기">건너뛰기</button>
   <button class="enter" type="button" aria-label="홈페이지로 들어가기">들어가기 →</button>
 </div>
@@ -431,7 +434,7 @@ html.no-intro #lcoIntro{display:none}
   if(!el) return;
   var root=document.documentElement;
   if(root.classList.contains('no-intro')){ el.remove(); return; }
-  var v=el.querySelector('video'), btn=el.querySelector('.enter'), skip=el.querySelector('.skip'), done=false, ready=false;
+  var v=el.querySelector('video'), btn=el.querySelector('.enter'), skip=el.querySelector('.skip'), snd=el.querySelector('.snd'), done=false, ready=false;
   function enter(){
     if(done) return; done=true;
     try{ sessionStorage.setItem('lcoIntroSeen','1'); }catch(e){}
@@ -446,13 +449,16 @@ html.no-intro #lcoIntro{display:none}
     try{ btn.focus({preventScroll:true}); }catch(e){}
   }
   function showStill(){
+    snd.style.display='none';
     if(v.parentNode){ var im=new Image(); im.className='still'; im.alt='LCO Pagecraft'; im.src='assets/intro/lco_pagecraft_intro_poster.jpg'; v.replaceWith(im); }
     showEnter();
   }
+  /* browsers only allow sound after a click: the clip starts muted, this button restarts it with voice + music */
+  snd.addEventListener('click',function(){ if(!v||!v.parentNode){ return; } v.muted=false; v.volume=1; try{ v.currentTime=0; }catch(e){} var q=v.play(); if(q&&q.catch) q.catch(function(){}); snd.textContent='🔊 재생 중'; setTimeout(function(){ snd.style.display='none'; },1200); });
   btn.addEventListener('click',enter); skip.addEventListener('click',enter);
   document.addEventListener('keydown',function(e){ if(e.key==='Escape'||(e.key==='Enter'&&ready)) enter(); });
   if(root.classList.contains('intro-still')){ showStill(); return; }
-  v.addEventListener('ended',function(){ setTimeout(showEnter,600); });   /* last frame holds for a beat, then the button fades in */
+  v.addEventListener("ended",function(){ snd.style.display="none"; setTimeout(showEnter,600); });   /* last frame holds for a beat, then the button fades in */
   v.addEventListener('error',showStill);                                    /* video can't load */
   var p=v.play(); if(p&&p.catch) p.catch(showStill);                        /* autoplay blocked */
   setTimeout(showEnter,20000);                                              /* very slow connection: never leave visitors waiting */
