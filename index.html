@@ -42,7 +42,7 @@
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth;scroll-padding-top:76px}
-body{margin:0;background:var(--white);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.65;letter-spacing:-.011em;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
+body{margin:0;background:var(--white);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.65;letter-spacing:0;word-break:keep-all;overflow-wrap:break-word;-webkit-font-smoothing:antialiased}
 img,video{max-width:100%;display:block}
 a{color:inherit}
 h1,h2,h3,p,ul{margin:0}
@@ -54,47 +54,46 @@ ul{padding:0;list-style:none}
 .nav{position:fixed;inset:0 0 auto 0;z-index:50;height:68px;display:flex;align-items:center;color:#fff;transition:background .3s,color .3s,border-color .3s,backdrop-filter .3s;border-bottom:1px solid transparent}
 .nav .wrap{display:flex;align-items:center;justify-content:space-between;gap:24px}
 .nav .logo img{width:150px;height:auto;filter:brightness(0) invert(1);transition:filter .3s}
-.nav ul{display:flex;gap:30px;font-size:15px;font-weight:500}
+.nav ul{display:flex;gap:32px;font-size:15px;font-weight:500}
 .nav ul a{text-decoration:none;opacity:.78;transition:opacity .2s}
 .nav ul a:hover{opacity:1}
-.nav .pill{font-size:14.5px;font-weight:600;text-decoration:none;padding:9px 20px;border-radius:999px;background:var(--blue);color:#fff;transition:background .2s}
+.nav .pill{font-size:14px;font-weight:600;text-decoration:none;padding:10px 16px;border-radius:10px;background:var(--blue);color:#fff;transition:background .2s}
 .nav .pill:hover{background:var(--blue-d)}
 .nav.solid{background:rgba(255,255,255,.92);backdrop-filter:blur(14px);color:var(--ink);border-bottom-color:var(--line)}
 .nav.solid .logo img{filter:none}
 @media(max-width:860px){.nav ul{display:none}}
 
 /* buttons */
-.btn{display:inline-flex;align-items:center;gap:8px;font:600 16px/1 var(--font);padding:16px 26px;border-radius:12px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:background .2s,border-color .2s,transform .2s}
+.btn{display:inline-flex;align-items:center;gap:8px;font:600 16px/1 var(--font);padding:16px 24px;border-radius:12px;text-decoration:none;border:1.5px solid transparent;cursor:pointer;transition:background .2s,border-color .2s,transform .1s}
+.btn:active{transform:scale(.98)}
 .btn.primary{background:var(--blue);color:#fff}
-.btn.primary:hover{background:var(--blue-d);transform:translateY(-1px)}
+.btn.primary:hover{background:var(--blue-d)}
 .btn.line{border-color:rgba(255,255,255,.28);color:#fff}
 .btn.line:hover{border-color:#fff}
 .btn.dark{background:var(--ink);color:#fff}
 .btn.dark:hover{background:#1c2740}
 
 /* hero */
-.hero{background:radial-gradient(900px 520px at 78% 38%,rgba(0,128,255,.22),transparent 62%),linear-gradient(180deg,#070B16 0%,var(--navy) 100%);color:#fff;padding:148px 0 0;overflow:hidden}
+.hero{background:var(--navy);color:#fff;padding:148px 0 0;overflow:hidden}
 .hero-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6.4fr);gap:56px;align-items:center}
-.kicker{font-size:14px;font-weight:600;letter-spacing:.06em;color:#7DB8FF;margin-bottom:22px}
-.hero h1{font-size:clamp(40px,5.4vw,72px);font-weight:800;line-height:1.12;letter-spacing:-.035em}
-.hero h1 b{font-weight:800;color:#4DA6FF}
-.hero .sub{margin-top:26px;font-size:19px;line-height:1.7;color:rgba(255,255,255,.72);max-width:30em}
+.kicker{font-size:14px;font-weight:500;letter-spacing:.02em;color:rgba(255,255,255,.6);margin-bottom:24px}
+.hero h1{font-size:clamp(40px,5.4vw,72px);font-weight:600;line-height:1.14;letter-spacing:-.03em}
+.hero h1 b{font-weight:600;color:#4DA6FF}
+.hero .sub{margin-top:24px;font-size:19px;line-height:1.7;color:rgba(255,255,255,.72);max-width:30em}
 .hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:36px}
-.hero .ticks{display:flex;gap:22px;flex-wrap:wrap;margin-top:30px;font-size:14.5px;color:rgba(255,255,255,.62)}
-.hero .ticks li::before{content:"";display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--blue);margin-right:9px;vertical-align:1px}
 .stage{position:relative}
 .frame{border-radius:14px;background:#0f1626;border:1px solid var(--navy-line);box-shadow:0 40px 90px -30px rgba(0,0,0,.8),0 0 0 1px rgba(255,255,255,.03)}
 .frame .bar{display:flex;gap:7px;padding:12px 16px;border-bottom:1px solid var(--navy-line)}
 .frame .bar i{width:10px;height:10px;border-radius:50%;background:rgba(255,255,255,.18)}
 .frame .screen{position:relative;aspect-ratio:16/9;background:#000;border-radius:0 0 13px 13px;overflow:hidden}
 .frame video,.frame img.fill{width:100%;height:100%;object-fit:cover;display:block}
-.stage .cap{position:absolute;right:0;bottom:-30px;font-size:13px;color:rgba(255,255,255,.5)}
-.facts{margin-top:92px;border-top:1px solid var(--navy-line);display:grid;grid-template-columns:repeat(4,1fr)}
-.facts div{padding:30px 24px 34px 0}
+.stage .cap{position:absolute;right:0;bottom:-32px;font-size:13px;color:rgba(255,255,255,.5)}
+.facts{margin-top:96px;border-top:1px solid var(--navy-line);display:grid;grid-template-columns:repeat(4,1fr)}
+.facts div{padding:32px 24px 32px 0}
 .facts div+div{padding-left:24px;border-left:1px solid var(--navy-line)}
-.facts b{display:block;font-size:30px;font-weight:700;letter-spacing:-.03em;color:#fff}
-.facts b em{font-style:normal;color:#4DA6FF}
-.facts span{font-size:14.5px;color:rgba(255,255,255,.58)}
+.facts b{display:block;font-size:30px;font-weight:600;letter-spacing:-.02em;color:#fff;font-variant-numeric:tabular-nums}
+.facts b em{font-style:normal;color:#fff}
+.facts span{font-size:14px;color:rgba(255,255,255,.58)}
 @media(max-width:960px){
   .hero{padding-top:116px}
   .hero-grid{grid-template-columns:1fr;gap:44px}
@@ -106,8 +105,10 @@ ul{padding:0;list-style:none}
 /* sections */
 section.s{padding:112px 0}
 .head{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:48px;align-items:end;margin-bottom:56px}
-.head .idx{font-size:14px;font-weight:600;color:var(--blue);letter-spacing:.04em;margin-bottom:14px}
-.head h2{font-size:clamp(30px,3.6vw,46px);font-weight:800;line-height:1.2;letter-spacing:-.032em}
+.idx{display:flex;align-items:center;gap:12px;font-size:14px;font-weight:500;color:var(--mute);margin-bottom:16px}
+.idx .pg{font-variant-numeric:tabular-nums;color:var(--blue);font-weight:600}
+.idx .pg::after{content:"";display:inline-block;width:24px;height:1px;background:currentColor;opacity:.5;margin-left:12px;vertical-align:4px}
+.head h2{font-size:clamp(30px,3.6vw,46px);font-weight:600;line-height:1.22;letter-spacing:-.025em}
 .head p{color:var(--mute);font-size:18px;line-height:1.7}
 @media(max-width:860px){.head{grid-template-columns:1fr;gap:16px;margin-bottom:40px}section.s{padding:80px 0}}
 
@@ -117,35 +118,32 @@ section.s{padding:112px 0}
 .row>*{min-width:0}
 .row:nth-child(even){grid-template-columns:minmax(0,6fr) minmax(0,5fr)}
 .row:nth-child(even) .txt{order:2}
-.row .n{font-size:14px;font-weight:700;color:var(--blue);margin-bottom:12px}
-.row h3{font-size:clamp(26px,2.8vw,34px);font-weight:800;line-height:1.28;letter-spacing:-.03em}
-.row p{margin-top:14px;color:var(--mute)}
-.row ul{margin-top:22px;display:grid;gap:10px;font-size:16px}
-.row li{display:flex;gap:12px;align-items:baseline;padding-top:10px;border-top:1px solid var(--line)}
-.row li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--blue);transform:translateY(-2px)}
-.shot{align-self:center;border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff;box-shadow:0 30px 60px -34px rgba(11,18,32,.45)}
-.shot .bar{display:flex;gap:7px;padding:11px 14px;background:#F0F2F6;border-bottom:1px solid var(--line)}
-.shot .bar i{width:9px;height:9px;border-radius:50%;background:#CBD1DC}
+.row .n{font-size:14px;font-weight:600;color:var(--blue);margin-bottom:12px;font-variant-numeric:tabular-nums}
+.row h3{font-size:clamp(26px,2.8vw,34px);font-weight:600;line-height:1.3;letter-spacing:-.02em}
+.row p{margin-top:16px;color:var(--mute)}
+.row ul{margin-top:24px;display:grid;gap:8px;font-size:16px}
+.row li{display:flex;gap:12px;align-items:baseline;padding-top:8px;border-top:1px solid var(--line)}
+.row li::before{content:"";flex:none;width:6px;height:6px;border-radius:50%;background:var(--faint);transform:translateY(-2px)}
+.shot{align-self:center;border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fff;box-shadow:0 24px 48px -32px rgba(11,18,32,.35)}
 .shot img{width:100%;height:auto;aspect-ratio:16/9;object-fit:cover}
 @media(max-width:900px){.row,.row:nth-child(even){grid-template-columns:1fr;gap:28px}.row:nth-child(even) .txt{order:0}.rows{gap:72px}}
 
 /* samples */
 .band{background:var(--bg)}
-.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;transition:transform .25s,box-shadow .25s,border-color .25s}
-.card:hover{transform:translateY(-4px);box-shadow:0 26px 50px -28px rgba(11,18,32,.5);border-color:#CFD5E0}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.card{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;transition:border-color .2s,background-color .2s}
+.card:hover{border-color:#B9C1CF}
 .card .th{position:relative;aspect-ratio:16/9;overflow:hidden;background:#0E2A47}
-.card .th img,.card .th video{width:100%;height:100%;object-fit:cover;transition:transform .5s}
-.card:hover .th img,.card:hover .th video{transform:scale(1.04)}
-.card .tag{position:absolute;left:12px;top:12px;font-size:12.5px;font-weight:600;color:#fff;background:rgba(11,18,32,.72);backdrop-filter:blur(6px);padding:5px 11px;border-radius:999px}
-.card .tag.new{background:var(--blue)}
-.card .bd{padding:20px 22px 24px;display:flex;justify-content:space-between;align-items:center;gap:14px}
-.card h3{font-size:20px;font-weight:700;letter-spacing:-.025em}
-.card small{display:block;color:var(--mute);font-size:14.5px;margin-top:2px}
+.card .th img,.card .th video{width:100%;height:100%;object-fit:cover}
+.card .tag{position:absolute;left:12px;top:12px;font-size:12px;font-weight:500;color:#fff;background:rgba(11,18,32,.72);padding:4px 8px;border-radius:6px}
+.card .bd{padding:20px 24px 24px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+.card h3{font-size:20px;font-weight:600;letter-spacing:-.015em}
+.card small{display:block;color:var(--mute);font-size:14px;margin-top:4px}
 .card .go{flex:none;font-size:14px;font-weight:600;color:var(--blue);white-space:nowrap}
-.card.cta{grid-column:span 2;background:var(--navy);border-color:var(--navy);color:#fff;justify-content:space-between;padding:30px 28px;min-height:100%}
-.card.cta h3{font-size:26px;line-height:1.3;font-weight:800}
-.card.cta p{margin-top:12px;color:rgba(255,255,255,.66);font-size:15.5px}
+.card.cta{grid-column:span 2;background:var(--navy);border-color:var(--navy);color:#fff;justify-content:space-between;padding:32px 28px;min-height:100%}
+.card.cta:hover{background:var(--navy2);border-color:var(--navy2)}
+.card.cta h3{font-size:26px;line-height:1.3;font-weight:600}
+.card.cta p{margin-top:12px;color:rgba(255,255,255,.66);font-size:15px}
 .card.cta .go{color:#4DA6FF;font-size:16px}
 .note{margin-top:22px;color:var(--faint);font-size:14px}
 @media(max-width:960px){.cards{grid-template-columns:repeat(2,1fr)}}
@@ -153,65 +151,66 @@ section.s{padding:112px 0}
 
 /* process */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border-top:1.5px solid var(--ink)}
-.step{padding:30px 32px 8px 0}
+.step{padding:32px 32px 8px 0}
 .step+.step{padding-left:32px;border-left:1px solid var(--line)}
-.step .no{font-size:56px;font-weight:800;letter-spacing:-.05em;color:var(--blue);line-height:1}
-.step h3{font-size:22px;font-weight:700;margin:20px 0 8px;letter-spacing:-.025em}
+.step .no{font-size:56px;font-weight:500;letter-spacing:-.03em;color:var(--blue);line-height:1;font-variant-numeric:tabular-nums}
+.step h3{font-size:22px;font-weight:600;margin:20px 0 8px;letter-spacing:-.015em}
 .step p{color:var(--mute);font-size:16px}
 @media(max-width:800px){.steps{grid-template-columns:1fr}.step,.step+.step{padding:26px 0 26px;border-left:0;border-bottom:1px solid var(--line)}}
 
 /* pricing */
-.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;align-items:stretch}
-.plan{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 30px}
+.plans{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;align-items:stretch}
+.plan{display:flex;flex-direction:column;background:#fff;border:1px solid var(--line);border-radius:16px;padding:32px 28px}
 .plan.hot{background:var(--navy);color:#fff;border-color:var(--navy);position:relative}
-.plan .badge{position:absolute;right:24px;top:-13px;background:var(--blue);color:#fff;font-size:12.5px;font-weight:700;padding:5px 13px;border-radius:999px}
-.plan h3{font-size:19px;font-weight:700}
-.plan .price{margin:14px 0 22px;font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1}
-.plan .price small{font-size:17px;font-weight:600;letter-spacing:0;margin-left:3px;color:var(--mute)}
+.plan .badge{position:absolute;right:24px;top:-12px;background:var(--blue);color:#fff;font-size:12px;font-weight:600;padding:4px 10px;border-radius:6px}
+.plan h3{font-size:19px;font-weight:600}
+.plan .price{margin:16px 0 24px;font-size:44px;font-weight:600;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums}
+.plan .price small{font-size:17px;font-weight:500;letter-spacing:0;margin-left:4px;color:var(--mute)}
 .plan.hot .price small{color:rgba(255,255,255,.6)}
 .plan li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-top:1px solid var(--line);font-size:16px}
 .plan.hot li{border-top-color:var(--navy-line)}
 .plan li span{color:var(--mute)}
 .plan.hot li span{color:rgba(255,255,255,.6)}
-.extras{margin-top:22px;display:flex;gap:30px;flex-wrap:wrap;color:var(--mute);font-size:15.5px}
+.plan li b{font-weight:600;font-variant-numeric:tabular-nums}
+.extras{margin-top:24px;display:flex;gap:32px;flex-wrap:wrap;color:var(--mute);font-size:15px}
 .extras b{color:var(--ink);font-weight:600;margin-right:6px}
 @media(max-width:900px){.plans{grid-template-columns:1fr}}
 
 /* faq */
 .faq{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:64px}
-.faq h2{font-size:clamp(30px,3.6vw,46px);font-weight:800;line-height:1.2;letter-spacing:-.032em}
-.faq .idx{font-size:14px;font-weight:600;color:var(--blue);margin-bottom:14px}
+.faq h2{font-size:clamp(30px,3.6vw,46px);font-weight:600;line-height:1.22;letter-spacing:-.025em}
 details{border-top:1px solid var(--line)}
 details:last-child{border-bottom:1px solid var(--line)}
-summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:18px;padding:22px 0;font-size:18px;font-weight:600;letter-spacing:-.02em}
+summary{cursor:pointer;list-style:none;display:flex;justify-content:space-between;gap:16px;padding:24px 0;font-size:18px;font-weight:500;letter-spacing:-.01em}
 summary::-webkit-details-marker{display:none}
 summary::after{content:"+";font-size:24px;font-weight:400;line-height:1;color:var(--blue)}
 details[open] summary::after{content:"–"}
-details p{padding:0 40px 26px 0;color:var(--mute);font-size:16.5px}
+details p{padding:0 40px 24px 0;color:var(--mute);font-size:16px}
 @media(max-width:860px){.faq{grid-template-columns:1fr;gap:28px}}
 
 /* contact */
-.contact{background:radial-gradient(800px 420px at 12% 0%,rgba(0,128,255,.2),transparent 60%),var(--navy);color:#fff;padding:112px 0}
+.contact{background:var(--navy);color:#fff;padding:112px 0}
 .contact .in{display:grid;grid-template-columns:minmax(0,6fr) minmax(0,5fr);gap:56px;align-items:center}
-.contact .idx{font-size:14px;font-weight:600;color:#7DB8FF;margin-bottom:14px}
-.contact h2{font-size:clamp(34px,4.4vw,58px);font-weight:800;line-height:1.15;letter-spacing:-.035em}
+.contact .idx{color:rgba(255,255,255,.6)}
+.contact .idx .pg{color:#4DA6FF}
+.contact h2{font-size:clamp(34px,4.4vw,58px);font-weight:600;line-height:1.18;letter-spacing:-.03em}
 .contact p{margin-top:20px;color:rgba(255,255,255,.7);font-size:18px;max-width:28em}
 .mail{background:rgba(255,255,255,.06);border:1px solid var(--navy-line);border-radius:16px;padding:28px}
 .mail small{display:block;color:rgba(255,255,255,.55);font-size:14px;margin-bottom:8px}
-.mail code{display:block;font:700 clamp(18px,2.2vw,24px)/1.3 var(--font);letter-spacing:-.01em;word-break:break-all;user-select:all}
-.mail .row2{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-.mail .btn{padding:13px 20px;font-size:15px;border-radius:10px}
+.mail code{display:block;font:600 clamp(18px,2.2vw,24px)/1.3 var(--font);letter-spacing:0;word-break:break-all;user-select:all}
+.mail .row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.mail .btn{padding:12px 20px;font-size:15px;border-radius:10px}
 .mail .btn.ghost{border-color:rgba(255,255,255,.28);color:#fff;background:transparent}
 .mail .btn.ghost:hover{border-color:#fff}
 @media(max-width:860px){.contact .in{grid-template-columns:1fr;gap:36px}.contact{padding:84px 0}}
 
 /* footer */
-footer{background:#060A14;color:rgba(255,255,255,.5);font-size:14px;padding:30px 0}
+footer{background:#060A14;color:rgba(255,255,255,.5);font-size:14px;padding:32px 0}
 footer .wrap{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
 footer img{width:130px;height:auto;filter:brightness(0) invert(1);opacity:.85}
 
 /* reveal on scroll */
-html.js .rv{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+html.js .rv{opacity:0;transform:translateY(12px);transition:opacity .6s cubic-bezier(.2,.7,.2,1),transform .6s cubic-bezier(.2,.7,.2,1)}
 html.js .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){html.js .rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.card,.card .th img,.card .th video{transition:none}}
 
@@ -222,7 +221,7 @@ html.js .rv.in{opacity:1;transform:none}
 #lcoIntro .skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;font:500 13px/1 var(--font);cursor:pointer;backdrop-filter:blur(6px)}
 #lcoIntro .skip:hover{background:rgba(255,255,255,.22)}
 /* "들어가기" appears when the clip ends; the page stays hidden until it is pressed */
-#lcoIntro .enter{position:absolute;left:50%;bottom:max(40px,8vh);transform:translate(-50%,10px);opacity:0;pointer-events:none;background:#0080FF;color:#fff;border:0;border-radius:999px;padding:14px 34px;font:700 17px/1 var(--font);letter-spacing:.02em;cursor:pointer;transition:opacity .8s ease,transform .8s ease,background .2s;box-shadow:0 10px 30px -10px rgba(0,128,255,.7)}
+#lcoIntro .enter{position:absolute;left:50%;bottom:max(40px,8vh);transform:translate(-50%,10px);opacity:0;pointer-events:none;background:#0080FF;color:#fff;border:0;border-radius:999px;padding:14px 32px;font:600 17px/1 var(--font);letter-spacing:.02em;cursor:pointer;transition:opacity .8s ease,transform .8s ease,background .2s}
 #lcoIntro .enter.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
 #lcoIntro .enter:hover{background:#2E94FF}
 #lcoIntro .enter:focus-visible{outline:3px solid #fff;outline-offset:3px}
@@ -253,11 +252,9 @@ html.no-intro #lcoIntro{display:none}
     <div class="hero-grid">
       <div>
         <p class="kicker">PDF 대신 보내는 3D 웹 책자</p>
-        <h1>PDF는 훑어보고,<br>책은 <b>끝까지</b><br><b>넘겨 봅니다</b></h1>
+        <h1>PDF는 훑어보고,<br>책은 <b>끝까지</b><br>넘겨 봅니다</h1>
         <p class="sub">보내던 PPT·PDF를 링크 하나로 열리는 3D 책자로 바꿔 드립니다. 페이지를 펼치면 그래프가 그려지고, 요약 영상과 원문까지 한 번에 봅니다.</p>
-        <div class="cta"><a class="btn primary" href="samples/report/" target="_blank" rel="noopener">지금 샘플 넘겨 보기 →</a><a class="btn line" href="#contact">제작 문의</a></div>
-        <ul class="ticks"><li>그래프가 움직이는 페이지</li><li>영상 보기 · 원문 보기</li><li>휴대폰·PC 링크 하나</li></ul>
-      </div>
+        <div class="cta"><a class="btn primary" href="samples/report/" target="_blank" rel="noopener">지금 샘플 넘겨 보기 →</a><a class="btn line" href="#contact">제작 문의</a></div>      </div>
       <figure class="stage" style="margin:0">
         <div class="frame">
           <div class="bar"><i></i><i></i><i></i></div>
@@ -278,50 +275,50 @@ html.no-intro #lcoIntro{display:none}
 <main>
 <section class="s" id="how"><div class="wrap">
   <div class="head rv">
-    <div><div class="idx">구성</div><h2>받는 분이 끝까지 보게 되는<br>네 가지 장치</h2></div>
+    <div><div class="idx"><span class="pg">01</span>구성</div><h2>받는 분이 끝까지 보게 되는<br>네 가지 장치</h2></div>
     <p>세로 보고서는 좌우로 펼치는 하드커버 책으로, 가로 PPT는 가로 책이나 스프링 제본으로 만듭니다. 비스듬히 놓인 표지에서 시작해 책상 위의 책처럼 넘기고, 마우스로 돌려 볼 수 있습니다.</p>
   </div>
   <div class="rows">
     <div class="row rv">
       <div class="txt"><div class="n">01</div><h3>영상 보기</h3><p>핵심 문구가 한 자씩 나오는 짧은 영상으로 내용을 먼저 요약해 보여 줍니다. 바쁜 분은 영상만 보셔도 흐름이 잡힙니다.</p>
         <ul><li>화면 오른쪽 위 ‘영상 보기’ 버튼으로 바로 재생</li><li>페이지 넘김과 같은 흐름으로 이어집니다</li></ul></div>
-      <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img src="assets/how_video.jpg" alt="영상 보기와 원문 보기 버튼이 있는 제안서 샘플 화면" width="1280" height="720" loading="lazy"></div>
+      <div class="shot"><img src="assets/how_video.jpg" alt="영상 보기와 원문 보기 버튼이 있는 제안서 샘플 화면" width="1280" height="720" loading="lazy"></div>
     </div>
     <div class="row rv">
       <div class="txt"><div class="n">02</div><h3>원문 보기</h3><p>원본 슬라이드를 그대로 확대해서 세부 내용까지 확인할 수 있습니다. 다시 만든 화면과 원본을 나란히 확인해 신뢰를 줍니다.</p>
         <ul><li>원본 PPT·PDF 페이지를 그대로 표시</li><li>확대해서 작은 글자까지 확인</li></ul></div>
-      <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img src="assets/how_original.jpg" alt="표와 그래프가 담긴 보고서 샘플 화면" width="1280" height="720" loading="lazy"></div>
+      <div class="shot"><img src="assets/how_original.jpg" alt="표와 그래프가 담긴 보고서 샘플 화면" width="1280" height="720" loading="lazy"></div>
     </div>
     <div class="row rv">
       <div class="txt"><div class="n">03</div><h3>고객사 브랜드 색</h3><p>로고와 대표 색을 반영해 자료의 분위기에 맞춥니다. 같은 구성이어도 회사마다 전혀 다른 인상으로 만들어집니다.</p>
         <ul><li>로고·대표 색을 표지부터 버튼까지 적용</li><li>자료 종류별로 색과 구성을 달리 제작</li></ul></div>
-      <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img src="assets/how_brand.jpg" alt="건축사무소 브랜드 색과 사진을 적용한 회사소개서 샘플 화면" width="1280" height="720" loading="lazy"></div>
+      <div class="shot"><img src="assets/how_brand.jpg" alt="건축사무소 브랜드 색과 사진을 적용한 회사소개서 샘플 화면" width="1280" height="720" loading="lazy"></div>
     </div>
     <div class="row rv">
       <div class="txt"><div class="n">04</div><h3>세로 하드커버 책</h3><p>세로 보고서는 좌우로 펼치는 하드커버 책으로 만듭니다. 책상 위의 책처럼 끌어서 돌려 보고, 펼친 면 전체·왼쪽·오른쪽을 나눠 크게 볼 수 있습니다.</p>
         <ul><li>페이지마다 요약 영상을 붙일 수 있습니다</li><li>PC·휴대폰 모두 같은 주소로 열립니다</li></ul></div>
-      <div class="shot"><div class="bar"><i></i><i></i><i></i></div><img src="assets/how_motion.jpg" alt="세로 하드커버 책으로 펼친 보장분석 리포트 샘플 화면" width="1280" height="720" loading="lazy"></div>
+      <div class="shot"><img src="assets/how_motion.jpg" alt="세로 하드커버 책으로 펼친 보장분석 리포트 샘플 화면" width="1280" height="720" loading="lazy"></div>
     </div>
   </div>
 </div></section>
 
 <section class="s band" id="samples"><div class="wrap">
   <div class="head rv">
-    <div><div class="idx">샘플</div><h2>샘플을 직접<br>넘겨 보세요</h2></div>
+    <div><div class="idx"><span class="pg">02</span>샘플</div><h2>샘플을 직접<br>넘겨 보세요</h2></div>
     <p>업종이 다른 세 회사의 자료와 보험 보장분석까지 4가지 샘플입니다. 회사마다 색·서체·사진을 따로 정해 만들었고, 가로·세로 모두 제작합니다. 샘플 속 회사와 수치는 모두 가상입니다.</p>
   </div>
   <div class="cards">
     <a class="card rv" href="samples/proposal/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_proposal.jpg" alt="물류센터 자동화 제안서 샘플" width="1280" height="720" loading="lazy"><span class="tag">가로</span></div><div class="bd"><span><h3>제안서</h3><small>물류 자동화 업체 · 배치도·일정·투자 회수</small></span><span class="go">넘겨 보기 →</span></div></a>
-    <a class="card rv" href="samples/company/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_company.jpg" alt="건축사무소 회사소개서 샘플" width="1280" height="720" loading="lazy"><span class="tag new">NEW · 가로</span></div><div class="bd"><span><h3>회사소개서</h3><small>건축사무소 · 사진 중심 포트폴리오</small></span><span class="go">넘겨 보기 →</span></div></a>
+    <a class="card rv" href="samples/company/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_company.jpg" alt="건축사무소 회사소개서 샘플" width="1280" height="720" loading="lazy"><span class="tag">가로 · 새 샘플</span></div><div class="bd"><span><h3>회사소개서</h3><small>건축사무소 · 사진 중심 포트폴리오</small></span><span class="go">넘겨 보기 →</span></div></a>
     <a class="card rv" href="samples/report/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_report.jpg" alt="커피 로스터리 분기 사업 보고서 샘플" width="1280" height="720" loading="lazy"><span class="tag">가로</span></div><div class="bd"><span><h3>사업 보고서</h3><small>커피 브랜드 · 매출·손익·리스크</small></span><span class="go">넘겨 보기 →</span></div></a>
-    <a class="card rv" href="samples/insurance/" target="_blank" rel="noopener"><div class="th"><video src="samples/insurance/videos/p01.mp4" muted autoplay loop playsinline preload="metadata" aria-label="보장분석 리포트 샘플 요약 영상"></video><span class="tag new">NEW · 세로</span></div><div class="bd"><span><h3>보장분석 리포트</h3><small>재무설계사 · 세로 하드커버 책</small></span><span class="go">넘겨 보기 →</span></div></a>
+    <a class="card rv" href="samples/insurance/" target="_blank" rel="noopener"><div class="th"><video src="samples/insurance/videos/p01.mp4" muted autoplay loop playsinline preload="metadata" aria-label="보장분석 리포트 샘플 요약 영상"></video><span class="tag">세로 · 새 샘플</span></div><div class="bd"><span><h3>보장분석 리포트</h3><small>재무설계사 · 세로 하드커버 책</small></span><span class="go">넘겨 보기 →</span></div></a>
     <a class="card cta rv" href="#contact"><span><h3>내 자료로<br>만들어 보기</h3><p>PPT 또는 PDF 한 개면 시작할 수 있습니다.</p></span><span class="go">제작 문의 →</span></a>
   </div>
 </div></section>
 
 <section class="s" id="process"><div class="wrap">
   <div class="head rv">
-    <div><div class="idx">진행 방법</div><h2>파일만 보내 주세요</h2></div>
+    <div><div class="idx"><span class="pg">03</span>진행 방법</div><h2>파일만 보내 주세요</h2></div>
     <p>평일 기준으로 작업하며, 주말 작업은 어렵습니다.</p>
   </div>
   <div class="steps">
@@ -333,13 +330,13 @@ html.no-intro #lcoIntro{display:none}
 
 <section class="s band" id="price"><div class="wrap">
   <div class="head rv">
-    <div><div class="idx">패키지</div><h2>분량에 맞춰 고르세요</h2></div>
+    <div><div class="idx"><span class="pg">04</span>패키지</div><h2>분량에 맞춰 고르세요</h2></div>
     <p>가격은 첫 판매 기간 기준이며 VAT 포함입니다. 분량이 더 많다면 먼저 문의해 주세요.</p>
   </div>
   <div class="plans">
     <div class="plan rv"><h3>베이직</h3><div class="price">69,000<small>원</small></div>
       <ul><li><span>분량</span><b>10장 이내</b></li><li><span>작업 기간</span><b>3일</b></li><li><span>수정</span><b>2회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul></div>
-    <div class="plan hot rv"><span class="badge">많이 선택해요</span><h3>프로</h3><div class="price">149,000<small>원</small></div>
+    <div class="plan hot rv"><span class="badge">추천</span><h3>프로</h3><div class="price">149,000<small>원</small></div>
       <ul><li><span>분량</span><b>20장 이내</b></li><li><span>작업 기간</span><b>5일</b></li><li><span>수정</span><b>3회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul></div>
     <div class="plan rv"><h3>비즈니스</h3><div class="price">299,000<small>원</small></div>
       <ul><li><span>분량</span><b>40장 이내</b></li><li><span>작업 기간</span><b>7일</b></li><li><span>수정</span><b>5회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul></div>
@@ -349,7 +346,7 @@ html.no-intro #lcoIntro{display:none}
 
 <section class="s" id="faq"><div class="wrap">
   <div class="faq">
-    <div class="rv"><div class="idx">질문</div><h2>자주 묻는<br>질문</h2></div>
+    <div class="rv"><div class="idx"><span class="pg">05</span>질문</div><h2>자주 묻는<br>질문</h2></div>
     <div class="rv">
       <details><summary>어떤 파일을 보내야 하나요?</summary><p>원본 PPT 또는 PDF면 됩니다. 적용을 원하시는 로고와 브랜드 대표 색이 있다면 함께 보내 주세요.</p></details>
       <details><summary>수정은 몇 번까지 가능한가요?</summary><p>수정 1회는 시안을 받으신 뒤 모아서 보내주신 요청 한 묶음입니다. 오탈자, 문구, 색상, 이미지 교체, 페이지 순서 변경은 패키지의 수정 횟수 안에서 반영합니다. 횟수를 넘으면 추가 수정으로, 페이지 추가나 전체 재디자인, 원본이 바뀌어 다시 만드는 경우는 추가 비용이 듭니다.</p></details>
@@ -364,7 +361,7 @@ html.no-intro #lcoIntro{display:none}
 <section class="contact" id="contact"><div class="wrap">
   <div class="in">
     <div class="rv">
-      <div class="idx">제작 문의</div>
+      <div class="idx"><span class="pg">06</span>제작 문의</div>
       <h2>파일만 보내 주시면<br>제작은 제가 맡습니다</h2>
       <p>자료의 종류와 대략적인 장수, 필요한 일정을 알려 주시면 가능한 범위와 일정을 안내해 드립니다.</p>
     </div>
