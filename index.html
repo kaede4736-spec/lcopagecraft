@@ -18,19 +18,7 @@
 <meta name="naver-site-verification" content="fbdbb792434067e2a5c62ce6f12581193b296339">
 <script type="application/ld+json">{"@context": "https://schema.org", "@graph": [{"@type": "Organization", "@id": "https://lcopagecraft.com/#org", "name": "LCO Pagecraft", "url": "https://lcopagecraft.com/", "logo": "https://lcopagecraft.com/assets/logo.png", "email": "thelcoworks@gmail.com"}, {"@type": "WebSite", "@id": "https://lcopagecraft.com/#site", "url": "https://lcopagecraft.com/", "name": "LCO Pagecraft", "inLanguage": "ko-KR"}, {"@type": "Service", "name": "PPT·PDF 3D 웹 책자(플립북) 제작", "serviceType": "3D 플립북 웹 책자 제작", "description": "PPT·PDF 제안서, 보고서, 기획서, 회사소개서를 책처럼 넘겨보는 가로·세로 3D 웹 책자로 제작합니다. 영상 보기와 원문 보기를 포함합니다.", "provider": {"@id": "https://lcopagecraft.com/#org"}, "areaServed": {"@type": "Country", "name": "KR"}, "url": "https://lcopagecraft.com/", "offers": [{"@type": "Offer", "name": "베이직 (10장 이내, 3일, 수정 2회)", "price": "69000", "priceCurrency": "KRW"}, {"@type": "Offer", "name": "프로 (20장 이내, 5일, 수정 3회)", "price": "149000", "priceCurrency": "KRW"}, {"@type": "Offer", "name": "비즈니스 (40장 이내, 7일, 수정 5회)", "price": "299000", "priceCurrency": "KRW"}]}]}</script>
 <meta name="claude:viewport-fit-sides" content="cover">
-<script>
-/* intro video: once per browser session (decided before first paint, so returning visitors never see a flash).
-   Reduced-motion users get a still logo splash instead of the moving clip. Add ?intro=1 to the address to force the full clip. */
-(function(){
-  var seen=false, reduce=false, force=/[?&]intro=1(&|$)/.test(location.search), h=document.documentElement.classList;
-  h.add('js');
-  try{ seen=!!sessionStorage.getItem('lcoIntroSeen'); }catch(e){}            /* storage blocked -> treat as first visit */
-  /* 인트로는 7초짜리 무음 로고 영상이라 '애니메이션 줄이기' 설정과 상관없이 재생합니다(건너뛰기 버튼 있음) */
-  if(force){ seen=false; reduce=false; }
-  if(seen){ h.add('no-intro'); return; }
-  h.add('intro-lock'); if(reduce) h.add('intro-still');
-})();
-</script>
+<script>document.documentElement.classList.add('js')</script>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
@@ -172,6 +160,11 @@ section.s{padding:112px 0}
 .plan li span{color:var(--mute)}
 .plan.hot li span{color:rgba(255,255,255,.6)}
 .plan li b{font-weight:600;font-variant-numeric:tabular-nums}
+.plan ul{margin-bottom:24px}
+.plan .apply{margin-top:auto;justify-content:center;width:100%;border-color:var(--line);color:var(--ink);background:#fff}
+.plan .apply:hover{border-color:var(--ink)}
+.plan.hot .apply{background:var(--blue);border-color:var(--blue);color:#fff}
+.plan.hot .apply:hover{background:var(--blue-d);border-color:var(--blue-d)}
 .extras{margin-top:24px;display:flex;gap:32px;flex-wrap:wrap;color:var(--mute);font-size:15px}
 .extras b{color:var(--ink);font-weight:600;margin-right:6px}
 @media(max-width:900px){.plans{grid-template-columns:1fr}}
@@ -198,7 +191,10 @@ details p{padding:0 40px 24px 0;color:var(--mute);font-size:16px}
 .mail{background:rgba(255,255,255,.06);border:1px solid var(--navy-line);border-radius:16px;padding:28px}
 .mail small{display:block;color:rgba(255,255,255,.55);font-size:14px;margin-bottom:8px}
 .mail code{display:block;font:600 clamp(18px,2.2vw,24px)/1.3 var(--font);letter-spacing:0;word-break:break-all;user-select:all}
-.mail .row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:24px}
+.mail .flow{margin-top:24px;padding-top:20px;border-top:1px solid var(--navy-line);font-size:15px;line-height:1.6;color:rgba(255,255,255,.72)}
+.mail .row2{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.mail .copy{margin-top:16px;background:none;border:0;padding:0;font:500 14px/1.4 var(--font);color:rgba(255,255,255,.55);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.mail .copy:hover{color:#fff}
 .mail .btn{padding:12px 20px;font-size:15px;border-radius:10px}
 .mail .btn.ghost{border-color:rgba(255,255,255,.28);color:#fff;background:transparent}
 .mail .btn.ghost:hover{border-color:#fff}
@@ -222,32 +218,9 @@ html.js .rv{opacity:0;transform:translateY(12px);transition:opacity .6s cubic-be
 html.js .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){html.js .rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.card,.card .th img,.card .th video{transition:none}}
 
-/* intro video overlay */
-#lcoIntro{position:fixed;inset:0;z-index:9999;background:#000;display:grid;place-items:center;transition:opacity .9s ease,visibility .9s}
-#lcoIntro video{width:100%;height:100%;object-fit:contain;background:#000;max-width:none}
-#lcoIntro.is-done{opacity:0;visibility:hidden;pointer-events:none}
-#lcoIntro .skip{position:absolute;right:max(16px,env(safe-area-inset-right,0px));bottom:max(16px,env(safe-area-inset-bottom,0px));background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.35);border-radius:999px;padding:8px 16px;font:500 13px/1 var(--font);cursor:pointer;backdrop-filter:blur(6px)}
-#lcoIntro .skip:hover{background:rgba(255,255,255,.22)}
-/* "들어가기" appears when the clip ends; the page stays hidden until it is pressed */
-#lcoIntro .enter{position:absolute;left:50%;bottom:max(40px,8vh);transform:translate(-50%,10px);opacity:0;pointer-events:none;background:#0080FF;color:#fff;border:0;border-radius:999px;padding:14px 32px;font:600 17px/1 var(--font);letter-spacing:.02em;cursor:pointer;transition:opacity .8s ease,transform .8s ease,background .2s}
-#lcoIntro .enter.show{opacity:1;transform:translate(-50%,0);pointer-events:auto}
-#lcoIntro .enter:hover{background:#2E94FF}
-#lcoIntro .enter:focus-visible{outline:3px solid #fff;outline-offset:3px}
-html.intro-lock{overflow:hidden}
-html.no-intro #lcoIntro{display:none}
-#lcoIntro img.still{width:100%;height:100%;object-fit:contain;background:#000;max-width:none}
 </style>
 </head>
 <body>
-
-<div id="lcoIntro" role="dialog" aria-label="LCO Pagecraft 인트로 영상">
-  <video autoplay playsinline preload="auto">
-    <source src="assets/intro/lco_pagecraft_intro.webm" type="video/webm">
-    <source src="assets/intro/lco_pagecraft_intro.mp4" type="video/mp4">
-  </video>
-  <button class="skip" type="button" aria-label="인트로 건너뛰고 홈페이지로 들어가기">건너뛰기</button>
-  <button class="enter" type="button" aria-label="홈페이지로 들어가기">들어가기 →</button>
-</div>
 
 <nav class="nav" id="nav"><div class="wrap">
   <a class="logo" href="#top"><img src="assets/logo.png" alt="LCO Pagecraft" width="150" height="50"></a>
@@ -343,11 +316,14 @@ html.no-intro #lcoIntro{display:none}
   </div>
   <div class="plans">
     <div class="plan rv"><h3>베이직</h3><div class="price">69,000<small>원</small></div>
-      <ul><li><span>분량</span><b>10장 이내</b></li><li><span>작업 기간</span><b>3일</b></li><li><span>수정</span><b>2회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul></div>
+      <ul><li><span>분량</span><b>10장 이내</b></li><li><span>작업 기간</span><b>3일</b></li><li><span>수정</span><b>2회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul>
+      <a class="btn apply" href="https://forms.gle/VAfFdGufUN2Xr2pN6" target="_blank" rel="noopener">베이직 신청하기</a></div>
     <div class="plan hot rv"><span class="badge">추천</span><h3>프로</h3><div class="price">149,000<small>원</small></div>
-      <ul><li><span>분량</span><b>20장 이내</b></li><li><span>작업 기간</span><b>5일</b></li><li><span>수정</span><b>3회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul></div>
+      <ul><li><span>분량</span><b>20장 이내</b></li><li><span>작업 기간</span><b>5일</b></li><li><span>수정</span><b>3회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul>
+      <a class="btn apply" href="https://forms.gle/VAfFdGufUN2Xr2pN6" target="_blank" rel="noopener">프로 신청하기</a></div>
     <div class="plan rv"><h3>비즈니스</h3><div class="price">299,000<small>원</small></div>
-      <ul><li><span>분량</span><b>40장 이내</b></li><li><span>작업 기간</span><b>7일</b></li><li><span>수정</span><b>5회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul></div>
+      <ul><li><span>분량</span><b>40장 이내</b></li><li><span>작업 기간</span><b>7일</b></li><li><span>수정</span><b>5회</b></li><li><span>영상 보기</span><b>포함</b></li><li><span>원문 보기</span><b>포함</b></li></ul>
+      <a class="btn apply" href="https://forms.gle/VAfFdGufUN2Xr2pN6" target="_blank" rel="noopener">비즈니스 신청하기</a></div>
   </div>
   <div class="extras rv"><span><b>추가 수정</b>1회 15,000원</span><span><b>슬라이드 추가</b>1장당 3,000원</span></div>
 </div></section>
@@ -376,10 +352,11 @@ html.no-intro #lcoIntro{display:none}
     <div class="mail rv">
       <small>이메일</small>
       <code id="mail">thelcoworks@gmail.com</code>
+      <button class="copy" id="copy" type="button">주소 복사</button>
+      <p class="flow">제작 문의를 남겨 주시면 자료 검토 후, 크몽 안전결제 링크와 예상 제작 일정을 안내해 드립니다.</p>
       <div class="row2">
-        <button class="btn primary" id="copy" type="button">주소 복사</button>
-        <a class="btn ghost" href="https://forms.gle/VAfFdGufUN2Xr2pN6" target="_blank" rel="noopener">문의 신청서</a>
-        <a class="btn ghost" href="https://kmong.com/gig/853349" target="_blank" rel="noopener">크몽에서 보기</a>
+        <a class="btn primary" href="https://forms.gle/VAfFdGufUN2Xr2pN6" target="_blank" rel="noopener">1분 간편 제작 문의 (무료)</a>
+        <a class="btn ghost" href="https://kmong.com/gig/853349" target="_blank" rel="noopener">크몽 안전결제 바로가기</a>
       </div>
     </div>
   </div>
@@ -413,7 +390,7 @@ html.no-intro #lcoIntro{display:none}
     items.forEach(function(el){ io.observe(el); });
   } else { items.forEach(function(el){ el.classList.add('in'); }); }
 
-  /* hero video: starts after the intro is dismissed, pauses when scrolled away */
+  /* hero video: loads and plays right away, pauses when scrolled away */
   var hv=document.getElementById('heroVideo'), loaded=false, visible=true;
   function startHero(){
     if(!hv) return;
@@ -423,8 +400,7 @@ html.no-intro #lcoIntro{display:none}
   if('IntersectionObserver' in window && hv){
     new IntersectionObserver(function(es){ visible=es[0].isIntersecting; if(!loaded) return; if(visible){ var p=hv.play(); if(p&&p.catch) p.catch(function(){}); } else { hv.pause(); } },{threshold:.25}).observe(hv);
   }
-  document.addEventListener('lco:enter',startHero);
-  if(document.documentElement.classList.contains('no-intro')) startHero();
+  startHero();
   if(hv) hv.addEventListener('click',function(){ if(hv.paused){ hv.play(); } else { hv.pause(); } });
 
   /* copy e-mail */
@@ -435,46 +411,6 @@ html.no-intro #lcoIntro{display:none}
     function fallback(){ var r=document.createRange(); r.selectNodeContents(t); var s=getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent='선택됨, 직접 복사해 주세요'; }
     if(navigator.clipboard&&navigator.clipboard.writeText){ navigator.clipboard.writeText(txt).then(done,fallback); } else { fallback(); }
   });
-})();
-</script>
-
-<script>
-/* intro: the clip plays, holds on the logo, then a "들어가기" button appears. The homepage is revealed only when it is pressed.
-   "건너뛰기" / Esc enter straight away. Reduced motion, a blocked autoplay or a failed video show the still logo frame + the same button. */
-(function(){
-  var el=document.getElementById('lcoIntro');
-  if(!el) return;
-  var root=document.documentElement;
-  if(root.classList.contains('no-intro')){ el.remove(); return; }
-  var v=el.querySelector('video'), btn=el.querySelector('.enter'), skip=el.querySelector('.skip'), done=false, ready=false;
-  function enter(){
-    if(done) return; done=true;
-    try{ sessionStorage.setItem('lcoIntroSeen','1'); }catch(e){}
-    el.classList.add('is-done');
-    root.classList.remove('intro-lock');
-    document.dispatchEvent(new Event('lco:enter'));
-    setTimeout(function(){ el.remove(); },1000);
-  }
-  function showEnter(){
-    if(ready||done) return; ready=true;
-    skip.style.display='none'; btn.classList.add('show');
-    try{ btn.focus({preventScroll:true}); }catch(e){}
-  }
-  function showStill(){
-    if(v.parentNode){ var im=new Image(); im.className='still'; im.alt='LCO Pagecraft'; im.src='assets/intro/lco_pagecraft_intro_poster.jpg'; v.replaceWith(im); }
-    showEnter();
-  }
-  btn.addEventListener('click',enter); skip.addEventListener('click',enter);
-  document.addEventListener('keydown',function(e){ if(e.key==='Escape'||(e.key==='Enter'&&ready)) enter(); });
-  if(root.classList.contains('intro-still')){ showStill(); return; }
-  v.addEventListener("ended",function(){ setTimeout(showEnter,600); });   /* last frame holds for a beat, then the button fades in */
-  v.addEventListener('error',showStill);                                    /* video can't load */
-  /* sound is always attempted. Browsers refuse sound before the visitor has interacted with the site: then the clip plays muted and the sound switches on at the first tap / click / key press */
-  function unmute(){ document.removeEventListener('pointerdown',unmute); document.removeEventListener('keydown',unmute); if(v.parentNode&&!v.ended){ v.muted=false; v.volume=1; } }
-  v.muted=false; v.volume=1;
-  var p=v.play();
-  if(p&&p.catch) p.catch(function(){ v.muted=true; var q=v.play(); if(q&&q.catch) q.catch(showStill); document.addEventListener('pointerdown',unmute); document.addEventListener('keydown',unmute); });
-  setTimeout(showEnter,20000);                                              /* very slow connection: never leave visitors waiting */
 })();
 </script>
 
