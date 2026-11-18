@@ -278,6 +278,37 @@ html.js .rv{opacity:0;transform:translateY(12px);transition:opacity .6s cubic-be
 html.js .rv.in{opacity:1;transform:none}
 @media(prefers-reduced-motion:reduce){html.js .rv{opacity:1;transform:none;transition:none}html{scroll-behavior:auto}.card,.card .th img,.card .th video{transition:none}}
 
+
+/* ===== dark showroom tone for every section below the hero ===== */
+main{--ink:#EDF0F5;--mute:#98A1B3;--faint:#6B7486;--line:rgba(255,255,255,.1);--bg:#0E1424;background:var(--navy);color:var(--ink)}
+main .band{background:#0E1424}
+main .shot{background:#0f1626;border-color:var(--line);box-shadow:0 30px 60px -32px rgba(0,0,0,.9)}
+main .card{background:#121A2B;border-color:var(--line)}
+main .card:hover{border-color:rgba(255,255,255,.28)}
+main .card .th{background:#0A0F1C}
+main .card.cta{background:var(--blue);border-color:var(--blue)}
+main .card.cta:hover{background:var(--blue-d);border-color:var(--blue-d)}
+main .card.cta p{color:rgba(255,255,255,.82)}
+main .card.cta .go{color:#fff}
+main .plan{background:#121A2B;border-color:var(--line)}
+main .plan.hot{background:#0F2445;border-color:var(--blue)}
+main .plan .apply{background:transparent;color:var(--ink);border-color:rgba(255,255,255,.25)}
+main .plan .apply:hover{border-color:#fff}
+main .btn.dark{background:#fff;color:#0B1220}
+main .btn.dark:hover{background:#dfe5ee}
+.nav.solid{background:rgba(10,15,28,.86);color:#fff;border-bottom-color:rgba(255,255,255,.08)}
+.nav.solid .logo img{filter:brightness(0) invert(1)}
+/* things arrive one after another as the section scrolls in */
+.cards .card:nth-child(2),.steps .step:nth-child(2),.plans .plan:nth-child(2){transition-delay:.08s}
+.cards .card:nth-child(3),.steps .step:nth-child(3),.plans .plan:nth-child(3){transition-delay:.16s}
+.cards .card:nth-child(4){transition-delay:.24s}
+.cards .card:nth-child(5){transition-delay:.32s}
+html.js .rv{transform:translateY(28px)}
+/* sample cards: the pages turn on hover (or by themselves on touch screens) */
+.card .th .flipbox{position:absolute;inset:0}
+.card .th .flipbox img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:translateY(10%) rotateX(-18deg);transform-origin:50% 0;transition:opacity .45s ease,transform .6s cubic-bezier(.2,.7,.2,1)}
+.card .th .flipbox img.on{opacity:1;transform:none}
+.card .th .tag{z-index:2}
 </style>
 </head>
 <body>
@@ -482,6 +513,24 @@ window.LCO_GA_ID = '';
 </script>
 <script src="assets/analytics.js" defer></script>
 
+<script>
+/* sample cards: flip through a few real pages of each sample */
+(function(){
+  var pages={proposal:8,company:8,report:8}, touch=matchMedia('(hover: none)').matches;
+  document.querySelectorAll('#samples a.card[href^="samples/"]').forEach(function(card,ci){
+    var key=card.getAttribute('href').split('/')[1], n=pages[key], th=card.querySelector('.th'); if(!n||!th) return;
+    var box=document.createElement('div'); box.className='flipbox'; th.insertBefore(box, th.querySelector('.tag'));
+    var imgs=[], cur=-1, timer=null;
+    function img(i){ if(!imgs[i]){ var im=new Image(); im.alt=''; im.decoding='async'; im.src='assets/showroom/'+key+'/p'+String(i+1).padStart(2,'0')+'.jpg'; box.appendChild(im); imgs[i]=im; } return imgs[i]; }
+    function step(){ var nx=(cur+1)%n, im=img(nx); img((nx+1)%n); requestAnimationFrame(function(){ im.classList.add('on'); if(cur>=0&&imgs[cur]) { var old=imgs[cur]; setTimeout(function(){ old.classList.remove('on'); },450); } cur=nx; }); }
+    function start(){ if(timer) return; step(); timer=setInterval(step,1300); }
+    function stop(){ clearInterval(timer); timer=null; imgs.forEach(function(im){ im&&im.classList.remove('on'); }); cur=-1; }
+    if(touch && 'IntersectionObserver' in window){
+      new IntersectionObserver(function(es){ es[0].isIntersecting ? setTimeout(start, ci*400) : stop(); },{threshold:.6}).observe(card);
+    } else { card.addEventListener('mouseenter',start); card.addEventListener('mouseleave',stop); card.addEventListener('focus',start); card.addEventListener('blur',stop); }
+  });
+})();
+</script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
 <script type="module" src="assets/showroom.js?v=15"></script>
 </body>
