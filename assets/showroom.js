@@ -12,9 +12,9 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const small = innerWidth < 760;
 
 const SAMPLES = [
-  { key: 'company', name: '회사소개서', title: '온도건축 회사소개서', url: 'samples/company/', n: 8, portrait: false, cover: 0x3a3631 },
+  { key: 'report', name: '사업 보고서', title: '모노그램 커피 3분기 사업 보고서', url: 'samples/report/', n: 8, portrait: false, cover: 0x3b2a20 },
 ];
-const START = 0; // one sample only: the company profile
+const START = 0; // one sample only: the business report (most charts)
 
 // ---------- renderer / scene ----------
 let renderer;
@@ -153,7 +153,7 @@ function Page(sample, n) { // n = 1-based page number
     }
     // charts: bars grow and lines draw along their rectangles
     if (p.rects) {
-      const prog = Math.max(0, (t - 0.5) / 1.6);
+      const prog = Math.max(0, (t - (p.chartDelay ?? 0.5)) / 2.2);
       for (const r of p.rects) {
         const e = ease3(prog * 1.6 - (r.d || 0)); if (e <= 0) continue;
         let x = r.x * k, y = r.y * k, w = r.w * k, h = r.h * k;
@@ -167,7 +167,7 @@ function Page(sample, n) { // n = 1-based page number
     if (p.loading) return p.loading;
     p.loading = Promise.all([animReady, motionFor(sample.key)]).then(async ([, motion]) => {
       const rects = ANIM[sample.key] && ANIM[sample.key][n];
-      p.mo = motion && motion.pages[n] ? Object.assign({ bg: motion.bg }, motion.pages[n]) : null;
+      p.mo = motion && motion.pages[n] ? Object.assign({ bg: motion.bg }, motion.pages[n]) : null; p.chartDelay = motion?.chartDelay;
       const photoLoads = (p.mo?.photos || []).map(ph => img(dir + ph.src).catch(() => null));
       if (rects) { [p.base, p.chart] = await Promise.all([img(dir + 'b' + nn + '.jpg'), img(dir + 'c' + nn + '.png')]); p.rects = rects; }
       else { p.img = await img(dir + 'p' + nn + '.jpg'); }
@@ -349,24 +349,27 @@ renderer.domElement.addEventListener('click', (e) => { if (hitBook(e)) turn(book
 renderer.domElement.addEventListener('pointermove', (e) => { renderer.domElement.style.cursor = hitBook(e) ? 'pointer' : 'default'; });
 
 // ---------- layout ----------
-let vw = 1, vh = 1, shift = 0, shiftWant = 0, tallView = false;
+let vw = 1, vh = 1, sx = 0, sy = 0, sxWant = 0, syWant = 0, tallView = false;
 const copy = root.querySelector('.hero-copy');
-// the pedestal is centred in the free area: right of the text on wide screens, the whole width otherwise,
-// and the camera distance is chosen so the pedestal fills most of that area
+// wide screens: the text sits centred on top, so the book is centred in the space between the text and the control bar;
+// the camera distance is chosen so the pedestal fills most of that space
 function frameScene() {
-  const vr = view.getBoundingClientRect(), side = vw > 980 && !document.fullscreenElement && copy;
-  let x0 = 24, x1 = vw - 24;
-  if (side) { const cr = copy.getBoundingClientRect(); x0 = Math.max(x0, cr.right - vr.left + 48); }
-  const free = Math.max(240, x1 - x0);
-  shiftWant = (x0 + x1) / 2 - vw / 2;
+  const vr = view.getBoundingClientRect(), wide = vw > 980 && !document.fullscreenElement && copy;
+  let y0 = 0, y1 = vh;
+  if (wide) { y0 = Math.max(0, copy.getBoundingClientRect().bottom - vr.top + 16); y1 = vh - 84; }
+  const freeW = vw - 48, freeH = Math.max(200, y1 - y0);
+  sxWant = 0; syWant = wide ? (y0 + y1) / 2 - vh / 2 : 0;
   const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-  const byWidth = 1.8 * vh / (2 * tanV * 0.86 * free), byHeight = 2.3 / (2 * tanV * 0.8);
-  orbitR = Math.min(8.5, Math.max(3.2, byWidth, byHeight));
+  const byWidth = 1.8 * vh / (2 * tanV * 0.86 * freeW), byHeight = 1.5 * vh / (2 * tanV * 0.95 * freeH);
+  orbitR = Math.min(9, Math.max(3.2, byWidth, byHeight));
+  logo.visible = tag.visible = !wide; // the headline already sits where the wall logo would show
 }
 function applyShift(k) {
-  const want = shiftWant;
-  shift += (want - shift) * k;
-  if (Math.abs(shift) > 0.5) camera.setViewOffset(vw + shift * 2, vh, 0, 0, vw, vh); else camera.clearViewOffset();
+  sx += (sxWant - sx) * k; sy += (syWant - sy) * k;
+  if (Math.abs(sx) > 0.5 || Math.abs(sy) > 0.5) {
+    const ax = Math.abs(sx), ay = Math.abs(sy);
+    camera.setViewOffset(vw + ax * 2, vh + ay * 2, sx >= 0 ? 0 : ax * 2, sy >= 0 ? 0 : ay * 2, vw, vh);
+  } else camera.clearViewOffset();
   camera.updateProjectionMatrix();
 }
 function resize() {
@@ -403,14 +406,14 @@ function frame(dt, time) {
   push += (pushT - push) * Math.min(1, dt * 1.6);
   smx += (mx - smx) * Math.min(1, dt * 2.5); smy += (my - smy) * Math.min(1, dt * 2.5);
   const a = (reduce ? 0 : Math.sin(time * 0.16) * 0.16) + smx * 0.08;
-  const r = orbitR * dolly * (1 - 0.15 * push), lx = pushX * push * 0.3;
+  const r = orbitR * dolly * (1 - 0.1 * push), lx = 0;
   camera.position.set(lx + Math.sin(a) * r, height * (0.9 + 0.1 * dolly) - smy * 0.18 - 0.2 * push, STAND.z + Math.cos(a) * r);
   camera.lookAt(look.x + lx, look.y + 0.05 * push, look.z);
   applyShift(Math.min(1, dt * 3));
   renderer.render(scene, camera);
 }
 // test hook: advance the scene by n frames without waiting for the browser (for checks while the tab is in the background)
-window.__showroom = { pick, turn, info: () => ({ vw, vh, shift, shiftWant, orbitR, push, copyR: copy.getBoundingClientRect().right }), step(n) { for (let i = 0; i < n; i++) { simT += 1 / 30; frame(1 / 30, simT); } } };
+window.__showroom = { pick, turn, info: () => ({ vw, vh, sx, sy, syWant, orbitR, push }), step(n) { for (let i = 0; i < n; i++) { simT += 1 / 30; frame(1 / 30, simT); } } };
 document.fonts?.ready.then(() => { if (cur >= 0) plaqueFor(SAMPLES[cur]); });
 setLight(true);
 pick(START); swap = null; books[START].g.position.y = 0;

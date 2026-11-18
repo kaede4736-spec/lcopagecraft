@@ -110,6 +110,19 @@ ul{padding:0;list-style:none}
 .showroom:fullscreen{max-height:none}
 .showroom:fullscreen .sr-copy,.showroom:fullscreen .sr-hint{display:none}
 .hero .facts{margin-top:0}
+/* wide screens: text centred on top, the book centred below it */
+@media(min-width:981px){
+  .sr-copy{align-items:flex-start;justify-content:center;text-align:center;padding-top:100px}
+  .sr-copy::before{inset:0 0 50% 0;background:linear-gradient(180deg,rgba(10,15,28,.85),rgba(10,15,28,0))}
+  .showroom.sr-day .sr-copy::before{background:linear-gradient(180deg,rgba(246,244,240,.92),rgba(246,244,240,0))}
+  .hero-copy{max-width:960px;margin:0 auto}
+  .hero-copy .kicker{margin-bottom:12px}
+  .hero-copy h1{font-size:clamp(36px,3.3vw,54px)}
+  .hero-copy h1 br{display:none}
+  .hero-copy .sub{margin:14px auto 0;font-size:17px;max-width:40em}
+  .hero-copy .cta{justify-content:center;margin-top:22px}
+}
+
 /* day light in the showroom: dark text on the bright room */
 html.sr-day .nav:not(.solid){color:var(--ink)}
 html.sr-day .nav:not(.solid) .logo img{filter:none}
@@ -277,10 +290,10 @@ html.js .rv.in{opacity:1;transform:none}
 
 <header class="hero" id="top">
   <div class="showroom" id="showroom">
-    <div class="sr-view" aria-label="조명 아래 놓인 회사소개서 샘플 3D 책. 페이지가 넘어가며 사진과 글, 연혁이 움직입니다."></div>
+    <div class="sr-view" aria-label="조명 아래 놓인 사업 보고서 샘플 3D 책. 페이지가 넘어가며 숫자와 표, 그래프가 차례로 나타납니다."></div>
     <div class="wrap sr-copy"><div class="hero-copy">
       <p class="kicker">PDF 대신 보내는 3D 웹 책자</p>
-      <h1>PDF는 훑어보고,<br>책은 <b>끝까지</b><br>넘겨 봅니다</h1>
+      <h1>PDF는 훑어보고, <br>책은 <b>끝까지</b> <br>넘겨 봅니다</h1>
       <p class="sub">보내던 PPT·PDF를 링크 하나로 열리는 3D 책자로 바꿔 드립니다. 페이지를 펼치면 그래프가 그려지고, 요약 영상과 원문까지 한 번에 봅니다.</p>
       <div class="cta"><a class="btn primary" href="samples/report/" target="_blank" rel="noopener">지금 샘플 넘겨 보기 →</a><a class="btn line" href="#contact">제작 문의</a></div>
     </div></div>
@@ -470,6 +483,6 @@ window.LCO_GA_ID = '';
 <script src="assets/analytics.js" defer></script>
 
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module" src="assets/showroom.js?v=11"></script>
+<script type="module" src="assets/showroom.js?v=15"></script>
 </body>
 </html>
