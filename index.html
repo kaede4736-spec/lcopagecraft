@@ -82,8 +82,55 @@ ul{padding:0;list-style:none}
 .facts b{display:block;font-size:30px;font-weight:600;letter-spacing:-.02em;color:#fff;font-variant-numeric:tabular-nums}
 .facts b em{font-style:normal;color:#fff}
 .facts span{font-size:14px;color:rgba(255,255,255,.58)}
+/* hero showroom (three.js) */
+.hero{padding:0}
+.showroom{position:relative;height:100vh;height:100svh;min-height:660px;max-height:1000px;background:var(--navy)}
+.sr-view{position:absolute;inset:0}
+.sr-view canvas{display:block;width:100%!important;height:100%!important;opacity:0;transition:opacity 1.2s ease;touch-action:pan-y}
+.showroom.sr-ready .sr-view canvas{opacity:1}
+.sr-copy{position:absolute;inset:0;display:flex;align-items:center;pointer-events:none;transition:opacity .5s ease}
+.showroom.sr-focused .sr-copy{opacity:0}
+.showroom.sr-focused .sr-copy .hero-copy{pointer-events:none}
+.hero-copy{max-width:520px;pointer-events:auto}
+.sr-copy::before{content:"";position:absolute;inset:0 45% 0 0;background:linear-gradient(90deg,rgba(10,15,28,.82),rgba(10,15,28,0));pointer-events:none}
+.sr-copy .hero-copy{position:relative}
+.sr-bar{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);display:flex;gap:8px;align-items:center;padding:8px;border-radius:14px;background:rgba(12,17,28,.78);backdrop-filter:blur(12px);border:1px solid var(--navy-line);max-width:calc(100% - 32px);overflow-x:auto;scrollbar-width:none;opacity:0;transition:opacity .6s ease .4s}
+.showroom.sr-ready .sr-bar{opacity:1}
+.sr-bar .grp{display:flex;gap:4px;flex:none}
+.sr-bar .grp+.grp{padding-left:8px;border-left:1px solid var(--navy-line)}
+.sr-bar button,.sr-bar a{font:500 14px/1 var(--font);color:rgba(255,255,255,.78);background:transparent;border:0;border-radius:8px;padding:10px 12px;cursor:pointer;white-space:nowrap;text-decoration:none;transition:background .2s,color .2s}
+.sr-bar button:hover,.sr-bar a:hover{background:rgba(255,255,255,.08);color:#fff}
+.sr-bar button[aria-pressed="true"]{background:#fff;color:var(--ink)}
+.sr-bar .pager button{font-size:20px;padding:6px 14px}
+.sr-bar .sr-open{background:var(--blue);color:#fff}
+.sr-bar .sr-open:hover{background:var(--blue-d)}
+.sr-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:84px;margin:0;font-size:13px;color:rgba(255,255,255,.5);opacity:0;transition:opacity .6s ease 1s}
+.showroom.sr-ready .sr-hint{opacity:1}
+.showroom.sr-focused .sr-hint{opacity:0}
+.showroom:fullscreen{max-height:none}
+.showroom:fullscreen .sr-copy,.showroom:fullscreen .sr-hint{display:none}
+.hero .facts{margin-top:0}
+/* day light in the showroom: dark text on the bright room */
+html.sr-day .nav:not(.solid){color:var(--ink)}
+html.sr-day .nav:not(.solid) .logo img{filter:none}
+.showroom.sr-day .sr-copy::before{background:linear-gradient(90deg,rgba(246,244,240,.92),rgba(246,244,240,0))}
+.showroom.sr-day .hero-copy{color:var(--ink)}
+.showroom.sr-day .kicker{color:var(--mute)}
+.showroom.sr-day .hero-copy .sub{color:#3d4656}
+.showroom.sr-day .hero-copy h1 b{color:var(--blue)}
+.showroom.sr-day .btn.line{color:var(--ink);border-color:rgba(11,18,32,.3)}
+.showroom.sr-day .sr-hint{color:rgba(11,18,32,.55)}
+
+@media(max-width:980px){
+  .showroom{height:auto;min-height:0;max-height:none;display:flex;flex-direction:column}
+  .sr-copy{position:relative;inset:auto;padding-top:108px;order:0}
+  .sr-copy::before{display:none}
+  .sr-view{position:relative;inset:auto;height:62vh;height:62svh;min-height:420px;margin-top:24px;order:1}
+  .sr-bar{bottom:16px;left:16px;right:16px;transform:none;max-width:none}
+  .sr-hint{display:none}
+}
 @media(max-width:960px){
-  .hero{padding-top:116px}
+  .hero{padding-top:0}
   .hero-grid{grid-template-columns:1fr;gap:44px}
   .facts{grid-template-columns:repeat(2,1fr);margin-top:70px}
   .facts div:nth-child(3){padding-left:0;border-left:0}
@@ -229,21 +276,22 @@ html.js .rv.in{opacity:1;transform:none}
 </div></nav>
 
 <header class="hero" id="top">
-  <div class="wrap">
-    <div class="hero-grid">
-      <div>
-        <p class="kicker">PDF 대신 보내는 3D 웹 책자</p>
-        <h1>PDF는 훑어보고,<br>책은 <b>끝까지</b><br>넘겨 봅니다</h1>
-        <p class="sub">보내던 PPT·PDF를 링크 하나로 열리는 3D 책자로 바꿔 드립니다. 페이지를 펼치면 그래프가 그려지고, 요약 영상과 원문까지 한 번에 봅니다.</p>
-        <div class="cta"><a class="btn primary" href="samples/report/" target="_blank" rel="noopener">지금 샘플 넘겨 보기 →</a><a class="btn line" href="#contact">제작 문의</a></div>      </div>
-      <figure class="stage" style="margin:0">
-        <div class="frame">
-          <div class="bar"><i></i><i></i><i></i></div>
-          <div class="screen"><video id="heroVideo" muted loop playsinline preload="none" poster="assets/hero_hook_poster.jpg" data-src="assets/hero_hook.mp4?v=2" aria-label="3D 책자 소개 영상"></video></div>
-        </div>
-        <figcaption class="cap">실제 제작 화면 · 가상 회사와 가상 수치로 만든 샘플</figcaption>
-      </figure>
+  <div class="showroom" id="showroom">
+    <div class="sr-view" aria-label="조명 아래 놓인 샘플 3D 책. 페이지가 넘어가며 그래프가 그려집니다."></div>
+    <div class="wrap sr-copy"><div class="hero-copy">
+      <p class="kicker">PDF 대신 보내는 3D 웹 책자</p>
+      <h1>PDF는 훑어보고,<br>책은 <b>끝까지</b><br>넘겨 봅니다</h1>
+      <p class="sub">보내던 PPT·PDF를 링크 하나로 열리는 3D 책자로 바꿔 드립니다. 페이지를 펼치면 그래프가 그려지고, 요약 영상과 원문까지 한 번에 봅니다.</p>
+      <div class="cta"><a class="btn primary" href="samples/report/" target="_blank" rel="noopener">지금 샘플 넘겨 보기 →</a><a class="btn line" href="#contact">제작 문의</a></div>
+    </div></div>
+    <div class="sr-bar" role="toolbar" aria-label="쇼룸 조작">
+      <div class="grp picks"><button type="button" data-go="0">제안서</button><button type="button" data-go="1">회사소개서</button><button type="button" data-go="2">사업 보고서</button><button type="button" data-go="3">보장분석 리포트</button></div>
+      <div class="grp pager"><button type="button" data-flip="-1" aria-label="이전 페이지">‹</button><button type="button" data-flip="1" aria-label="다음 페이지">›</button><a class="sr-open" href="samples/report/" target="_blank" rel="noopener"><span>샘플 열기</span> ↗</a></div>
+      <div class="grp"><button type="button" data-light>조명: 밤</button><button type="button" data-full>전체 화면</button></div>
     </div>
+    <p class="sr-hint">책을 누르거나 ‹ › 로 넘겨 보세요</p>
+  </div>
+  <div class="wrap">
     <div class="facts">
       <div><b>파일 <em>1개</em></b><span>원본 PPT 또는 PDF만 보내 주세요</span></div>
       <div><b>링크 <em>1개</em></b><span>휴대폰과 PC에서 같은 주소로 열립니다</span></div>
@@ -421,5 +469,7 @@ window.LCO_GA_ID = '';
 </script>
 <script src="assets/analytics.js" defer></script>
 
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="assets/showroom.js?v=3"></script>
 </body>
 </html>
