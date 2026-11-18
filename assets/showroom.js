@@ -12,12 +12,9 @@ const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const small = innerWidth < 760;
 
 const SAMPLES = [
-  { key: 'proposal', name: '제안서', title: 'NORTHLINE 물류센터 자동화 제안서', url: 'samples/proposal/', n: 8, portrait: false, cover: 0x1d2229 },
   { key: 'company', name: '회사소개서', title: '온도건축 회사소개서', url: 'samples/company/', n: 8, portrait: false, cover: 0x3a3631 },
-  { key: 'report', name: '사업 보고서', title: '모노그램 커피 3분기 사업 보고서', url: 'samples/report/', n: 8, portrait: false, cover: 0x3b2a20 },
-  { key: 'insurance', name: '보장분석 리포트', title: '온결 보장분석 리포트', url: 'samples/insurance/', n: 8, portrait: true, cover: 0x1f2b45 },
 ];
-const START = 2; // the report has the most chart pages, so it opens first
+const START = 0; // one sample only: the company profile
 
 // ---------- renderer / scene ----------
 let renderer;
@@ -77,11 +74,11 @@ function paintLogo(col) {
 }
 logoImg.onload = () => paintLogo(night ? '#ffffff' : '#10141c');
 const logoMat = new THREE.MeshBasicMaterial({ map: logoTex, transparent: true, opacity: 0, fog: false });
-const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2 * 724 / 2172), logoMat); logo.position.set(0, 2.75, -6.05); scene.add(logo);
+const logo = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.6 * 724 / 2172), logoMat); logo.position.set(0, 2.62, -6.05); scene.add(logo);
 const tagMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, fog: false, map: canvasTex(1024, 96, (g, w, h) => {
   g.fillStyle = 'rgba(255,255,255,.62)'; g.font = `500 44px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('PPT·PDF를 책처럼 넘겨보는 3D 웹 책자', w / 2, h / 2);
 }) });
-const tag = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 0.32), tagMat); tag.position.set(0, 2.27, -6.05); scene.add(tag);
+const tag = new THREE.Mesh(new THREE.PlaneGeometry(2.5, 0.235), tagMat); tag.position.set(0, 2.25, -6.05); scene.add(tag);
 
 // lights: everything starts dark and comes up in the opening
 const hemi = new THREE.HemisphereLight(0xdfe6f2, 0x24201c, 0); scene.add(hemi);
@@ -114,46 +111,79 @@ const spotTarget = new THREE.Object3D(); spotTarget.position.set(0, 1.25, 0); pe
 { const top = spot.position, bot = new THREE.Vector3(0, 0.9, STAND.z); const mid = top.clone().add(bot).multiplyScalar(0.5);
   cone.position.copy(mid); cone.lookAt(bot); cone.rotateX(Math.PI / 2); cone.scale.set(1, top.distanceTo(bot) / 3.6, 1); }
 
-// ---------- pages: plain images, or a chart page that draws itself ----------
+// ---------- pages: each page is a canvas that plays its own motion graphics ----------
+// photos slowly zoom (Ken Burns), text blocks rise in one after another, charts and timelines draw themselves.
+// The motion plan per page lives in assets/showroom/<sample>/motion.json (coordinates in 1600 x 900 page space).
 let ANIM = {};
 const animReady = fetch('assets/showroom/anim.json').then(r => r.json()).then(j => { ANIM = j; }).catch(() => {});
+const motionCache = {};
+const motionFor = (key) => motionCache[key] || (motionCache[key] = fetch(`assets/showroom/${key}/motion.json`).then(r => r.ok ? r.json() : null).catch(() => null));
+const ease3 = (q) => 1 - Math.pow(1 - Math.max(0, Math.min(1, q)), 3);
 function Page(sample, n) { // n = 1-based page number
-  const p = { tex: null, ready: false, prog: 1, rects: null, base: null, chart: null, img: null, waiting: [] };
+  const p = { ready: false, time: 99, rects: null, base: null, chart: null, img: null, mo: null, photos: [], waiting: [] };
   const dir = `assets/showroom/${sample.key}/`, nn = String(n).padStart(2, '0');
   const c = document.createElement('canvas'); const tex = new THREE.CanvasTexture(c);
   tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = Math.min(8, maxAniso); p.tex = tex;
-  const mirror = tex.clone(); mirror.wrapS = THREE.RepeatWrapping; mirror.repeat.x = -1; mirror.offset.x = 1; p.mirror = mirror;
   p.draw = () => {
-    const g = c.getContext('2d');
-    if (!p.rects) { g.drawImage(p.img, 0, 0, c.width, c.height); }
-    else {
-      g.drawImage(p.base, 0, 0, c.width, c.height);
-      const k = c.width / 1600;
+    const g = c.getContext('2d'), k = c.width / 1600, t = p.time, still = p.rects ? p.base : p.img;
+    g.globalAlpha = 1; g.drawImage(still, 0, 0, c.width, c.height);
+    const mo = p.mo;
+    if (mo) {
+      // photos: slow push-in over ~8 s
+      mo.photos?.forEach((ph, i) => {
+        const im = p.photos[i]; if (!im) return;
+        const z = 1.0 + 0.09 * ease3(t / 8), x = ph.x * k, y = ph.y * k, w = ph.w * k, h = ph.h * k;
+        const s = Math.max(w / im.width, h / im.height) * z, dw = im.width * s, dh = im.height * s;
+        const py = ph.py ?? 0.5;
+        g.save(); g.beginPath(); g.rect(x, y, w, h); g.clip();
+        g.drawImage(im, x + (w - dw) / 2, y + (h - dh) * py, dw, dh); g.restore();
+      });
+      mo.grad?.forEach(gr => { const lg = g.createLinearGradient(0, gr.y * k, 0, (gr.y + gr.h) * k); lg.addColorStop(0, `rgba(0,0,0,${gr.a})`); lg.addColorStop(1, 'rgba(0,0,0,0)'); g.fillStyle = lg; g.fillRect(0, gr.y * k, c.width, gr.h * k); });
+      mo.keep?.forEach(r => g.drawImage(still, r.x * k, r.y * k, r.w * k, r.h * k, r.x * k, r.y * k, r.w * k, r.h * k));
+      // text blocks: hidden, then rise 30 px and fade in, one after another
+      mo.rise?.forEach(r => {
+        const e = ease3((t - 0.25 - (r.d || 0)) / 0.7); if (e >= 1) return;
+        const x = r.x * k, y = r.y * k, w = r.w * k, h = r.h * k;
+        if (!mo.photos?.some(ph => r.x >= ph.x && r.y >= ph.y && r.x + r.w <= ph.x + ph.w && r.y + r.h <= ph.y + ph.h)) { g.fillStyle = r.bg || mo.bg || '#ffffff'; g.fillRect(x, y, w, h); }
+        else { const ph = mo.photos.find(ph => r.x >= ph.x && r.y >= ph.y); const im = p.photos[mo.photos.indexOf(ph)]; if (im) { /* photo already under it */ } }
+        if (e <= 0) return;
+        g.save(); g.beginPath(); g.rect(x, y - 2, w, h + 4); g.clip(); g.globalAlpha = e;
+        g.drawImage(still, x, y, w, h, x, y + (1 - e) * 30 * k, w, h); g.restore();
+      });
+    }
+    // charts: bars grow and lines draw along their rectangles
+    if (p.rects) {
+      const prog = Math.max(0, (t - 0.5) / 1.6);
       for (const r of p.rects) {
-        const q = Math.max(0, Math.min(1, (p.prog * 1.6 - (r.d || 0)) / 1)), e = 1 - Math.pow(1 - q, 3);
-        if (e <= 0) continue;
+        const e = ease3(prog * 1.6 - (r.d || 0)); if (e <= 0) continue;
         let x = r.x * k, y = r.y * k, w = r.w * k, h = r.h * k;
         if (r.dir === 'up') { y += h * (1 - e); h *= e; } else if (r.dir === 'down') { h *= e; } else if (r.dir === 'left') { x += w * (1 - e); w *= e; } else { w *= e; }
-        if (w > 0.5 && h > 0.5) g.drawImage(p.chart, x, y, w, h, x, y, w, h); // chart layer has the same size as the canvas
+        if (w > 0.5 && h > 0.5) g.drawImage(p.chart, x, y, w, h, x, y, w, h);
       }
     }
-    tex.needsUpdate = true; mirror.needsUpdate = true;
+    tex.needsUpdate = true;
   };
   p.load = () => {
     if (p.loading) return p.loading;
-    p.loading = animReady.then(async () => {
+    p.loading = Promise.all([animReady, motionFor(sample.key)]).then(async ([, motion]) => {
       const rects = ANIM[sample.key] && ANIM[sample.key][n];
-      if (rects) { [p.base, p.chart] = await Promise.all([img(dir + 'b' + nn + '.jpg'), img(dir + 'c' + nn + '.png')]); p.rects = rects; c.width = p.base.width; c.height = p.base.height; }
-      else { p.img = await img(dir + 'p' + nn + '.jpg'); c.width = p.img.width; c.height = p.img.height; }
+      p.mo = motion && motion.pages[n] ? Object.assign({ bg: motion.bg }, motion.pages[n]) : null;
+      const photoLoads = (p.mo?.photos || []).map(ph => img(dir + ph.src).catch(() => null));
+      if (rects) { [p.base, p.chart] = await Promise.all([img(dir + 'b' + nn + '.jpg'), img(dir + 'c' + nn + '.png')]); p.rects = rects; }
+      else { p.img = await img(dir + 'p' + nn + '.jpg'); }
+      p.photos = await Promise.all(photoLoads);
+      const still = p.base || p.img; c.width = still.width; c.height = still.height;
       p.ready = true; p.draw(); p.waiting.forEach(f => f()); p.waiting = [];
     }).catch(() => {});
     return p.loading;
   };
-  p.play = () => { if (!p.rects) return; p.prog = 0; p.draw(); playing.add(p); };
+  p.moving = () => !!(p.mo || p.rects);
+  p.play = () => { if (!p.moving()) return; p.time = 0; p.draw(); playing.add(p); };
+  p.settle = () => { p.time = 99; playing.delete(p); if (p.ready) p.draw(); };
   return p;
 }
 const playing = new Set();
-function tickCharts(dt) { for (const p of playing) { p.prog = Math.min(1, p.prog + dt / 1.6); p.draw(); if (p.prog >= 1) playing.delete(p); } }
+function tickCharts(dt) { for (const p of playing) { p.time += dt; p.draw(); if (p.time > 9) playing.delete(p); } }
 
 // ---------- book ----------
 // one page at a time, bound at the top like a desk calendar: each page lifts from the bottom edge and flips up over the binding
@@ -198,7 +228,7 @@ function Book(s, idx) {
   function put(m, k, play) {
     const p = pages[k]; m.userData.want = p || null;
     if (!p) { m.map = null; m.color.set(PAPER); m.needsUpdate = true; return; }
-    const apply = () => { if (m.userData.want !== p) return; m.map = p.tex; m.color.set(TINT); m.needsUpdate = true; if (play) { p.play(); if (p.rects && m.userData.chart) chartFocus(0, pw); } };
+    const apply = () => { if (m.userData.want !== p) return; m.map = p.tex; m.color.set(TINT); m.needsUpdate = true; if (play) { p.play(); if (p.moving() && m.userData.chart) chartFocus(0, pw); } else p.settle(); };
     if (p.ready) apply(); else { m.map = null; m.color.set(PAPER); m.needsUpdate = true; p.waiting.push(apply); p.load(); }
   }
   const spreads = s.n; // kept the old name: number of stops
@@ -265,7 +295,7 @@ function tickSwap(dt) {
 // ---------- camera: slow orbit + follows the pointer a little ----------
 // when a chart page opens, the camera leans in toward that page while the chart draws, then eases back
 let push = 0, pushT = 0, pushX = 0, pushHold = 0;
-function chartFocus(side, pw) { pushT = 1; pushX = side * pw * 0.5; pushHold = 2.6; }
+function chartFocus(side, pw) { pushT = 1; pushX = side * pw * 0.5; pushHold = 4.2; }
 const look = new THREE.Vector3(0, 1.2, STAND.z);
 let orbitR = 3.6, height = 1.95, mx = 0, my = 0, smx = 0, smy = 0, dolly = 1;
 addEventListener('pointermove', (e) => { if (!inView) return; mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; }, { passive: true });
@@ -330,7 +360,7 @@ function frameScene() {
   const free = Math.max(240, x1 - x0);
   shiftWant = (x0 + x1) / 2 - vw / 2;
   const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-  const byWidth = 2.15 * vh / (2 * tanV * 0.86 * free), byHeight = 2.3 / (2 * tanV * 0.8);
+  const byWidth = 1.8 * vh / (2 * tanV * 0.86 * free), byHeight = 2.3 / (2 * tanV * 0.8);
   orbitR = Math.min(8.5, Math.max(3.2, byWidth, byHeight));
 }
 function applyShift(k) {
@@ -365,7 +395,7 @@ function frame(dt, time) {
   // pages turn on their own; after the last spread the book goes back to the first one
   if (!swap) {
     held = Math.max(0, held - dt);
-    if (held <= 0) { auto -= dt; if (auto <= 0) { const b = books[cur]; if (b.spread >= b.spreads - 1) b.reset(0); else b.flip(1); auto = b.spread === 0 ? 3.0 : 3.4; } }
+    if (held <= 0) { auto -= dt; if (auto <= 0) { const b = books[cur]; if (b.spread >= b.spreads - 1) b.reset(0); else b.flip(1); auto = 5.6; } }
   }
   books.forEach(b => b.tick(dt)); tickSwap(dt); tickCharts(dt);
   // camera: slow orbit, plus a small move toward the pointer
@@ -384,5 +414,6 @@ window.__showroom = { pick, turn, info: () => ({ vw, vh, shift, shiftWant, orbit
 document.fonts?.ready.then(() => { if (cur >= 0) plaqueFor(SAMPLES[cur]); });
 setLight(true);
 pick(START); swap = null; books[START].g.position.y = 0;
+auto = 5.2; // let the cover play before the first turn
 root.classList.add('sr-ready');
 kick();
