@@ -77,11 +77,11 @@ function paintLogo(col) {
 }
 logoImg.onload = () => paintLogo(night ? '#ffffff' : '#10141c');
 const logoMat = new THREE.MeshBasicMaterial({ map: logoTex, transparent: true, opacity: 0, fog: false });
-const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2 * 724 / 2172), logoMat); logo.position.set(0, 3.4, -6.05); scene.add(logo);
+const logo = new THREE.Mesh(new THREE.PlaneGeometry(2.2, 2.2 * 724 / 2172), logoMat); logo.position.set(0, 2.75, -6.05); scene.add(logo);
 const tagMat = new THREE.MeshBasicMaterial({ transparent: true, opacity: 0, fog: false, map: canvasTex(1024, 96, (g, w, h) => {
   g.fillStyle = 'rgba(255,255,255,.62)'; g.font = `500 44px ${FONT}`; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('PPT·PDF를 책처럼 넘겨보는 3D 웹 책자', w / 2, h / 2);
 }) });
-const tag = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 0.32), tagMat); tag.position.set(0, 2.88, -6.05); scene.add(tag);
+const tag = new THREE.Mesh(new THREE.PlaneGeometry(3.4, 0.32), tagMat); tag.position.set(0, 2.27, -6.05); scene.add(tag);
 
 // lights: everything starts dark and comes up in the opening
 const hemi = new THREE.HemisphereLight(0xdfe6f2, 0x24201c, 0); scene.add(hemi);
@@ -316,19 +316,34 @@ renderer.domElement.addEventListener('click', (e) => { if (hitBook(e)) turn(book
 renderer.domElement.addEventListener('pointermove', (e) => { renderer.domElement.style.cursor = hitBook(e) ? 'pointer' : 'default'; });
 
 // ---------- layout ----------
-let vw = 1, vh = 1, shift = 0, tallView = false;
+let vw = 1, vh = 1, shift = 0, shiftWant = 0, tallView = false;
+const copy = root.querySelector('.hero-copy');
+// the pedestal is centred in the free area: right of the text on wide screens, the whole width otherwise,
+// and the camera distance is chosen so the pedestal fills most of that area
+function frameScene() {
+  const vr = view.getBoundingClientRect(), side = vw > 980 && !document.fullscreenElement && copy;
+  let x0 = 24, x1 = vw - 24;
+  if (side) { const cr = copy.getBoundingClientRect(); x0 = Math.max(x0, cr.right - vr.left + 48); }
+  const free = Math.max(240, x1 - x0);
+  shiftWant = (x0 + x1) / 2 - vw / 2;
+  const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+  const byWidth = 2.75 * vh / (2 * tanV * 0.88 * free), byHeight = 2.1 / (2 * tanV * 0.78);
+  orbitR = Math.min(8.5, Math.max(3.2, byWidth, byHeight));
+}
 function applyShift(k) {
-  const want = vw > 980 && !document.fullscreenElement ? vw * 0.21 : 0;
+  const want = shiftWant;
   shift += (want - shift) * k;
   if (Math.abs(shift) > 0.5) camera.setViewOffset(vw + shift * 2, vh, 0, 0, vw, vh); else camera.clearViewOffset();
   camera.updateProjectionMatrix();
 }
 function resize() {
   vw = view.clientWidth; vh = view.clientHeight; renderer.setSize(vw, vh, false); camera.aspect = vw / vh;
-  const tall = tallView = vw / vh < 1; camera.fov = tall ? 42 : 30; orbitR = tall ? 5.0 : 5.0; height = tall ? 2.3 : 2.15;
-  camera.updateProjectionMatrix();
+  const tall = tallView = vw / vh < 1; camera.fov = tall ? 40 : 30; height = tall ? 2.25 : 2.15;
+  camera.updateProjectionMatrix(); frameScene();
 }
 new ResizeObserver(() => { resize(); applyShift(1); }).observe(view); resize(); applyShift(1);
+document.fonts?.ready.then(() => { frameScene(); applyShift(1); }); // the text width changes once the web font is in
+document.addEventListener('fullscreenchange', () => setTimeout(() => { resize(); applyShift(1); }, 60));
 
 // ---------- loop ----------
 let inView = true, last = performance.now(), t0 = last, running = false, simT = 0, opening = 0;
@@ -354,15 +369,15 @@ function frame(dt, time) {
   pushHold -= dt; if (pushHold <= 0) pushT = 0;
   push += (pushT - push) * Math.min(1, dt * 1.6);
   smx += (mx - smx) * Math.min(1, dt * 2.5); smy += (my - smy) * Math.min(1, dt * 2.5);
-  const a = (reduce ? 0 : Math.sin(time * 0.16) * 0.22) + smx * 0.12 + (tallView ? 0 : 0.18);
-  const r = orbitR * dolly * (1 - (tallView ? 0.18 : 0.36) * push), lx = pushX * push * (tallView ? 0.4 : 1);
-  camera.position.set(lx + Math.sin(a) * r, height * (0.9 + 0.1 * dolly) - smy * 0.18 - 0.35 * push, STAND.z + Math.cos(a) * r);
+  const a = (reduce ? 0 : Math.sin(time * 0.16) * 0.16) + smx * 0.08;
+  const r = orbitR * dolly * (1 - 0.15 * push), lx = pushX * push * 0.3;
+  camera.position.set(lx + Math.sin(a) * r, height * (0.9 + 0.1 * dolly) - smy * 0.18 - 0.2 * push, STAND.z + Math.cos(a) * r);
   camera.lookAt(look.x + lx, look.y + 0.05 * push, look.z);
   applyShift(Math.min(1, dt * 3));
   renderer.render(scene, camera);
 }
 // test hook: advance the scene by n frames without waiting for the browser (for checks while the tab is in the background)
-window.__showroom = { pick, turn, step(n) { for (let i = 0; i < n; i++) { simT += 1 / 30; frame(1 / 30, simT); } } };
+window.__showroom = { pick, turn, info: () => ({ vw, vh, shift, shiftWant, orbitR, push, copyR: copy.getBoundingClientRect().right }), step(n) { for (let i = 0; i < n; i++) { simT += 1 / 30; frame(1 / 30, simT); } } };
 document.fonts?.ready.then(() => { if (cur >= 0) plaqueFor(SAMPLES[cur]); });
 setLight(true);
 pick(START); swap = null; books[START].g.position.y = 0;
