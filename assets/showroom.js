@@ -98,8 +98,8 @@ const cone = new THREE.Mesh(new THREE.ConeGeometry(1.05, 3.6, 48, 1, true), cone
 // ---------- pedestal ----------
 const STAND = new THREE.Vector3(0, 0, -1.4);
 const ped = new THREE.Group(); ped.position.copy(STAND); scene.add(ped);
-const plinth = new THREE.Mesh(new THREE.BoxGeometry(2.6, 0.8, 0.8), M.stand); plinth.position.y = 0.4; plinth.castShadow = plinth.receiveShadow = true; ped.add(plinth);
-const ptop = new THREE.Mesh(new THREE.BoxGeometry(2.64, 0.04, 0.84), M.standTop); ptop.position.y = 0.82; ptop.receiveShadow = true; ped.add(ptop);
+const plinth = new THREE.Mesh(new THREE.BoxGeometry(2.0, 0.8, 0.8), M.stand); plinth.position.y = 0.4; plinth.castShadow = plinth.receiveShadow = true; ped.add(plinth);
+const ptop = new THREE.Mesh(new THREE.BoxGeometry(2.04, 0.04, 0.84), M.standTop); ptop.position.y = 0.82; ptop.receiveShadow = true; ped.add(ptop);
 const plaqueMat = new THREE.MeshStandardMaterial({ roughness: 0.6 });
 const plaque = new THREE.Mesh(new THREE.PlaneGeometry(1.0, 0.25), plaqueMat); plaque.position.set(0, 0.52, 0.401); ped.add(plaque);
 function plaqueFor(s) {
@@ -156,18 +156,21 @@ const playing = new Set();
 function tickCharts(dt) { for (const p of playing) { p.prog = Math.min(1, p.prog + dt / 1.6); p.draw(); if (p.prog >= 1) playing.delete(p); } }
 
 // ---------- book ----------
-const LAND = { pw: 1.15, ph: 1.15 * 9 / 16 }, PORT = { pw: 0.68, ph: 0.68 * 1.4 };
+// one page at a time, bound at the top like a desk calendar: each page lifts from the bottom edge and flips up over the binding
+const LAND = { pw: 1.5, ph: 1.5 * 9 / 16 }, PORT = { pw: 0.78, ph: 0.78 * 1.4 };
+const TILT = 0.3;
+const restY = (ph) => 0.84 + ph * 0.5 * Math.cos(TILT) + 0.05;
 function makePageGeo(pw, ph, segs) {
-  const geo = new THREE.PlaneGeometry(pw, ph, segs, 1); geo.translate(pw / 2, 0, 0);
-  geo.userData.x0 = Float32Array.from({ length: geo.attributes.position.count }, (_, i) => geo.attributes.position.getX(i)); return geo;
+  const geo = new THREE.PlaneGeometry(pw, ph, 1, segs); geo.translate(0, -ph / 2, 0); // hinge along the top edge (y = 0)
+  geo.userData.v0 = Float32Array.from({ length: geo.attributes.position.count }, (_, i) => -geo.attributes.position.getY(i)); return geo;
 }
-// t = 0 flat on the right, t = 1 flat on the left; the free edge trails so the sheet curls
-function bendPage(geo, pw, t) {
-  const pos = geo.attributes.position, x0 = geo.userData.x0, lift = Math.sin(Math.PI * t), segs = 28;
+// t = 0 hangs flat over the page below, t = 1 stands straight up above the binding; the free edge trails so the sheet curls
+function bendPage(geo, ph, t) {
+  const pos = geo.attributes.position, v0 = geo.userData.v0, lift = Math.sin(Math.PI * Math.min(1, t)), segs = 28;
   for (let i = 0; i < pos.count; i++) {
-    const steps = Math.round(x0[i] / pw * segs); let x = 0, z = 0;
-    for (let k = 0; k < steps; k++) { const uu = (k + 0.5) / segs, a = Math.PI * t - 0.6 * lift * uu * uu; x += Math.cos(a) * pw / segs; z += Math.sin(a) * pw / segs; }
-    pos.setX(i, x); pos.setZ(i, z + 0.004 * lift);
+    const steps = Math.round(v0[i] / ph * segs); let y = 0, z = 0;
+    for (let k = 0; k < steps; k++) { const uu = (k + 0.5) / segs, a = Math.PI * t - 0.7 * lift * uu * uu; y -= Math.cos(a) * ph / segs; z += Math.sin(a) * ph / segs; }
+    pos.setY(i, y); pos.setZ(i, z + 0.004 * lift);
   }
   pos.needsUpdate = true; geo.computeVertexNormals();
 }
@@ -175,53 +178,52 @@ function Book(s, idx) {
   const { pw, ph } = s.portrait ? PORT : LAND;
   const pages = Array.from({ length: s.n }, (_, k) => Page(s, k + 1));
   const g = new THREE.Group(); g.visible = false; ped.add(g);
-  const tilt = 0.36;
-  const rest = new THREE.Group(); rest.position.set(0, 0.84 + ph * 0.5 * Math.cos(tilt) + 0.03, -0.05); rest.rotation.x = -tilt; g.add(rest);
+  const rest = new THREE.Group(); rest.position.set(0, restY(ph), -0.02); rest.rotation.x = -TILT; g.add(rest);
   const easel = new THREE.Mesh(new THREE.BoxGeometry(0.05, ph * 0.9, 0.03), M.brass); easel.position.set(0, -0.02, -0.06); rest.add(easel);
-  const ledge = new THREE.Mesh(new THREE.BoxGeometry(pw * 2 + 0.1, 0.03, 0.06), M.brass); ledge.position.set(0, -ph / 2 - 0.03, 0.01); rest.add(ledge);
-  const board = new THREE.Mesh(new THREE.BoxGeometry(pw * 2 + 0.05, ph + 0.05, 0.02), new THREE.MeshStandardMaterial({ color: s.cover, roughness: 0.6 }));
+  const ledge = new THREE.Mesh(new THREE.BoxGeometry(pw + 0.12, 0.03, 0.06), M.brass); ledge.position.set(0, -ph / 2 - 0.03, 0.01); rest.add(ledge);
+  const board = new THREE.Mesh(new THREE.BoxGeometry(pw + 0.05, ph + 0.05, 0.02), new THREE.MeshStandardMaterial({ color: s.cover, roughness: 0.6 }));
   board.position.z = -0.017; board.castShadow = true; rest.add(board);
-  for (const sx of [-1, 1]) { const b = new THREE.Mesh(new THREE.BoxGeometry(pw - 0.006, ph - 0.004, 0.012), M.edge); b.position.set(sx * pw / 2, 0, -0.002); rest.add(b); }
-  const mat = () => new THREE.MeshBasicMaterial({ color: PAPER });
-  const left = new THREE.Mesh(new THREE.PlaneGeometry(pw, ph), mat()); left.position.set(-pw / 2, 0, 0.0055); rest.add(left);
-  const right = new THREE.Mesh(new THREE.PlaneGeometry(pw, ph), mat()); right.position.set(pw / 2, 0, 0.0055); rest.add(right);
-  left.material.userData.side = -1; right.material.userData.side = 1;
-  const fgeo = makePageGeo(pw, ph, 22);
-  const frontM = new THREE.MeshBasicMaterial({ color: PAPER, side: THREE.FrontSide }), backM = new THREE.MeshBasicMaterial({ color: PAPER, side: THREE.BackSide });
-  const turner = new THREE.Group(); turner.position.z = 0.0068; turner.add(new THREE.Mesh(fgeo, frontM), new THREE.Mesh(fgeo, backM)); turner.visible = false; rest.add(turner);
-  [board, left, right, ...turner.children].forEach(m => { m.userData.book = true; });
+  const block = new THREE.Mesh(new THREE.BoxGeometry(pw - 0.006, ph - 0.004, 0.012), M.edge); block.position.z = -0.002; rest.add(block);
+  // spiral binding along the top edge
+  const ringGeo = new THREE.TorusGeometry(0.03, 0.006, 8, 20), rings = Math.round(pw / 0.075);
+  for (let k = 0; k < rings; k++) { const r = new THREE.Mesh(ringGeo, M.brass); r.rotation.y = Math.PI / 2; r.position.set(-pw / 2 + (k + 0.5) * pw / rings, ph / 2 + 0.004, 0.0); rest.add(r); }
+  const base = new THREE.Mesh(new THREE.PlaneGeometry(pw, ph), new THREE.MeshBasicMaterial({ color: PAPER })); base.position.z = 0.0055; rest.add(base);
+  base.material.userData.chart = true;
+  const fgeo = makePageGeo(pw, ph, 24);
+  const frontM = new THREE.MeshBasicMaterial({ color: PAPER, side: THREE.FrontSide }), backM = new THREE.MeshBasicMaterial({ color: 0xdcd8d0, side: THREE.BackSide });
+  const turner = new THREE.Group(); turner.position.set(0, ph / 2, 0.0068); turner.add(new THREE.Mesh(fgeo, frontM), new THREE.Mesh(fgeo, backM)); turner.visible = false; rest.add(turner);
+  [board, base, block, ...turner.children].forEach(m => { m.userData.book = true; });
 
   // page k (0-based) on a material; waits on plain paper until the image is in
-  function put(m, k, mirrored, play) {
+  function put(m, k, play) {
     const p = pages[k]; m.userData.want = p || null;
     if (!p) { m.map = null; m.color.set(PAPER); m.needsUpdate = true; return; }
-    const apply = () => { if (m.userData.want !== p) return; m.map = mirrored ? p.mirror : p.tex; m.color.set(TINT); m.needsUpdate = true; if (play) { p.play(); if (p.rects && m.userData.side) chartFocus(m.userData.side, pw); } };
+    const apply = () => { if (m.userData.want !== p) return; m.map = p.tex; m.color.set(TINT); m.needsUpdate = true; if (play) { p.play(); if (p.rects && m.userData.chart) chartFocus(0, pw); } };
     if (p.ready) apply(); else { m.map = null; m.color.set(PAPER); m.needsUpdate = true; p.waiting.push(apply); p.load(); }
   }
-  // spread k: left = page 2k-1, right = page 2k (spread 0 = cover alone on the right)
-  const spreads = Math.floor(s.n / 2) + 1;
+  const spreads = s.n; // kept the old name: number of stops
   let spread = 0, anim = null;
-  function show(k, play) { put(left.material, 2 * k - 1, false, play); put(right.material, 2 * k, false, play); }
   function flip(dir) {
     if (anim) return false;
     const to = spread + dir; if (to < 0 || to >= spreads) return false;
-    if (dir > 0) { put(frontM, 2 * spread); put(backM, 2 * to - 1, true); put(right.material, 2 * to, false, true);
-      anim = { t: 0, from: 0, to: 1, done: () => put(left.material, 2 * to - 1, false, true) }; }
-    else { put(frontM, 2 * to); put(backM, 2 * spread - 1, true); put(left.material, 2 * to - 1, false, true);
-      anim = { t: 0, from: 1, to: 0, done: () => put(right.material, 2 * to, false, true) }; }
-    spread = to; bendPage(fgeo, pw, anim.from); turner.visible = true; sfx(); return true;
+    if (dir > 0) { put(frontM, spread); put(base.material, to, true); anim = { t: 0, from: 0, to: 1, done: () => {} }; }
+    else { put(frontM, to); anim = { t: 0, from: 1, to: 0, done: () => put(base.material, to, true) }; }
+    spread = to; bendPage(fgeo, ph, anim.from); turner.visible = true; sfx(); return true;
   }
   function tick(dt) {
     if (!anim) return;
-    anim.t = Math.min(1, anim.t + dt / 0.95);
-    const e = anim.t < .5 ? 2 * anim.t * anim.t : 1 - Math.pow(-2 * anim.t + 2, 2) / 2;
-    bendPage(fgeo, pw, anim.from + (anim.to - anim.from) * e);
-    if (anim.t >= 1) { const d = anim.done; anim = null; turner.visible = false; d(); }
+    anim.t = Math.min(1, anim.t + dt / 1.0);
+    const e = anim.t < .5 ? 2 * anim.t * anim.t : 1 - Math.pow(-2 * anim.t + 2, 2) / 2, v = anim.from + (anim.to - anim.from) * e;
+    bendPage(fgeo, ph, v);
+    // the lifted sheet fades as it stands up past the binding, as if it went over to the back
+    const fade = Math.min(1, Math.max(0, (0.86 - v) / 0.3));
+    frontM.transparent = backM.transparent = fade < 1; frontM.opacity = backM.opacity = fade;
+    if (anim.t >= 1) { const d = anim.done; anim = null; turner.visible = false; frontM.opacity = backM.opacity = 1; d(); }
   }
   function warm() { pages.forEach(p => p.load()); }
-  function reset(k) { anim = null; turner.visible = false; spread = k; show(k, true); }
-  show(0); pages[0].load(); pages[1].load(); pages[2].load();
-  return { s, g, rest, flip, tick, warm, reset, get spread() { return spread; }, spreads, center: () => rest.getWorldPosition(new THREE.Vector3()) };
+  function reset(k) { anim = null; turner.visible = false; spread = k; put(base.material, k, true); }
+  put(base.material, 0); pages[0].load(); pages[1].load();
+  return { s, g, rest, ph, flip, tick, warm, reset, get spread() { return spread; }, spreads, center: () => rest.getWorldPosition(new THREE.Vector3()) };
 }
 const books = SAMPLES.map(Book);
 
@@ -246,6 +248,7 @@ function pick(i) {
   if (i === cur || swap) return;
   const old = cur; cur = i; books[i].warm(); plaqueFor(SAMPLES[i]); ui.update();
   pushT = 0; pushHold = 0; // step back to the wide view while the books change
+  look.y = restY(books[i].ph) - 0.12;
   swap = { t: 0, old, neu: i };
   books[i].reset(0); books[i].g.visible = true; books[i].g.position.y = -1.1;
   auto = 0.6; // the new book opens shortly after it arrives
@@ -263,7 +266,7 @@ function tickSwap(dt) {
 // when a chart page opens, the camera leans in toward that page while the chart draws, then eases back
 let push = 0, pushT = 0, pushX = 0, pushHold = 0;
 function chartFocus(side, pw) { pushT = 1; pushX = side * pw * 0.5; pushHold = 2.6; }
-const look = new THREE.Vector3(0, 1.12, STAND.z);
+const look = new THREE.Vector3(0, 1.2, STAND.z);
 let orbitR = 3.6, height = 1.95, mx = 0, my = 0, smx = 0, smy = 0, dolly = 1;
 addEventListener('pointermove', (e) => { if (!inView) return; mx = e.clientX / innerWidth * 2 - 1; my = e.clientY / innerHeight * 2 - 1; }, { passive: true });
 
@@ -327,7 +330,7 @@ function frameScene() {
   const free = Math.max(240, x1 - x0);
   shiftWant = (x0 + x1) / 2 - vw / 2;
   const tanV = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
-  const byWidth = 2.75 * vh / (2 * tanV * 0.88 * free), byHeight = 2.1 / (2 * tanV * 0.78);
+  const byWidth = 2.15 * vh / (2 * tanV * 0.86 * free), byHeight = 2.3 / (2 * tanV * 0.8);
   orbitR = Math.min(8.5, Math.max(3.2, byWidth, byHeight));
 }
 function applyShift(k) {
@@ -362,7 +365,7 @@ function frame(dt, time) {
   // pages turn on their own; after the last spread the book goes back to the first one
   if (!swap) {
     held = Math.max(0, held - dt);
-    if (held <= 0) { auto -= dt; if (auto <= 0) { const b = books[cur]; if (b.spread >= b.spreads - 1) b.reset(1); else b.flip(1); auto = b.spread === 1 ? 3.6 : 3.4; } }
+    if (held <= 0) { auto -= dt; if (auto <= 0) { const b = books[cur]; if (b.spread >= b.spreads - 1) b.reset(0); else b.flip(1); auto = b.spread === 0 ? 3.0 : 3.4; } }
   }
   books.forEach(b => b.tick(dt)); tickSwap(dt); tickCharts(dt);
   // camera: slow orbit, plus a small move toward the pointer
