@@ -13,8 +13,9 @@ const small = innerWidth < 760;
 
 const SAMPLES = [
   { key: 'report', name: '사업 보고서', title: '모노그램 커피 3분기 사업 보고서', url: 'samples/report/', n: 8, portrait: false, cover: 0x3b2a20 },
+  { key: 'menu', name: 'QR 메뉴판', title: '모노그램 커피 QR 3D 메뉴판', url: 'samples/menu/', n: 8, portrait: true, cover: 0x2b1d14 },
 ];
-const START = 0; // one sample only: the business report (most charts)
+const START = 0; // the business report opens first; the QR menu is one button away
 
 // ---------- renderer / scene ----------
 let renderer;
@@ -187,7 +188,7 @@ function tickCharts(dt) { for (const p of playing) { p.time += dt; p.draw(); if 
 
 // ---------- book ----------
 // one page at a time, bound at the top like a desk calendar: each page lifts from the bottom edge and flips up over the binding
-const LAND = { pw: 1.5, ph: 1.5 * 9 / 16 }, PORT = { pw: 0.78, ph: 0.78 * 1.4 };
+const LAND = { pw: 1.5, ph: 1.5 * 9 / 16 }, PORT = { pw: 0.66, ph: 0.66 * 1.4 };
 const TILT = 0.3;
 const restY = (ph) => 0.84 + ph * 0.5 * Math.cos(TILT) + 0.05;
 function makePageGeo(pw, ph, segs) {

@@ -315,6 +315,7 @@ main .btn.dark:hover{background:#dfe5ee}
 .cards .card:nth-child(3),.steps .step:nth-child(3),.plans .plan:nth-child(3){transition-delay:.16s}
 .cards .card:nth-child(4){transition-delay:.24s}
 .cards .card:nth-child(5){transition-delay:.32s}
+.cards .card:nth-child(6){transition-delay:.4s}
 .perks .perk:nth-child(2){transition-delay:.06s}.perks .perk:nth-child(3){transition-delay:.12s}.perks .perk:nth-child(4){transition-delay:.18s}.perks .perk:nth-child(5){transition-delay:.24s}
 html.js .rv{transform:translateY(28px)}
 /* sample cards: the pages turn on hover (or by themselves on touch screens) */
@@ -365,7 +366,7 @@ html.js .rv{transform:translateY(28px)}
 
 <header class="hero" id="top">
   <div class="showroom" id="showroom">
-    <div class="sr-view" aria-label="조명 아래 놓인 사업 보고서 샘플 3D 책. 페이지가 넘어가며 숫자와 표, 그래프가 차례로 나타납니다."></div>
+    <div class="sr-view" aria-label="조명 아래 놓인 3D 책 샘플. 사업 보고서와 QR 메뉴판을 골라 볼 수 있고, 페이지가 넘어가며 숫자와 표, 그래프가 차례로 나타납니다."></div>
     <div class="wrap sr-copy"><div class="hero-copy">
       <p class="kicker">PDF 대신 보내는 3D 웹 책자</p>
       <h1>PDF는 훑어보고, <br>책은 <b>끝까지</b> <br>넘겨 봅니다</h1>
@@ -373,7 +374,7 @@ html.js .rv{transform:translateY(28px)}
       <div class="cta"><a class="btn primary" href="samples/report/" target="_blank" rel="noopener">지금 샘플 넘겨 보기 →</a><a class="btn line" href="#contact">제작 문의</a></div>
     </div></div>
     <div class="sr-bar" role="toolbar" aria-label="쇼룸 조작">
-      
+      <div class="grp"><button type="button" data-go="0" aria-pressed="true">사업 보고서</button><button type="button" data-go="1" aria-pressed="false">QR 메뉴판</button></div>
       <div class="grp pager"><button type="button" data-flip="-1" aria-label="이전 페이지">‹</button><button type="button" data-flip="1" aria-label="다음 페이지">›</button><a class="sr-open" href="samples/report/" target="_blank" rel="noopener"><span>샘플 열기</span> ↗</a></div>
       <div class="grp"><button type="button" data-light>조명: 밤</button><button type="button" data-full>전체 화면</button></div>
     </div>
@@ -384,7 +385,7 @@ html.js .rv{transform:translateY(28px)}
       <div><b>파일 <em>1개</em></b><span>원본 PPT 또는 PDF만 보내 주세요</span></div>
       <div><b>링크 <em>1개</em></b><span>휴대폰과 PC에서 같은 주소로 열립니다</span></div>
       <div><b><em>3일</em>부터</b><span>패키지별 작업 기간 3~7일</span></div>
-      <div><b>샘플 <em>4종</em></b><span>제안서·회사소개서·보고서·보장분석</span></div>
+      <div><b>샘플 <em>5종</em></b><span>QR 메뉴판·제안서·회사소개서·보고서·보장분석</span></div>
     </div>
   </div>
 </header>
@@ -444,19 +445,22 @@ html.js .rv{transform:translateY(28px)}
       <li>제품 카탈로그·룩북·포트폴리오를 링크 하나로 전하고 싶은 브랜드</li>
     </ul>
   </div>
+  <div class="en-row rv"><div><h3>QR 메뉴판 샘플을 직접 넘겨 보세요</h3><p>가상 카페 ‘모노그램 커피’의 10쪽 메뉴북입니다. 책 속 갈색 버튼을 누르면 예약·배달·길찾기 링크가 열립니다.</p></div>
+    <div class="links"><a href="samples/menu/" target="_blank" rel="noopener"><b>QR</b>메뉴판 샘플 열기 →</a></div></div>
 </div></section>
 
 <section class="s" id="samples"><div class="wrap">
   <div class="head rv">
     <div><div class="idx"><span class="pg">03</span>샘플</div><h2>샘플을 직접<br>넘겨 보세요</h2></div>
-    <p>업종이 다른 세 회사의 자료와 보험 보장분석까지 4가지 샘플입니다. 회사마다 색·서체·사진을 따로 정해 만들었고, 가로·세로 모두 제작합니다. 샘플 속 회사와 수치는 모두 가상입니다.</p>
+    <p>카페 QR 메뉴판부터 세 회사의 자료, 보험 보장분석까지 5가지 샘플입니다. 회사마다 색·서체·사진을 따로 정해 만들었고, 가로·세로 모두 제작합니다. 샘플 속 매장·회사와 수치는 모두 가상입니다.</p>
   </div>
   <div class="cards">
+    <a class="card rv" href="samples/menu/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_menu.jpg" alt="모노그램 커피 QR 3D 메뉴판 샘플" width="1280" height="720" loading="lazy"><span class="tag">세로 · QR 메뉴판 · 새 샘플</span></div><div class="bd"><span><h3>QR 메뉴판</h3><small>카페 · 예약·배달 버튼이 눌리는 메뉴북</small></span><span class="go">넘겨 보기 →</span></div></a>
     <a class="card rv" href="samples/proposal/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_proposal.jpg" alt="물류센터 자동화 제안서 샘플" width="1280" height="720" loading="lazy"><span class="tag">가로</span></div><div class="bd"><span><h3>제안서</h3><small>물류 자동화 업체 · 배치도·일정·투자 회수</small></span><span class="go">넘겨 보기 →</span></div></a>
-    <a class="card rv" href="samples/company/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_company.jpg" alt="건축사무소 회사소개서 샘플" width="1280" height="720" loading="lazy"><span class="tag">가로 · 새 샘플</span></div><div class="bd"><span><h3>회사소개서</h3><small>건축사무소 · 사진 중심 포트폴리오</small></span><span class="go">넘겨 보기 →</span></div></a>
+    <a class="card rv" href="samples/company/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_company.jpg" alt="건축사무소 회사소개서 샘플" width="1280" height="720" loading="lazy"><span class="tag">가로</span></div><div class="bd"><span><h3>회사소개서</h3><small>건축사무소 · 사진 중심 포트폴리오</small></span><span class="go">넘겨 보기 →</span></div></a>
     <a class="card rv" href="samples/report/" target="_blank" rel="noopener"><div class="th"><img src="assets/sample_report.jpg" alt="커피 로스터리 분기 사업 보고서 샘플" width="1280" height="720" loading="lazy"><span class="tag">가로</span></div><div class="bd"><span><h3>사업 보고서</h3><small>커피 브랜드 · 매출·손익·리스크</small></span><span class="go">넘겨 보기 →</span></div></a>
-    <a class="card rv" href="samples/insurance/" target="_blank" rel="noopener"><div class="th"><video src="samples/insurance/videos/p01.mp4" muted autoplay loop playsinline preload="metadata" aria-label="보장분석 리포트 샘플 요약 영상"></video><span class="tag">세로 · 새 샘플</span></div><div class="bd"><span><h3>보장분석 리포트</h3><small>재무설계사 · 세로 하드커버 책</small></span><span class="go">넘겨 보기 →</span></div></a>
-    <a class="card cta rv" href="#contact"><span><h3>내 자료로<br>만들어 보기</h3><p>PPT 또는 PDF 한 개면 시작할 수 있습니다.</p></span><span class="go">제작 문의 →</span></a>
+    <a class="card rv" href="samples/insurance/" target="_blank" rel="noopener"><div class="th"><video src="samples/insurance/videos/p01.mp4" muted autoplay loop playsinline preload="metadata" aria-label="보장분석 리포트 샘플 요약 영상"></video><span class="tag">세로</span></div><div class="bd"><span><h3>보장분석 리포트</h3><small>재무설계사 · 세로 하드커버 책</small></span><span class="go">넘겨 보기 →</span></div></a>
+    <a class="card cta rv" href="#contact" style="grid-column:auto"><span><h3>내 자료로<br>만들어 보기</h3><p>PPT 또는 PDF 한 개면 시작할 수 있습니다.</p></span><span class="go">제작 문의 →</span></a>
   </div>
   <div class="en-row rv" id="english"><div><h3>영문 샘플도 넘겨 보세요</h3><p>제안서·회사소개서·사업 보고서·서비스 소개서를 영어로 만들었습니다. 버튼과 안내 문구까지 모두 영어입니다.</p></div>
     <div class="links"><a href="samples/en/" target="_blank" rel="noopener"><b>EN</b>영문 샘플 전체 보기 →</a></div></div>
@@ -616,6 +620,6 @@ window.LCO_GA_ID = '';
 })();
 </script>
 <script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
-<script type="module" src="assets/showroom.js?v=15"></script>
+<script type="module" src="assets/showroom.js?v=16"></script>
 </body>
 </html>

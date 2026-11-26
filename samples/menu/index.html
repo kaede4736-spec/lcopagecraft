@@ -1,0 +1,489 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<title>모노그램 커피 QR 3D 메뉴판 · LCO Pagecraft 샘플</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#2B1D14;--soft:#6B5A4B;--glass:rgba(255,255,255,.88);--line:rgba(43,29,20,.16);--acc:#2B1D14;--hi:#E2C27F;--hov:rgba(43,29,20,.08)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--glass:rgba(255,255,255,.88)}}
+:root[data-theme="dark"]{--glass:rgba(255,255,255,.88)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden}
+body{background:#C79E72 url("desk.jpg") center/cover no-repeat;font-family:"Noto Sans KR",system-ui,sans-serif;color:var(--ink);-webkit-tap-highlight-color:transparent;user-select:none;touch-action:none}
+#vig{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 46%,rgba(255,255,255,.10) 0%,rgba(0,0,0,0) 42%,rgba(24,20,28,.30) 100%);z-index:3}
+#stage{position:fixed;inset:0;z-index:2}
+canvas{display:block}
+.brand{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));left:16px;z-index:5;display:flex;align-items:center;gap:10px;padding:8px 14px 8px 12px;border-radius:14px;background:var(--glass);border:1px solid var(--line);box-shadow:0 8px 24px rgba(40,25,10,.18)}
+.brand img{height:28px;width:auto;display:block}
+.brand small{font-size:12px;color:var(--soft);border-left:1px solid var(--line);padding-left:10px;white-space:nowrap}
+.tools{position:fixed;top:calc(12px + env(safe-area-inset-top,0px));right:16px;z-index:5;display:flex;gap:8px}
+.tool{height:40px;min-width:40px;padding:0 14px;border-radius:999px;border:1px solid var(--line);background:var(--glass);color:var(--ink);font:700 14px "Noto Sans KR";cursor:pointer;display:inline-flex;align-items:center;gap:6px;box-shadow:0 8px 24px rgba(40,25,10,.16)}
+.tool:hover{background:#fff}
+.tool svg{width:17px;height:17px}
+.bar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:5;display:flex;align-items:center;gap:4px;padding:6px 8px;border-radius:999px;background:var(--glass);border:1px solid var(--line);box-shadow:0 10px 30px rgba(40,25,10,.25);max-width:calc(100vw - 24px)}
+.bar button{width:40px;height:40px;border:0;border-radius:50%;background:transparent;color:var(--ink);font-size:18px;cursor:pointer;display:grid;place-items:center;flex:none}
+.bar button:hover{background:var(--hov)}
+.bar button:disabled{opacity:.28;cursor:default}
+.bar button.pri{background:var(--ink);color:#fff}
+.bar button.pri:disabled{background:var(--ink)}
+.lab{min-width:200px;text-align:center;line-height:1.25;padding:0 6px}
+.lab b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:280px;margin:0 auto}
+.lab i{font-style:normal;font-size:12px;color:var(--soft)}
+.lab i em{font-style:normal;color:var(--ink);background:var(--hi);padding:0 6px;border-radius:5px;font-weight:700}
+.hint{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(84px + env(safe-area-inset-bottom,0px));z-index:4;padding:8px 16px;border-radius:999px;background:var(--glass);border:1px solid var(--line);font-size:13px;white-space:nowrap;max-width:calc(100% - 32px);overflow:hidden;text-overflow:ellipsis;transition:opacity .6s}
+.hint.off{opacity:0;pointer-events:none}
+.panel{position:fixed;top:64px;right:16px;width:310px;max-width:calc(100vw - 32px);max-height:calc(100vh - 170px);overflow:auto;background:#fff;border:1px solid var(--line);border-radius:16px;padding:12px;z-index:6;display:none;box-shadow:0 18px 40px rgba(40,25,10,.3)}
+.panel.on{display:block}
+.panel h4{font-size:13px;color:var(--soft);margin:2px 4px 8px}
+.toc a{display:flex;gap:10px;align-items:center;padding:8px;border-radius:9px;cursor:pointer;font-size:14px}
+.toc a:hover{background:var(--hov)}
+.toc a b{width:26px;height:22px;border-radius:6px;background:var(--ink);color:#fff;font-size:12px;display:grid;place-items:center;flex:none}
+#qrbox{padding:12px;display:grid;place-items:center}
+.note{font-size:12px;color:var(--soft);line-height:1.5}
+.vmodal{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:rgba(10,14,24,.78);backdrop-filter:blur(6px);padding:16px}
+.vmodal[hidden]{display:none}
+.vbox{width:min(1100px,100%)}
+.vtop{display:flex;justify-content:space-between;align-items:center;color:#fff;font-size:14px;margin-bottom:8px;gap:8px}
+.vtop span:first-child{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.vb{font:700 13px "Noto Sans KR";color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.4);border-radius:999px;height:34px;padding:0 12px;margin-left:6px;cursor:pointer}
+#vCv{display:block;width:100%;height:auto;border-radius:12px;background:#0E2A47;box-shadow:0 20px 50px rgba(0,0,0,.5)}
+.vprog{height:4px;background:rgba(255,255,255,.2);border-radius:2px;margin-top:8px;overflow:hidden}
+#vBar{height:100%;width:0;background:#C9A35C}
+#load{position:fixed;inset:0;display:grid;place-items:center;z-index:9;background:#C79E72 url("desk.jpg") center/cover;transition:opacity .6s}
+#load div{padding:10px 18px;border-radius:999px;background:var(--glass);font-weight:700}
+@media (max-width:640px){.brand small{display:none}.brand img{height:18px}.lab{min-width:120px}.lab b{max-width:150px;font-size:13px}.bar .s{display:none}.tool span{display:none}.tool{padding:0 11px}}
+.tool.ord{background:#2B1D14;color:#F3E6CF;border-color:#2B1D14}.tool.ord:hover{background:#3d2a1d}
+.olist{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 10px}
+.olist a{display:flex;gap:8px;align-items:center;padding:12px;border-radius:10px;background:#2B1D14;color:#F3E6CF;text-decoration:none;font-size:14px;font-weight:700}
+.olist a b{color:#C9A35C}
+.toast{position:fixed;left:50%;top:76px;transform:translateX(-50%) translateY(-8px);z-index:8;padding:10px 18px;border-radius:999px;background:#2B1D14;color:#F3E6CF;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .3s,transform .3s;white-space:nowrap}
+.toast.on{opacity:1;transform:translateX(-50%)}
+@media (max-width:640px){.hint{white-space:normal;text-align:center;line-height:1.4;border-radius:16px}}
+</style>
+</head>
+<body>
+<div id="stage"></div><div id="vig"></div>
+<div id="load"><div>책자를 준비하는 중…</div></div>
+<div class="brand"><img src="logo.png" alt="LCO Pagecraft"><small>QR 3D 메뉴판 · 샘플</small></div>
+<div class="tools">
+  <button class="tool ord" id="bOrd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M7 17L17 7M9 7h8v8"/></svg><span>주문·예약</span></button>
+  <button class="tool" id="bToc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M4 6h16M4 12h16M4 18h10"/></svg><span>목차</span></button>
+  <button class="tool" id="bQr"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><path d="M14 14h3v3h-3zM20 14v7M14 20h3"/></svg><span>QR</span></button>
+  <button class="tool" id="bSnd" title="효과음">♪</button>
+</div>
+<div class="hint" id="hint">▶ 를 눌러 펼쳐 보세요 · 책 속 갈색 버튼을 누르면 예약·주문 링크가 열립니다</div>
+<div class="toast" id="toast"></div>
+<div class="panel" id="pToc"><h4>목차</h4><div class="toc" id="toc"></div></div>
+<div class="panel" id="pQr"><h4>QR로 휴대폰에서 열기</h4><div id="qrbox"></div><p class="note">테이블에 붙일 QR과 같습니다. 휴대폰 기본 카메라로 스캔하면 앱 설치 없이 이 메뉴판이 열립니다. 매장·가격·링크는 설명용 가상 정보입니다.</p></div>
+<div class="panel" id="pOrd"><h4>주문·예약 바로가기</h4><div class="olist"><a href="https://booking.naver.com/" target="_blank" rel="noopener"><b>↗</b>네이버 예약</a><a href="https://app.catchtable.co.kr/" target="_blank" rel="noopener"><b>↗</b>캐치테이블</a><a href="https://www.baemin.com/" target="_blank" rel="noopener"><b>↗</b>배달의민족</a><a href="https://www.coupangeats.com/" target="_blank" rel="noopener"><b>↗</b>쿠팡이츠</a><a href="https://www.instagram.com/" target="_blank" rel="noopener"><b>↗</b>인스타그램</a><a href="https://map.naver.com/" target="_blank" rel="noopener"><b>↗</b>네이버 지도</a></div><p class="note">샘플이라 각 서비스의 첫 화면으로 연결됩니다. 실제 제작 시 매장 페이지 주소로 연결합니다. 책 속 갈색 버튼도 같은 방식으로 눌러집니다.</p></div>
+<div id="vid" class="vmodal" hidden><div class="vbox"><div class="vtop"><span id="vT">페이지 요약 영상</span><span><button class="vb" id="vRe">↺ 다시</button><button class="vb" id="vClose">닫기</button></span></div><canvas id="vCv" width="1280" height="720"></canvas><video id="vEl" playsinline muted preload="auto" style="display:none;width:100%;border-radius:12px;background:#0E2A47;box-shadow:0 20px 50px rgba(0,0,0,.5)"></video><div class="vprog"><div id="vBar"></div></div></div></div>
+<div class="bar">
+  <button class="s" id="bFirst" title="처음으로">⏮</button>
+  <button id="bPrev" title="이전">‹</button>
+  <div class="lab"><b id="labT">표지</b><i id="labM">요약</i></div>
+  <button class="pri" id="bNext" title="다음">›</button>
+  <button class="s" id="bLast" title="끝으로">⏭</button>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script>
+const BOOK={"title": "모노그램 커피 겨울 메뉴", "pageTitle": "모노그램 커피 QR 3D 메뉴판 · LCO Pagecraft 샘플", "brandSub": "QR 3D 메뉴판 · 샘플", "share": "https://lcopagecraft.com/samples/menu/", "TW": 1500, "TH": 2100, "ink": "#2B1D14", "accent": "#C9A35C", "live": [], "imgs": ["pages/p01.jpg", "pages/p02.jpg", "pages/p03.jpg", "pages/p04.jpg", "pages/p05.jpg", "pages/p06.jpg", "pages/p07.jpg", "pages/p08.jpg", "pages/p09.jpg", "pages/p10.jpg"], "titles": ["환영합니다", "시그니처", "에스프레소", "핸드드립 · 티", "논커피 · 에이드", "케이크 · 디저트", "베이커리 · 브런치", "세트 메뉴", "원두 · 선물", "매장 안내"], "cover": {"sub": "가상 카페 · QR 3D 메뉴판 샘플"}, "scenes": {}, "back": {"lines": ["매장·가격·링크는", "설명용 가상 정보입니다"], "notes": []}, "links": {"1": [{"x": 120, "y": 1712, "w": 619, "h": 132, "url": "https://booking.naver.com/", "label": "네이버 예약"}, {"x": 761, "y": 1712, "w": 619, "h": 132, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}], "2": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://www.baemin.com/", "label": "배달의민족"}], "3": [{"x": 120, "y": 1863, "w": 1260, "h": 116, "url": "https://www.coupangeats.com/", "label": "쿠팡이츠"}], "6": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://booking.naver.com/", "label": "네이버 예약"}], "8": [{"x": 120, "y": 1466, "w": 1260, "h": 116, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}], "9": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://smartstore.naver.com/", "label": "스마트스토어"}], "10": [{"x": 120, "y": 912, "w": 619, "h": 132, "url": "https://booking.naver.com/", "label": "네이버 예약"}, {"x": 761, "y": 912, "w": 619, "h": 132, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}, {"x": 120, "y": 1066, "w": 619, "h": 132, "url": "https://www.baemin.com/", "label": "배달의민족"}, {"x": 761, "y": 1066, "w": 619, "h": 132, "url": "https://www.coupangeats.com/", "label": "쿠팡이츠"}, {"x": 120, "y": 1220, "w": 619, "h": 132, "url": "https://www.instagram.com/", "label": "인스타그램"}, {"x": 761, "y": 1220, "w": 619, "h": 132, "url": "https://map.naver.com/", "label": "네이버 지도"}]}};
+
+const SHARE_URL = BOOK.share || location.href.split("?")[0].split("#")[0];
+const TITLES = BOOK.titles.slice(); if(TITLES.length%2) TITLES.push("");
+const NP=TITLES.length, TW=BOOK.TW, TH=BOOK.TH, W=1, H=TH/TW, NL=NP/2+1, LAST=NP+1, LAND=TW>TH;
+const INK=BOOK.ink||"#0E2A47", ACC=BOOK.accent||"#FFC301";
+const FN=(w,s)=>`${w} ${s}px "Noto Sans KR"`;
+const cl=x=>x<0?0:x>1?1:x, pr=(t,d,u)=>cl((t-d)/u), eO=x=>1-Math.pow(1-x,3), eB=x=>{x=cl(x);const c=1.7;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+function T(g,s,x,y,f,c,a){g.font=f;g.fillStyle=c||"#1F2A37";g.textAlign=a||"left";g.textBaseline="alphabetic";g.fillText(s,x,y);}
+function R(g,x,y,w,h,r){r=Math.min(r,w/2,h/2);g.beginPath();g.moveTo(x+r,y);g.arcTo(x+w,y,x+w,y+h,r);g.arcTo(x+w,y+h,x,y+h,r);g.arcTo(x,y+h,x,y,r);g.arcTo(x,y,x+w,y,r);g.closePath();}
+function fitFont(g,txt,maxW,size,weight){let z=size;g.font=FN(weight,z);while(g.measureText(txt).width>maxW&&z>12){z-=2;g.font=FN(weight,z);}return z;}
+let P=[];
+/* ---------- sound ---------- */
+let AC=null, soundOn=true;
+function ac(){ if(!AC){ try{AC=new (window.AudioContext||window.webkitAudioContext)()}catch(e){} } if(AC&&AC.state!=="running") AC.resume().catch(()=>{}); return AC;}
+["pointerdown","touchstart","mousedown","keydown","click"].forEach(ev=>window.addEventListener(ev,()=>ac(),{capture:true,passive:true}));
+function flipSound(){ if(!soundOn) return; const a=ac(); if(!a) return;
+  try{ const d=.42,n=Math.floor(a.sampleRate*d),b=a.createBuffer(1,n,a.sampleRate),x=b.getChannelData(0); for(let i=0;i<n;i++) x[i]=Math.random()*2-1;
+  const s=a.createBufferSource(); s.buffer=b; const f=a.createBiquadFilter(); f.type="bandpass"; f.Q.value=.9; const g=a.createGain(), t=a.currentTime;
+  f.frequency.setValueAtTime(700,t); f.frequency.exponentialRampToValueAtTime(3200,t+.32); g.gain.setValueAtTime(.0001,t); g.gain.exponentialRampToValueAtTime(.5,t+.06); g.gain.exponentialRampToValueAtTime(.0001,t+.4);
+  s.connect(f); f.connect(g); g.connect(a.destination); s.start(t); s.stop(t+.45);}catch(e){} }
+document.getElementById("bSnd").onclick=e=>{soundOn=!soundOn; e.currentTarget.style.opacity=soundOn?1:.5;};
+
+/* ---------- covers ---------- */
+let LOGO=null, LOGOW=null;
+function whiteLogo(img){const c=document.createElement("canvas");c.width=img.width;c.height=img.height;const g=c.getContext("2d");g.drawImage(img,0,0);g.globalCompositeOperation="source-in";g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);return c;}
+function linen(g,base){g.fillStyle=base;g.fillRect(0,0,TW,TH);g.save();g.globalAlpha=.05;for(let y=0;y<TH;y+=3){g.fillStyle=y%6?"#000":"#fff";g.fillRect(0,y,TW,1);}for(let x=0;x<TW;x+=4){g.fillStyle=x%8?"#000":"#fff";g.fillRect(x,0,1,TH);}g.restore();
+  const v=g.createRadialGradient(TW*.35,TH*.3,100,TW*.5,TH*.5,TH*.8);v.addColorStop(0,"rgba(255,255,255,.08)");v.addColorStop(1,"rgba(0,0,0,.25)");g.fillStyle=v;g.fillRect(0,0,TW,TH);}
+function drawCover(){
+  const cv=document.createElement("canvas"); cv.width=TW; cv.height=TH; const g=cv.getContext("2d"), C=BOOK.cover||{};
+  linen(g,INK); g.fillStyle="rgba(255,255,255,.06)"; g.fillRect(0,0,TW*.047,TH); g.fillStyle="rgba(0,0,0,.18)"; g.fillRect(TW*.047,0,6,TH);
+  const u=LAND?TH/900:TW/1500, x0=LAND?110:150, maxW=LAND?TW*.5:TW-300;
+  let y=LAND?140:205;
+  T(g,C.tag||"",x0,y,FN(700,40*u),"rgba(255,255,255,.7)"); g.fillStyle=ACC; g.fillRect(x0,y+35*u,120*u,12*u);
+  y+=(LAND?120:215)*u; const fs=(LAND?92:150)*u;
+  (C.lines||[BOOK.title]).forEach(l=>{const z=fitFont(g,l,maxW,fs,900); T(g,l,x0-8,y,FN(900,z),"#fff"); y+=z*1.13;});
+  y+=(LAND?10:-60)*u; g.font=FN(400,(LAND?30:46)*u); T(g,C.sub||"",x0,y,FN(400,fitFont(g,C.sub||"",maxW,(LAND?30:46)*u,400)),"rgba(255,255,255,.82)");
+  const box=LAND?{x:TW*.58,y:TH*.16,w:TW*.36,h:TH*.62}:{x:150,y:800,w:TW-300,h:950};
+  if(C.art) C.art(g,box); else defaultArt(g,box);
+  const pw=330*u,ph=62*u; R(g,TW-pw-140*u,TH-(LAND?150:340)*u,pw,ph,ph/2); g.fillStyle=ACC; g.fill(); T(g,C.badge||"가상 샘플 · SAMPLE",TW-pw/2-140*u,TH-(LAND?150:340)*u+ph*.68,FN(700,30*u),INK,"center");
+  g.fillStyle="rgba(255,255,255,.18)"; g.fillRect(x0,TH-(LAND?70:230)*u-12,TW-x0-140*u,2);
+  if(LOGOW){const h=(LAND?56:88)*u,w=h*LOGOW.width/LOGOW.height; g.drawImage(LOGOW,x0,TH-(LAND?62:175)*u,w,h);}
+  T(g,C.date||"",TW-140*u,TH-(LAND?28:115)*u,FN(400,32*u),"rgba(255,255,255,.6)","right");
+  return cv;
+}
+function defaultArt(g,b){ // stacked report cards
+  const cx=b.x+b.w/2, cy=b.y+b.h/2, cw=Math.min(b.w*.7,b.h*.62), chh=cw*.78;
+  [[-.08,.10,"rgba(255,255,255,.10)"],[-.04,.05,"rgba(255,255,255,.18)"],[0,0,"#fff"]].forEach(([r,o,c],i)=>{g.save();g.translate(cx+o*cw,cy+o*chh);g.rotate(r);
+    g.shadowColor="rgba(0,0,0,.35)";g.shadowBlur=30;g.shadowOffsetY=16;R(g,-cw/2,-chh/2,cw,chh,22);g.fillStyle=c;g.fill();g.shadowColor="transparent";
+    if(i===2){g.fillStyle=INK;R(g,-cw/2+cw*.08,-chh/2+chh*.1,cw*.45,chh*.08,8);g.fill();
+      [.55,.85,.4].forEach((v,k)=>{g.fillStyle="#E4E9EF";R(g,-cw/2+cw*.08,-chh/2+chh*(.3+k*.18),cw*.84,chh*.1,10);g.fill();g.fillStyle=[ACC,"#64A9BB","#57BEA2"][k];R(g,-cw/2+cw*.08,-chh/2+chh*(.3+k*.18),cw*.84*v,chh*.1,10);g.fill();});}
+    g.restore();});
+}
+function drawBack(){
+  const cv=document.createElement("canvas"); cv.width=TW; cv.height=TH; const g=cv.getContext("2d"), B=BOOK.back||{}, u=LAND?TH/900:TW/1500, cx=TW/2;
+  linen(g,INK); g.fillStyle="rgba(255,255,255,.06)"; g.fillRect(TW*.953,0,TW*.047,TH);
+  let y=LAND?150*u:520; g.fillStyle=ACC; g.fillRect(cx-60*u,y,120*u,10*u); y+=(LAND?80:140)*u;
+  (B.lines||["본 자료는 형식 확인을 위한","가상 샘플입니다"]).forEach(l=>{T(g,l,cx,y,FN(700,(LAND?46:64)*u),"#fff","center"); y+=(LAND?60:90)*u;});
+  y+=(LAND?10:40)*u; (B.notes||[]).forEach(l=>{T(g,l,cx,y,FN(400,(LAND?26:40)*u),"rgba(255,255,255,.72)","center"); y+=(LAND?40:64)*u;});
+  const lw=(LAND?560:840)*u, lh=(LAND?150:250)*u, ly=LAND?TH-330*u:1330; R(g,cx-lw/2,ly,lw,lh,28*u); g.fillStyle="#fff"; g.fill();
+  if(LOGO){const w=lw*.86,h=w*LOGO.height/LOGO.width; g.drawImage(LOGO,cx-w/2,ly+lh/2-h/2,w,h);}
+  T(g,"보고서를 책처럼 펼쳐 보는 3D 디지털 출판",cx,ly+lh+(LAND?50:100)*u,FN(500,(LAND?26:40)*u),"rgba(255,255,255,.8)","center");
+  T(g,BOOK.contact||"thelcoworks@gmail.com",cx,ly+lh+(LAND?90:165)*u,FN(400,(LAND?22:34)*u),"rgba(255,255,255,.6)","center");
+  T(g,"Made with LCO Pagecraft · SAMPLE ONLY",cx,TH-(LAND?30:115)*u,FN(400,(LAND?20:30)*u),"rgba(255,255,255,.45)","center");
+  return cv;
+}
+function blankPage(){const cv=document.createElement("canvas");cv.width=TW;cv.height=TH;const g=cv.getContext("2d");g.fillStyle="#FAFAF8";g.fillRect(0,0,TW,TH);
+  if(LOGO){g.globalAlpha=.25;const w=TW*.35,h=w*LOGO.height/LOGO.width;g.drawImage(LOGO,TW/2-w/2,TH/2-h/2,w,h);g.globalAlpha=1;}return cv;}
+function shade(g,k){ if(k===0||k===LAST) return; const sg=g.createLinearGradient(0,0,110,0); sg.addColorStop(0,"rgba(0,0,0,.22)"); sg.addColorStop(1,"rgba(0,0,0,0)"); g.setTransform(1,0,0,1,0,0); g.fillStyle=sg; g.fillRect(0,0,110,TH);
+  g.fillStyle="rgba(0,0,0,.05)"; g.fillRect(TW-3,0,3,TH); }
+const FACE=[]; const anim=new Array(NP+2).fill(-1e9);
+function makeFace(k,st){const cv=document.createElement("canvas"); cv.width=TW; cv.height=TH; FACE[k]={cv,g:cv.getContext("2d"),flip:(k%2===1&&k!==LAST),st,tex:null,lastT:-1}; drawFace(k,0);}
+function drawFace(k,t){const F=FACE[k],g=F.g; g.setTransform(1,0,0,1,0,0); g.globalAlpha=1; g.globalCompositeOperation="source-over";
+  if(F.flip){g.translate(TW,0); g.scale(-1,1);}
+  if(F.st) g.drawImage(F.st,0,0,TW,TH); else { g.save(); P[k-1](g,t); g.restore(); }
+  shade(g,k); if(F.tex) F.tex.needsUpdate=true; F.lastT=t;}
+
+/* ---------- three ---------- */
+const stage=document.getElementById("stage");
+const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio,2)); renderer.outputEncoding=THREE.sRGBEncoding;
+stage.appendChild(renderer.domElement);
+const scene=new THREE.Scene();
+const camera=new THREE.PerspectiveCamera(30,1,.1,80);
+scene.add(new THREE.AmbientLight(0xfff6ec,.72));
+const dl=new THREE.DirectionalLight(0xfff1dc,.5); dl.position.set(-1.2,1.6,2.4); scene.add(dl);
+const rig=new THREE.Group(); scene.add(rig);
+const book=new THREE.Group(); rig.add(book);
+const ANI=renderer.capabilities.getMaxAnisotropy();
+function makeTex(cv){const t=new THREE.CanvasTexture(cv); t.encoding=THREE.sRGBEncoding; t.anisotropy=ANI; t.minFilter=THREE.LinearFilter; t.generateMipmaps=false; return t;}
+function gradTex(w,h,draw){const c=document.createElement("canvas");c.width=w;c.height=h;draw(c.getContext("2d"),w,h);const t=new THREE.CanvasTexture(c);t.encoding=THREE.sRGBEncoding;return t;}
+
+// soft contact shadow on the desk
+const shT=gradTex(256,256,(g,w,h)=>{const r=g.createRadialGradient(w/2,h/2,10,w/2,h/2,w/2);r.addColorStop(0,"rgba(45,25,8,.62)");r.addColorStop(.55,"rgba(45,25,8,.32)");r.addColorStop(1,"rgba(45,25,8,0)");g.fillStyle=r;g.fillRect(0,0,w,h);});
+const shadow=new THREE.Mesh(new THREE.PlaneGeometry(1,1),new THREE.MeshBasicMaterial({map:shT,transparent:true,depthWrite:false}));
+shadow.renderOrder=1; scene.add(shadow);
+/* desk: light wood planks (same desk as the Pagecraft report sample) */
+function seeded(s){return function(){s=(s*16807)%2147483647;return (s-1)/2147483646;};}
+function woodTex(){const c=document.createElement("canvas");c.width=c.height=1024;const g=c.getContext("2d"),rnd=seeded(7),PH=128;
+  for(let p=0;p<8;p++){const y0=p*PH,tone=214+Math.floor(rnd()*14-7);g.fillStyle=`rgb(${tone},${tone-3},${tone-8})`;g.fillRect(0,y0,1024,PH);
+    for(let k=0;k<70;k++){const yy=y0+4+rnd()*(PH-8),amp=1+rnd()*3,ph=rnd()*6.28,fr=.004+rnd()*.008,dark=rnd()<.75;
+      g.strokeStyle=dark?`rgba(110,98,86,${.05+rnd()*.11})`:`rgba(255,255,255,${.10+rnd()*.12})`;g.lineWidth=.6+rnd()*1.4;
+      g.beginPath();for(let x=0;x<=1024;x+=16){const yv=yy+Math.sin(x*fr+ph)*amp;if(x===0)g.moveTo(x,yv);else g.lineTo(x,yv);}g.stroke();}
+    if(rnd()<.6){const kx=rnd()*900+60,ky=y0+30+rnd()*70;for(let r=5;r>0;r--){g.strokeStyle="rgba(100,88,76,.13)";g.lineWidth=1.2;g.beginPath();g.ellipse(kx,ky,r*7,r*2.2,0,0,6.28);g.stroke();}}
+    g.fillStyle="rgba(70,60,52,.34)";g.fillRect(0,y0,1024,2.4);g.fillStyle="rgba(255,255,255,.22)";g.fillRect(0,y0+2.4,1024,1.4);
+    const jx=rnd()*900+60;g.fillStyle="rgba(70,60,52,.28)";g.fillRect(jx,y0,2,PH);}
+  const t=new THREE.CanvasTexture(c);t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(16,16);t.anisotropy=renderer.capabilities.getMaxAnisotropy();t.encoding=THREE.sRGBEncoding;return t;}
+const DW=9.2, DH=DW*941/1672;
+const deskTex=new THREE.TextureLoader().load("desk.jpg",t=>{t.needsUpdate=true;}); deskTex.encoding=THREE.sRGBEncoding; deskTex.anisotropy=renderer.capabilities.getMaxAnisotropy();
+const desk=new THREE.Group(); scene.add(desk);
+const deskMain=new THREE.Mesh(new THREE.PlaneGeometry(DW,DH),new THREE.MeshBasicMaterial({map:deskTex})); deskMain.position.y=.25; desk.add(deskMain);
+// mirrored skirts so the desk never ends when the book is rotated
+[[-1,0],[1,0],[0,-1],[0,1]].forEach(([sx,sy])=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(DW,DH),new THREE.MeshBasicMaterial({map:deskTex,color:0xf2f2f2})); m.position.set(sx*DW,.25+sy*DH,0); m.scale.set(sx?-1:1,sy?-1:1,1); m.material.side=THREE.DoubleSide; desk.add(m);});
+const props=new THREE.Group(); scene.add(props); props.visible=false;
+(function(){
+  const mugM=new THREE.MeshStandardMaterial({color:new THREE.Color("#0E2A47"),roughness:.45,metalness:.05});
+  const mug=new THREE.Group();
+  const body=new THREE.Mesh(new THREE.CylinderGeometry(.105,.095,.2,40),mugM); body.rotation.x=Math.PI/2; body.position.z=.11; mug.add(body);
+  const cof=new THREE.Mesh(new THREE.CircleGeometry(.09,32),new THREE.MeshBasicMaterial({color:0x3a2518})); cof.position.z=.2; mug.add(cof);
+  const hd=new THREE.Mesh(new THREE.TorusGeometry(.06,.016,10,20,Math.PI),mugM); hd.rotation.set(Math.PI/2,0,-Math.PI/2); hd.position.set(.115,0,.11); mug.add(hd);
+  const sau=new THREE.Mesh(new THREE.CylinderGeometry(.19,.19,.012,40),new THREE.MeshStandardMaterial({color:0xf2f2f4,roughness:.5})); sau.rotation.x=Math.PI/2; sau.position.z=.006; mug.add(sau);
+  mug.position.set(W*2.25,.95,0); props.add(mug);
+  const pen=new THREE.Group();
+  const pb=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,.72,6),new THREE.MeshStandardMaterial({color:new THREE.Color("#FFC301"),roughness:.5})); pen.add(pb);
+  const tip=new THREE.Mesh(new THREE.ConeGeometry(.02,.07,6),new THREE.MeshStandardMaterial({color:0xe8d2b0})); tip.position.y=-.395; tip.rotation.x=Math.PI; pen.add(tip);
+  const er=new THREE.Mesh(new THREE.CylinderGeometry(.021,.021,.045,6),new THREE.MeshStandardMaterial({color:0xe56b7a})); er.position.y=.38; pen.add(er);
+  pen.rotation.z=1.15; pen.position.set(-W*1.5,-.55,.021); props.add(pen);
+})();
+const BB=new THREE.Box3();
+
+// page-block edges
+const edgeT=gradTex(8,256,(g,w,h)=>{g.fillStyle="#F3F1EC";g.fillRect(0,0,w,h);for(let i=0;i<h;i+=3){g.fillStyle=i%6?"rgba(150,135,115,.35)":"rgba(255,255,255,.8)";g.fillRect(0,i,w,1);}});
+edgeT.wrapS=edgeT.wrapT=THREE.RepeatWrapping;
+const edgeM=new THREE.MeshLambertMaterial({map:edgeT}), paperM=new THREE.MeshLambertMaterial({color:0xF7F6F2});
+const blockR=new THREE.Mesh(new THREE.BoxGeometry(W-.02,H-.03,1),[edgeM,edgeM,edgeM,edgeM,paperM,paperM]); book.add(blockR);
+const blockL=new THREE.Mesh(new THREE.BoxGeometry(W-.02,H-.03,1),[edgeM,edgeM,edgeM,edgeM,paperM,paperM]); book.add(blockL);
+const boardM=new THREE.MeshStandardMaterial({color:0x2B1D14,roughness:.55,metalness:.05});
+
+const SEG=36, KTH=.032, leaves=[];
+function buildLeaves(){
+  for(let i=0;i<NL;i++){
+    const g=new THREE.Group(); book.add(g);
+    const L={g,i,p:0,from:0,to:0,t0:0,dur:950,delay:0,rigid:(i===0||i===NL-1)};
+    if(L.rigid){
+      const front=i===0;
+      const mats=[boardM,boardM,boardM,boardM,boardM,boardM];
+      const ct=FACE[front?0:LAST].tex=makeTex(FACE[front?0:LAST].cv);
+      const cm=new THREE.MeshStandardMaterial({map:ct,roughness:.6,metalness:0});
+      if(front) mats[4]=cm; else mats[5]=cm;
+      const bx=new THREE.Mesh(new THREE.BoxGeometry(W+.035,H+.05,.03),mats); bx.position.set(W/2+.012,0,front?.016:-.016); g.add(bx);
+      const pk=front?1:NP; FACE[pk].tex=makeTex(FACE[pk].cv);
+      const pl=new THREE.Mesh(new THREE.PlaneGeometry(W,H),new THREE.MeshLambertMaterial({map:FACE[pk].tex,side:front?THREE.BackSide:THREE.FrontSide}));
+      pl.position.set(W/2,0,front?-.001:.001); pl.userData.k=pk; g.add(pl);
+    } else {
+      const geo=new THREE.PlaneGeometry(W,H,SEG,1); geo.translate(W/2,0,0);
+      const u=[]; const pp=geo.attributes.position; for(let k=0;k<pp.count;k++) u.push(pp.getX(k));
+      FACE[2*i].tex=makeTex(FACE[2*i].cv); FACE[2*i+1].tex=makeTex(FACE[2*i+1].cv);
+      const mF=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({map:FACE[2*i].tex,side:THREE.FrontSide})); mF.userData.k=2*i; g.add(mF);
+      const mB=new THREE.Mesh(geo,new THREE.MeshLambertMaterial({map:FACE[2*i+1].tex,side:THREE.BackSide})); mB.userData.k=2*i+1; g.add(mB);
+      L.geo=geo; L.u=u;
+    }
+    leaves.push(L); shapeLeaf(L,0);
+  }
+}
+window._bend=(i,p)=>{const L=leaves[i];L.p=L.to=p;};
+function shapeLeaf(L,p){
+  const th=Math.PI*p;
+  if(L.rigid){ L.g.rotation.y=-th; return; }
+  const k=1.15*Math.sin(Math.PI*p)/W, pos=L.geo.attributes.position;
+  for(let j=0;j<pos.count;j++){const s=L.u[j]; let x,z;
+    if(Math.abs(k)<1e-5){x=s*Math.cos(th); z=s*Math.sin(th);} else { x=(Math.sin(th-k*s)-Math.sin(th))/(-k); z=(Math.cos(th)-Math.cos(th-k*s))/(-k); }
+    pos.setX(j,x); pos.setZ(j,z);}
+  pos.needsUpdate=true; L.geo.computeVertexNormals();
+}
+function stackLayout(){
+  // z of each leaf from the stack under it on its side
+  for(let i=0;i<NL;i++){ const L=leaves[i]; let zr=0, zl=0;
+    for(let j=i+1;j<NL;j++) zr+=(1-leaves[j].p)*KTH;
+    for(let j=0;j<i;j++) zl+=leaves[j].p*KTH;
+    L.g.position.z = zr+(zl-zr)*L.p + Math.sin(Math.PI*L.p)*.06; }
+  let dr=0, dl2=0; for(let j=1;j<NL;j++) dr+=(1-leaves[j].p)*KTH; for(let j=0;j<NL-1;j++) dl2+=leaves[j].p*KTH;
+  dr-=KTH; dl2-=KTH;
+  blockR.visible=dr>.004; blockR.scale.z=Math.max(.001,dr-.006); blockR.position.set(W/2,0,dr/2-.003);
+  blockL.visible=dl2>.004; blockL.scale.z=Math.max(.001,dl2-.006); blockL.position.set(-W/2,0,dl2/2-.003);
+}
+
+/* ---------- steps ---------- */
+function buildSteps(){const st=[]; for(let f=0;f<=NL;f++){ if(f===0||f===NL) st.push([f,"S"]); else {st.push([f,"S"]); st.push([f,"L"]); st.push([f,"R"]);}} return st;}
+let steps=buildSteps(), si=0, curF=0, scrollT0=0, zoomT=1, zoom=1; const pan={x:0,y:0};
+function pagesOf(f){ return f===0?"표지": f===NL?"뒤표지": `p.${2*f-1}–${2*f}`; }
+function label(){
+  const [f,m]=steps[si], Tl=document.getElementById("labT"), M=document.getElementById("labM");
+  if(f===0){Tl.textContent=BOOK.title; M.innerHTML="표지";}
+  else if(f===NL){Tl.textContent="뒤표지"; M.innerHTML="끝";}
+  else{ const a=2*f-1,b=2*f; Tl.textContent = m==="L"?`${a}. ${TITLES[a-1]}`: m==="R"?`${b}. ${TITLES[b-1]}`:`${a}–${b}. ${TITLES[a-1]}`;
+    const nm={S:"전체",L:"왼쪽",R:"오른쪽"}; M.innerHTML=`${pagesOf(f)} · `+["S","L","R"].map(x=>x===m?`<em>${nm[x]}</em>`:nm[x]).join(" / "); }
+  document.getElementById("bPrev").disabled=si===0; document.getElementById("bNext").disabled=si===steps.length-1;
+  document.getElementById("bFirst").disabled=si===0; document.getElementById("bLast").disabled=si===steps.length-1;
+  try{history.replaceState(null,"","?s="+si)}catch(e){}
+}
+function turnTo(f){
+  if(f===curF) return; const now=performance.now(), dir=f>curF?1:-1, idx=[];
+  if(dir>0) for(let i=curF;i<f;i++) idx.push(i); else for(let i=curF-1;i>=f;i--) idx.push(i);
+  idx.forEach((i,n)=>{const L=leaves[i]; L.from=L.p; L.to=dir>0?1:0; L.t0=now; L.delay=n*120+(curF===0&&dir>0?250:0); L.dur=idx.length>2?700:1050;});
+  flipSound(); if(idx.length>2) setTimeout(flipSound,240);
+  curF=f;
+}
+function go(i){ zoomT=1; pan.x=pan.y=0; orb.tx=orb.ty=0; const pf=steps[si][0]; si=Math.max(0,Math.min(steps.length-1,i)); const [f,m]=steps[si]; const moved=f!==pf; turnTo(f);
+  const now=performance.now(), a=2*f-1, b=2*f; scrollT0=now;
+  if(f>0&&f<NL){ if(moved){ anim[a]=anim[b]=now+(Math.abs(f-pf)>1?1000:800); } else if(m==="L") anim[a]=now+350; else if(m==="R") anim[b]=now+350; }
+  document.getElementById("hint").classList.add("off"); label(); }
+function gotoSpread(f){ go(steps.findIndex(s=>s[0]===f&&s[1]==="S")); }
+
+/* ---------- camera & pose ---------- */
+const eio=t=>t<.5?2*t*t:1-Math.pow(-2*t+2,2)/2, ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const cam={x:0,y:0,d:5,tilt:.3,bx:0,rx:0,ry:0,rz:0}, camT={...cam}; const orb={x:0,y:0,tx:0,ty:0}, hov={x:0,y:0,tx:0,ty:0};
+function camTarget(now){
+  const [f,m]=steps[si], asp=innerWidth/innerHeight, vh=Math.max(.4,(innerHeight-150)/innerHeight), tf=Math.tan(THREE.MathUtils.degToRad(camera.fov/2));
+  let bx=0,w,h,x=0,y=-.02,tilt,rx=0,ry=0,rz=0;
+  if(f===0||f===NL){ bx=f===0?-W/2:W/2; w=W*(asp<.8?2.3:1.75); h=H*1.45; tilt=.32; rx=-.42; ry=f===0?-.62:.62; rz=f===0?.1:-.1; }
+  else if(m==="S"){ w=2*W*1.1; h=H*1.16; tilt=.36; }
+  else { w=W*1.06; tilt=0; x=m==="L"?-W/2:W/2; h=Math.min(H*1.03,Math.max(H*.58,w/(asp/vh)));
+    if(h<H){ const room=(H*1.03-h)/2, sp=eio(Math.min(1,Math.max(0,(now-scrollT0-1000)/6500))); y=room*(1-2*sp); } }
+  const d=Math.max(h/2/(tf*vh), w/2/(tf*asp));
+  Object.assign(camT,{x,y,d:d*1.02,tilt,bx,rx,ry,rz});
+}
+function resize(){ renderer.setSize(innerWidth,innerHeight); camera.aspect=innerWidth/innerHeight; camera.updateProjectionMatrix(); }
+addEventListener("resize",resize);
+
+let lastNow=performance.now();
+function loop(now){
+  requestAnimationFrame(loop);
+  const dt=Math.min(.05,(now-lastNow)/1000); lastNow=now;
+  leaves.forEach(L=>{ if(L.p!==L.to||L._force){ const t=Math.min(1,Math.max(0,(now-L.t0-L.delay)/L.dur)); L.p = t>=1?L.to : L.from+(L.to-L.from)*ease(t); shapeLeaf(L,L.p); L._force=false; } });
+  stackLayout();
+  for(let k=1;k<=NP;k++){ if(!FACE[k]||FACE[k].st) continue; const el=(now-anim[k])/1000, live=(BOOK.live||[]).includes(k)&&curF===Math.ceil(k/2);
+    if((el>-2&&el<3.4)||live){ const tt=Math.max(0,el); if(tt!==FACE[k].lastT) drawFace(k,live&&el>3.4?el:tt); } }
+  camTarget(now);
+  const kk=1-Math.exp(-dt*3.6); for(const key in cam) cam[key]+=(camT[key]-cam[key])*kk;
+  zoom+=(zoomT-zoom)*.15;
+  const closed=curF===0||curF===NL, idle=closed?1:0;
+  orb.x+=(orb.tx-orb.x)*.18; orb.y+=(orb.ty-orb.y)*.18; hov.x+=(hov.tx-hov.x)*.06; hov.y+=(hov.ty-hov.y)*.06;
+  rig.rotation.order="YXZ";
+  rig.rotation.set(cam.rx+orb.x+hov.y*.05+Math.sin(now/1900)*.03*idle, cam.ry+orb.y+hov.x*.08+Math.sin(now/2600)*.05*idle, cam.rz);
+  rig.position.y=Math.sin(now/1300)*.025*idle;
+  book.position.x=cam.bx;
+  // shadow follows the visible footprint
+  const open=leaves.reduce((a,L)=>a+L.p,0)>0&&leaves.reduce((a,L)=>a+L.p,0)<NL;
+  rig.updateMatrixWorld(true); BB.makeEmpty(); leaves.forEach(L=>BB.expandByObject(L.g)); BB.expandByObject(blockR); BB.expandByObject(blockL);
+  let dz=BB.min.z-.004; if(!isFinite(dz)) dz=-.12; dz=Math.max(-1.3,Math.min(-.02,dz)); desk.position.z=dz; props.position.z=dz; shadow.position.set((BB.min.x+BB.max.x)/2+.06,(BB.min.y+BB.max.y)/2-.05,dz+.002);
+  if(isFinite(BB.max.x)) shadow.scale.set(BB.max.x-BB.min.x+.55,BB.max.y-BB.min.y+.5,1);
+  const D=cam.d/zoom, cx=cam.x+pan.x, cy=cam.y+pan.y;
+  camera.position.set(cx, cy-Math.sin(cam.tilt)*D-.05, Math.cos(cam.tilt)*D); camera.lookAt(cx, cy-.05, 0);
+  renderer.render(scene,camera);
+}
+
+
+/* ---------- action buttons inside the pages ---------- */
+const RC=new THREE.Raycaster(), RV=new THREE.Vector2();
+function hitLink(cx,cy){ if(!leaves.length) return null; const r=renderer.domElement.getBoundingClientRect();
+  RV.set((cx-r.left)/r.width*2-1, -((cy-r.top)/r.height)*2+1); RC.setFromCamera(RV,camera);
+  const hs=RC.intersectObject(book,true); for(const h of hs){ const k=h.object.userData.k; if(k===undefined||!h.uv) continue;
+    const L=(BOOK.links||{})[k]; if(!L) return null; const F=FACE[k]; const px=(F&&F.flip?(1-h.uv.x):h.uv.x)*TW, py=(1-h.uv.y)*TH;
+    for(const b of L){ if(px>=b.x&&px<=b.x+b.w&&py>=b.y&&py<=b.y+b.h) return b; } return null; } return null; }
+let toastT=0; function toast(m){const t=document.getElementById("toast"); t.textContent=m; t.classList.add("on"); clearTimeout(toastT); toastT=setTimeout(()=>t.classList.remove("on"),1800);}
+function openLink(b){ toast(b.label+"(으)로 이동합니다"); window.open(b.url,"_blank","noopener"); }
+/* ---------- input ---------- */
+document.getElementById("bNext").onclick=()=>go(si+1);
+document.getElementById("bPrev").onclick=()=>go(si-1);
+document.getElementById("bFirst").onclick=()=>go(0);
+document.getElementById("bLast").onclick=()=>go(steps.length-1);
+addEventListener("pointermove",e=>{ if(e.pointerType==="mouse"){ hov.tx=e.clientX/innerWidth*2-1; hov.ty=e.clientY/innerHeight*2-1; if(e.target===renderer.domElement&&!ptrs.size) renderer.domElement.style.cursor=hitLink(e.clientX,e.clientY)?"pointer":""; } });
+addEventListener("keydown",e=>{ if(VID.on||!document.getElementById("vid").hidden){ if(e.key==="Escape") vClose(); return; } if(e.key==="ArrowRight"||e.key===" "||e.key==="PageDown"){e.preventDefault();go(si+1);} if(e.key==="ArrowLeft"||e.key==="PageUp"){e.preventDefault();go(si-1);} if(e.key==="Home")go(0); if(e.key==="End")go(steps.length-1); });
+let sx=null,sy=null,st0=0,lx=0,ly=0,lastTap=0; const ptrs=new Map(); let pinch0=0,zoom0=1;
+const cvs=renderer.domElement;
+function clampPan(){ const lim=.75*(zoomT-1)/zoomT+.05; pan.x=Math.max(-lim,Math.min(lim,pan.x)); pan.y=Math.max(-lim*1.4,Math.min(lim*1.4,pan.y)); if(zoomT<=1.01){pan.x=pan.y=0;} }
+function wpp(){ return 2*Math.tan(THREE.MathUtils.degToRad(camera.fov/2))*cam.d/zoom/innerHeight; }
+cvs.addEventListener("pointerdown",e=>{ptrs.set(e.pointerId,[e.clientX,e.clientY]); try{cvs.setPointerCapture(e.pointerId)}catch(_){}
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()]; pinch0=Math.hypot(a[0]-b[0],a[1]-b[1]); zoom0=zoomT; sx=null; return;}
+  sx=lx=e.clientX;sy=ly=e.clientY;st0=Date.now(); closePanels();});
+cvs.addEventListener("pointermove",e=>{ if(!ptrs.has(e.pointerId)) return; ptrs.set(e.pointerId,[e.clientX,e.clientY]);
+  if(ptrs.size===2){const [a,b]=[...ptrs.values()]; zoomT=Math.max(1,Math.min(3.5,zoom0*Math.hypot(a[0]-b[0],a[1]-b[1])/pinch0)); clampPan(); return;}
+  if(sx!==null&&zoomT>1.05){ const k=wpp(); pan.x-=(e.clientX-lx)*k; pan.y+=(e.clientY-ly)*k; clampPan(); }
+  else if(sx!==null){ orb.ty=Math.max(-1.1,Math.min(1.1,orb.ty+(e.clientX-lx)*.006)); orb.tx=Math.max(-.75,Math.min(.6,orb.tx+(e.clientY-ly)*.005)); if(Math.abs(e.clientX-sx)+Math.abs(e.clientY-sy)>8) document.getElementById("hint").classList.add("off"); }
+  lx=e.clientX; ly=e.clientY; });
+function up(e){ ptrs.delete(e.pointerId); if(sx===null) return; const dx=e.clientX-sx, dy=e.clientY-sy, tap=Math.abs(dx)<8&&Math.abs(dy)<8&&Date.now()-st0<400;
+  if(tap&&Date.now()-lastTap<300){ zoomT = zoomT>1.05?1:2.2; if(zoomT>1){const k=wpp(); pan.x=(e.clientX-innerWidth/2)*k; pan.y=-(e.clientY-innerHeight/2)*k; clampPan();} else {pan.x=pan.y=0;} lastTap=0; sx=null; return; }
+  if(tap){ const lk=hitLink(e.clientX,e.clientY); if(lk){ lastTap=0; sx=null; openLink(lk); return; } }
+  if(zoomT<=1.05){
+    if(tap){ const x=e.clientX; lastTap=Date.now(); setTimeout(()=>{ if(lastTap&&Date.now()-lastTap>=280){ lastTap=0; go(si+(x>innerWidth/2?1:-1)); } },300); }
+  } else if(tap) lastTap=Date.now();
+  sx=null; }
+cvs.addEventListener("pointerup",up); cvs.addEventListener("pointercancel",e=>{ptrs.delete(e.pointerId); sx=null;});
+cvs.addEventListener("wheel",e=>{ e.preventDefault(); zoomT=Math.max(1,Math.min(3.5,zoomT*Math.exp(-e.deltaY*.0015))); clampPan(); },{passive:false});
+function closePanels(){document.querySelectorAll(".panel").forEach(p=>p.classList.remove("on"));}
+function toggle(id){const p=document.getElementById(id), on=p.classList.contains("on"); closePanels(); if(!on) p.classList.add("on");}
+document.getElementById("bToc").onclick=()=>toggle("pToc");
+let qrMade=false;
+document.getElementById("bQr").onclick=()=>{ toggle("pQr"); if(!qrMade&&window.QRCode){ new QRCode(document.getElementById("qrbox"),{text:SHARE_URL||location.href.split("?")[0],width:200,height:200,colorDark:"#2B1D14",correctLevel:QRCode.CorrectLevel.M}); qrMade=true;} };
+const toc=document.getElementById("toc");
+[["표",0,"표지"]].concat(TITLES.map((t,i)=>[String(i+1),Math.ceil((i+1)/2),t]).filter(x=>x[2])).concat([["뒤",NL,"뒤표지"]]).forEach(([n,f,t])=>{
+  const a=document.createElement("a"); a.innerHTML=`<b>${n}</b>${t}`;
+  a.onclick=()=>{ const pg=parseInt(n); closePanels(); if(isNaN(pg)) return gotoSpread(f); go(steps.findIndex(s=>s[0]===f&&s[1]===(pg%2?"L":"R"))); };
+  toc.appendChild(a);
+});
+
+/* ---------- page summary video ---------- */
+const VID={on:false,list:[],t0:0,raf:0,voice:false,off:null,lastScene:-1,q:[],qi:0};
+const SCN=3.8; // seconds per scene
+function vScenes(k){ const sc=(BOOK.scenes&&BOOK.scenes[k])||[TITLES[k-1]+"|"+(TITLES[k-1]||"")+" 페이지를 한눈에 정리했습니다|"]; return sc.map(x=>{const [h,b,c]=x.split("|");return {k,h,b:b||"",c:c||""};}); }
+function vBuild(){ const [f,m]=steps[si]; let ks=[];
+  if(f===0||f===NL){ ks=[0]; } else if(m==="L") ks=[2*f-1]; else if(m==="R") ks=[2*f]; else ks=[2*f-1,2*f].filter(k=>k<=NP&&TITLES[k-1]);
+  let L=[]; ks.forEach(k=>{ if(k===0) L=L.concat((BOOK.scenes&&BOOK.scenes[0]||[BOOK.title+"|"+(BOOK.cover&&BOOK.cover.sub||"")+"|"]).map(x=>{const [h,b,c]=x.split("|");return {k:0,h,b:b||"",c:c||""};})); else L=L.concat(vScenes(k)); });
+  return L; }
+function vSay(txt){ return; if(!window.speechSynthesis) return; try{ speechSynthesis.cancel(); const u=new SpeechSynthesisUtterance(txt.replace(/\*/g,"")); u.lang="ko-KR"; u.rate=1.05; speechSynthesis.speak(u);}catch(e){} }
+function vPages(){ const [f,m]=steps[si]; if(f===0||f===NL) return [f===0?1:NP]; if(m==="L") return [2*f-1]; if(m==="R") return [2*f]; return [2*f-1,2*f].filter(k=>k<=NP&&TITLES[k-1]); }
+function vPlayFile(){ const el=document.getElementById("vEl"), k=VID.q[VID.qi]; if(k===undefined){ return; }
+  el.src=BOOK.videos[k-1]; el.currentTime=0; document.getElementById("vT").textContent=`p.${k} · ${TITLES[k-1]} · 요약 영상`; const pr=el.play(); if(pr&&pr.catch) pr.catch(()=>{}); }
+function vOpen(){ if(BOOK.videos){ VID.q=vPages().filter(k=>BOOK.videos[k-1]); VID.qi=0; if(VID.q.length){ VID.on=true; document.getElementById("vid").hidden=false; document.getElementById("vCv").style.display="none"; const el=document.getElementById("vEl"); el.style.display="block"; vPlayFile(); return; } }
+  document.getElementById("vCv").style.display="block"; document.getElementById("vEl").style.display="none"; VID.list=vBuild(); VID.t0=performance.now(); VID.on=true; VID.lastScene=-1; document.getElementById("vid").hidden=false;
+  const [f]=steps[si]; document.getElementById("vT").textContent = f===0||f===NL? BOOK.title+" · 요약 영상" : pagesOf(f)+" · 페이지 요약 영상";
+  if(!VID.off){VID.off=document.createElement("canvas"); VID.off.width=TW; VID.off.height=TH;}
+  cancelAnimationFrame(VID.raf); VID.raf=requestAnimationFrame(vFrame); }
+function vClose(){ try{document.getElementById("vEl").pause()}catch(e){} VID.on=false; cancelAnimationFrame(VID.raf); document.getElementById("vid").hidden=true; try{speechSynthesis.cancel()}catch(e){} }
+function typeRich(g,txt,x,y,maxW,size,n,col,hi){ // *강조* -> accent highlight, typed to n chars, wraps
+  g.font=FN(700,size); let cx=x, cy=y, em=false, cnt=0; const lh=size*1.35;
+  const parts=txt.split(/(\*)/);
+  for(const p of parts){ if(p==="*"){em=!em;continue;}
+    for(const ch of p){ if(cnt>=n) return; const w=g.measureText(ch).width; if(cx+w>x+maxW&&ch!==" "){cx=x;cy+=lh;}
+      if(em){g.fillStyle=hi;g.globalAlpha=.9;g.fillRect(cx-1,cy+size*.12,w+2,size*.22);g.globalAlpha=1;}
+      g.fillStyle=em?hi:col; g.fillText(ch,cx,cy); cx+=w; cnt++; } } }
+function vFrame(now){
+  if(!VID.on) return; VID.raf=requestAnimationFrame(vFrame); if(!VID.list.length) return;
+  const cv=document.getElementById("vCv"), g=cv.getContext("2d"), t=Math.max(0,(now-VID.t0)/1000), N=VID.list.length, total=N*SCN;
+  const idx=Math.min(N-1,Math.floor(t/SCN)), ts=t-idx*SCN, S=VID.list[idx];
+  document.getElementById("vBar").style.width=Math.min(100,t/total*100)+"%";
+  if(idx!==VID.lastScene){VID.lastScene=idx; vSay(S.h+". "+S.b+". "+S.c);}
+  // background
+  const bg=g.createLinearGradient(0,0,1280,720); bg.addColorStop(0,"#13355A"); bg.addColorStop(1,INK); g.fillStyle=bg; g.fillRect(0,0,1280,720);
+  g.globalAlpha=.06; for(let i=0;i<14;i++){g.fillStyle="#fff";g.beginPath();g.arc((i*173+t*18)%1400-60,(i*97)%720,40+i%5*18,0,7);g.fill();} g.globalAlpha=1;
+  // page visual (live graphs replay with the scene)
+  const pageK=S.k, pt=t-VID.list.findIndex(x=>x.k===pageK)*SCN;
+  const og=VID.off.getContext("2d"); og.setTransform(1,0,0,1,0,0); og.globalAlpha=1;
+  if(pageK===0) og.drawImage(FACE[0].st||FACE[0].cv,0,0,TW,TH); else if(P[pageK-1]){ og.save(); P[pageK-1](og,Math.max(0,pt)); og.restore(); } else og.drawImage(FACE[pageK].st||FACE[pageK].cv,0,0,TW,TH);
+  const LANDP=TW>TH, ph=LANDP?380:640, pw=ph*TW/TH, px=LANDP?60:70, py=LANDP?300:40;
+  const z=1+.25*eO(Math.min(1,ts/SCN)), fy=(idx%2)*.35; // slow push-in
+  g.save(); g.shadowColor="rgba(0,0,0,.5)"; g.shadowBlur=40; g.shadowOffsetY=18; R(g,px,py,pw,ph,14); g.fillStyle="#fff"; g.fill(); g.restore();
+  g.save(); R(g,px,py,pw,ph,14); g.clip(); const sw=TW/z, sh=TH/z, sx=(TW-sw)/2, sy=(TH-sh)*fy; g.drawImage(VID.off,sx,sy,sw,sh,px,py,pw,ph); g.restore();
+  // text
+  const tx=LANDP?60:px+pw+60, tw=LANDP?1160:1280-tx-60, ty=LANDP?90:150;
+  const tag=pageK===0?"SUMMARY":("PAGE "+String(pageK).padStart(2,"0")); g.fillStyle=ACC; g.fillRect(tx,ty-50,60,6); T(g,tag+"  ·  "+(pageK?TITLES[pageK-1]:BOOK.title),tx,ty-14,FN(700,20),"rgba(255,255,255,.75)");
+  const a1=eO(cl(ts/.5)); g.globalAlpha=a1; T(g,S.h,tx,ty+44,FN(900,LANDP?40:44),"#fff"); g.globalAlpha=1;
+  typeRich(g,S.b,tx,ty+(LANDP?110:130),tw,LANDP?30:34,Math.floor(Math.max(0,ts-.5)*22),"rgba(255,255,255,.95)",ACC);
+  g.globalAlpha=eO(cl((ts-1.6)/.6)); g.font=FN(400,24); T(g,S.c,tx,LANDP?ty+230:ty+330,FN(400,24),"rgba(255,255,255,.7)"); g.globalAlpha=1;
+  // dots + brand
+  for(let i=0;i<N;i++){g.fillStyle=i===idx?ACC:"rgba(255,255,255,.3)";R(g,tx+i*26,LANDP?660:600,i===idx?20:10,8,4);g.fill();}
+  if(LOGOW){const h=26,w=h*LOGOW.width/LOGOW.height; g.globalAlpha=.8; g.drawImage(LOGOW,1280-w-40,720-h-30,w,h); g.globalAlpha=1;}
+  if(t>=total+.6){ VID.on=false; document.getElementById("vBar").style.width="100%"; }
+}
+document.getElementById("bOrd").onclick=()=>toggle("pOrd");
+document.getElementById("vClose").onclick=vClose;
+document.getElementById("vRe").onclick=()=>vOpen();
+(function(){const el=document.getElementById("vEl"); el.addEventListener("timeupdate",()=>{ if(!el.duration) return; const n=VID.q.length||1; document.getElementById("vBar").style.width=((VID.qi+el.currentTime/el.duration)/n*100)+"%"; });
+ el.addEventListener("ended",()=>{ if(VID.qi<VID.q.length-1){ VID.qi++; vPlayFile(); } });})();
+document.getElementById("vid").addEventListener("click",e=>{if(e.target.id==="vid")vClose();});
+
+/* ---------- boot ---------- */
+(async()=>{
+  const wait=(p,ms)=>Promise.race([p,new Promise(r=>setTimeout(r,ms))]);
+  try{ await wait(Promise.all(['900 150px "Noto Sans KR"','700 70px "Noto Sans KR"','500 40px "Noto Sans KR"','400 40px "Noto Sans KR"'].map(f=>document.fonts.load(f,"보고서가상AB"))),2500); }catch(e){}
+  await wait(new Promise(res=>{const im=new Image(); im.onload=()=>{LOGO=im; try{LOGOW=whiteLogo(im);}catch(e){} res();}; im.onerror=res; im.src="logo.png";}),2500);
+  try{
+  const IM=await Promise.all((BOOK.imgs||[]).map(src=>src?wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000):null));
+  const IMX=await Promise.all(["pages/cover.jpg","pages/back.jpg"].map(src=>wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000)));
+    const ANIM={};
+  const ldA=src=>wait(new Promise(r=>{const im=new Image();im.onload=()=>r(im);im.onerror=()=>r(null);im.src=src;}),8000);
+  const AB={},ACH={}; await Promise.all(Object.keys(ANIM).map(async k=>{const n=String(k).padStart(2,'0'); AB[k]=await ldA('anim/b'+n+'.jpg'); ACH[k]=await ldA('anim/c'+n+'.png');}));
+  const easeA=x=>{x=x<0?0:x>1?1:x;return 1-Math.pow(1-x,3);};
+  P=[]; Object.keys(ANIM).forEach(k=>{ if(!AB[k]||!ACH[k]) return; P[k-1]=(g,t)=>{ g.drawImage(AB[k],0,0,TW,TH); ANIM[k].forEach((r,i)=>{ const p=easeA((t-.35-r.d-i*.12)/1.2); if(p<=0) return; g.save(); g.beginPath();
+    if(r.dir==='up') g.rect(r.x-6,r.y+r.h*(1-p)-6,r.w+12,r.h*p+12); else g.rect(r.x-6,r.y-6,r.w*p+12,r.h+12); g.clip(); g.drawImage(ACH[k],0,0,TW,TH); g.restore(); }); }; });
+  makeFace(0,IMX[0]||drawCover()); for(let k=1;k<=NP;k++){ if(P[k-1]) makeFace(k); else makeFace(k, IM[k-1]||blankPage()); } makeFace(LAST,IMX[1]||drawBack());
+  buildLeaves();
+  const q=new URLSearchParams(location.search).get("s");
+  si = q!==null ? Math.max(0,Math.min(steps.length-1,parseInt(q)||0)) : 0;
+  curF=steps[si][0]; leaves.forEach((L,i)=>{L.p=L.to=i<curF?1:0; shapeLeaf(L,L.p);});
+  if(curF>0&&curF<NL){ const n=performance.now(); anim[2*curF-1]=anim[2*curF]=n+300; }
+  if(si>0) document.getElementById("hint").classList.add("off");
+  label(); resize(); camTarget(performance.now()); Object.assign(cam,camT);
+  requestAnimationFrame(loop);
+  const ld=document.getElementById("load"); ld.style.opacity=0; setTimeout(()=>ld.remove(),600);
+  }catch(err){ const ld=document.getElementById("load"); if(ld) ld.firstElementChild.textContent="표시 오류: "+err.message; console.error(err); }
+})();
+window.addEventListener("error",e=>{const ld=document.getElementById("load"); if(ld) ld.firstElementChild.textContent="표시 오류: "+e.message;});
+</script>
+</body>
+</html>
