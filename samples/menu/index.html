@@ -91,7 +91,7 @@ canvas{display:block}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-const BOOK={"title": "모노그램 커피 겨울 메뉴", "pageTitle": "모노그램 커피 QR 3D 메뉴판 · LCO Pagecraft 샘플", "brandSub": "QR 3D 메뉴판 · 샘플", "share": "https://lcopagecraft.com/samples/menu/", "TW": 1500, "TH": 2100, "ink": "#2B1D14", "accent": "#C9A35C", "live": [], "imgs": ["pages/p01.jpg", "pages/p02.jpg", "pages/p03.jpg", "pages/p04.jpg", "pages/p05.jpg", "pages/p06.jpg", "pages/p07.jpg", "pages/p08.jpg", "pages/p09.jpg", "pages/p10.jpg"], "titles": ["환영합니다", "시그니처", "에스프레소", "핸드드립 · 티", "논커피 · 에이드", "케이크 · 디저트", "베이커리 · 브런치", "세트 메뉴", "원두 · 선물", "매장 안내"], "cover": {"sub": "가상 카페 · QR 3D 메뉴판 샘플"}, "scenes": {}, "back": {"lines": ["매장·가격·링크는", "설명용 가상 정보입니다"], "notes": []}, "links": {"1": [{"x": 120, "y": 1712, "w": 619, "h": 132, "url": "https://booking.naver.com/", "label": "네이버 예약"}, {"x": 761, "y": 1712, "w": 619, "h": 132, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}], "2": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://www.baemin.com/", "label": "배달의민족"}], "3": [{"x": 120, "y": 1863, "w": 1260, "h": 116, "url": "https://www.coupangeats.com/", "label": "쿠팡이츠"}], "6": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://booking.naver.com/", "label": "네이버 예약"}], "8": [{"x": 120, "y": 1466, "w": 1260, "h": 116, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}], "9": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://smartstore.naver.com/", "label": "스마트스토어"}], "10": [{"x": 120, "y": 912, "w": 619, "h": 132, "url": "https://booking.naver.com/", "label": "네이버 예약"}, {"x": 761, "y": 912, "w": 619, "h": 132, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}, {"x": 120, "y": 1066, "w": 619, "h": 132, "url": "https://www.baemin.com/", "label": "배달의민족"}, {"x": 761, "y": 1066, "w": 619, "h": 132, "url": "https://www.coupangeats.com/", "label": "쿠팡이츠"}, {"x": 120, "y": 1220, "w": 619, "h": 132, "url": "https://www.instagram.com/", "label": "인스타그램"}, {"x": 761, "y": 1220, "w": 619, "h": 132, "url": "https://map.naver.com/", "label": "네이버 지도"}]}};
+const BOOK={"title": "모노그램 커피 겨울 메뉴", "pageTitle": "모노그램 커피 QR 3D 메뉴판 · LCO Pagecraft 샘플", "brandSub": "QR 3D 메뉴판 · 샘플", "share": "https://lcopagecraft.com/samples/menu/", "TW": 1500, "TH": 2100, "ink": "#2B1D14", "accent": "#C9A35C", "live": [1, 2, 4, 5, 8], "imgs": ["pages/p01.jpg", "pages/p02.jpg", "pages/p03.jpg", "pages/p04.jpg", "pages/p05.jpg", "pages/p06.jpg", "pages/p07.jpg", "pages/p08.jpg", "pages/p09.jpg", "pages/p10.jpg"], "titles": ["환영합니다", "시그니처", "에스프레소", "핸드드립 · 티", "논커피 · 에이드", "케이크 · 디저트", "베이커리 · 브런치", "세트 메뉴", "원두 · 선물", "매장 안내"], "cover": {"sub": "가상 카페 · QR 3D 메뉴판 샘플"}, "scenes": {}, "back": {"lines": ["매장·가격·링크는", "설명용 가상 정보입니다"], "notes": []}, "links": {"1": [{"x": 120, "y": 1712, "w": 619, "h": 132, "url": "https://booking.naver.com/", "label": "네이버 예약"}, {"x": 761, "y": 1712, "w": 619, "h": 132, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}], "2": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://www.baemin.com/", "label": "배달의민족"}], "3": [{"x": 120, "y": 1863, "w": 1260, "h": 116, "url": "https://www.coupangeats.com/", "label": "쿠팡이츠"}], "6": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://booking.naver.com/", "label": "네이버 예약"}], "8": [{"x": 120, "y": 1466, "w": 1260, "h": 116, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}], "9": [{"x": 120, "y": 1634, "w": 1260, "h": 116, "url": "https://smartstore.naver.com/", "label": "스마트스토어"}], "10": [{"x": 120, "y": 912, "w": 619, "h": 132, "url": "https://booking.naver.com/", "label": "네이버 예약"}, {"x": 761, "y": 912, "w": 619, "h": 132, "url": "https://app.catchtable.co.kr/", "label": "캐치테이블"}, {"x": 120, "y": 1066, "w": 619, "h": 132, "url": "https://www.baemin.com/", "label": "배달의민족"}, {"x": 761, "y": 1066, "w": 619, "h": 132, "url": "https://www.coupangeats.com/", "label": "쿠팡이츠"}, {"x": 120, "y": 1220, "w": 619, "h": 132, "url": "https://www.instagram.com/", "label": "인스타그램"}, {"x": 761, "y": 1220, "w": 619, "h": 132, "url": "https://map.naver.com/", "label": "네이버 지도"}]}, "cups": {"1": [{"x": 750, "y": 941, "s": 560, "k": "latte", "h": 1}, {"x": 250, "y": 1540, "s": 170, "k": "sesame", "h": 1}], "2": [{"x": 220, "y": 674, "s": 200, "k": "cream", "h": 1}, {"x": 220, "y": 935, "s": 200, "k": "sesame", "h": 1}, {"x": 220, "y": 1196, "s": 200, "k": "latte", "h": 1}, {"x": 220, "y": 1457, "s": 200, "k": "caramel", "h": 0}], "4": [{"x": 220, "y": 724, "s": 200, "k": "black", "h": 1}, {"x": 220, "y": 985, "s": 200, "k": "black", "h": 1}, {"x": 220, "y": 1340, "s": 200, "k": "tea", "h": 1}, {"x": 220, "y": 1601, "s": 200, "k": "caramel", "h": 1}], "5": [{"x": 220, "y": 674, "s": 200, "k": "matcha", "h": 1}, {"x": 220, "y": 935, "s": 200, "k": "choco", "h": 1}, {"x": 220, "y": 1196, "s": 200, "k": "berry", "h": 0}], "8": [{"x": 260, "y": 680, "s": 190, "k": "black", "h": 1}, {"x": 260, "y": 982, "s": 190, "k": "latte", "h": 1}]}};
 
 const SHARE_URL = BOOK.share || location.href.split("?")[0].split("#")[0];
 const TITLES = BOOK.titles.slice(); if(TITLES.length%2) TITLES.push("");
@@ -114,6 +114,39 @@ function flipSound(){ if(!soundOn) return; const a=ac(); if(!a) return;
   s.connect(f); f.connect(g); g.connect(a.destination); s.start(t); s.stop(t+.45);}catch(e){} }
 document.getElementById("bSnd").onclick=e=>{soundOn=!soundOn; e.currentTarget.style.opacity=soundOn?1:.5;};
 
+
+/* ---------- coffee motion: the cup fills, latte art floats up, hot drinks steam ---------- */
+const CREMA={latte:["#E9D3B5","#B98455"],black:["#6B4226","#2A170C"],sesame:["#CFC6BC","#5B5550"],matcha:["#C9D9A3","#7E9A4C"],choco:["#A0765A","#4A2C1C"],cream:["#F4EBDD","#C8A27A"],tea:["#D9A066","#A35E26"],berry:["#F3C6CC","#D0717F"],caramel:["#EBD2AE","#B9783E"]};
+const HEART={latte:1,sesame:1,matcha:1,berry:1,caramel:1};
+function drawCups(g,list,t){ list.forEach((c,i)=>{ const s=c.s, cx=c.x, cy=c.y, R=s*.25, d=.25+i*.18;
+  const p=eO(cl((t-d)/1.4)); if(p>0){ const col=CREMA[c.k]||CREMA.latte;
+    // liquid spreads out from where the coffee is poured, with a darker ring at the moving edge
+    const ox=cx+(1-p)*R*.35, oy=cy-(1-p)*R*.2, r=R*p;
+    g.save(); g.beginPath(); g.arc(cx,cy,R,0,6.2832); g.clip();
+    const gr=g.createRadialGradient(cx-R*.12,cy-R*.15,R*.05,cx,cy,R*1.05); gr.addColorStop(0,col[0]); gr.addColorStop(1,col[1]);
+    g.beginPath(); g.arc(ox,oy,r,0,6.2832); g.fillStyle=gr; g.fill();
+    if(p<1){ g.lineWidth=R*.08*(1-p); g.strokeStyle="rgba(60,30,10,.25)"; g.stroke(); }
+    // pour point while filling
+    if(p<.95){ g.beginPath(); g.arc(cx+R*.35*(1-p)*0+R*.0+ (ox-cx), oy, R*.12*(1-p*.6),0,6.2832); g.fillStyle=col[1]; g.globalAlpha=.7*(1-p); g.fill(); g.globalAlpha=1; }
+    // latte art
+    const a=eO(cl((t-d-1.1)/.9));
+    if(a>0&&HEART[c.k]){ g.save(); g.translate(cx,cy+R*.05*(1-a)); g.scale(.6+.4*a,.6+.4*a); g.globalAlpha=a*.95; g.fillStyle="#FFF8EE";
+      const k=s; g.beginPath(); g.moveTo(0,k*.13); g.bezierCurveTo(-k*.2,-k*.02,-k*.13,-k*.17,0,-k*.07); g.bezierCurveTo(k*.13,-k*.17,k*.2,-k*.02,0,k*.13); g.fill(); g.restore(); }
+    if(a>0&&c.k==="cream"){ g.globalAlpha=a; g.beginPath(); g.arc(cx,cy,s*.2*(.5+.5*a),0,6.2832); g.fillStyle="#FFFDF8"; g.fill(); g.beginPath(); g.arc(cx+s*.05,cy-s*.04,s*.05,0,6.2832); g.fillStyle="rgba(200,162,122,.5)"; g.fill(); g.globalAlpha=1; }
+    g.restore();
+    // shine
+    if(p>=1){ g.save(); g.globalAlpha=.35*a; g.fillStyle="#fff"; g.translate(cx-s*.1,cy-s*.15); g.rotate(-.52); g.beginPath(); g.ellipse(0,0,s*.06,s*.02,0,0,6.2832); g.fill(); g.restore(); }
+  }
+  // steam: soft wisps that rise off hot drinks and fade, on a loop
+  if(c.h){ const on=cl((t-d-1.2)/1.2); if(on<=0) return;
+    g.save(); g.lineCap="round";
+    for(let j=0;j<3;j++){ const ph=((t*.32)+j/3)%1, rise=ph*s*.62, al=Math.sin(ph*Math.PI)*.75*on, x0=cx+(j-1)*s*.085, y0=cy-s*.02-rise, L=s*.34, wob=s*.045;
+      const path=()=>{ g.beginPath(); for(let q=0;q<=16;q++){ const u=q/16, y=y0-u*L, x=x0+Math.sin(u*5.2+t*1.7+j*2.1)*wob*(.4+u); if(q===0) g.moveTo(x,y); else g.lineTo(x,y);} };
+      path(); g.strokeStyle=`rgba(110,78,52,${al*.24})`; g.lineWidth=s*.09; g.stroke();
+      path(); g.strokeStyle=`rgba(255,255,255,${al*.75})`; g.lineWidth=s*.062; g.stroke();
+      path(); g.strokeStyle=`rgba(255,255,255,${al})`; g.lineWidth=s*.026; g.stroke(); }
+    g.restore(); }
+ }); }
 /* ---------- covers ---------- */
 let LOGO=null, LOGOW=null;
 function whiteLogo(img){const c=document.createElement("canvas");c.width=img.width;c.height=img.height;const g=c.getContext("2d");g.drawImage(img,0,0);g.globalCompositeOperation="source-in";g.fillStyle="#fff";g.fillRect(0,0,c.width,c.height);return c;}
@@ -327,7 +360,7 @@ function loop(now){
   leaves.forEach(L=>{ if(L.p!==L.to||L._force){ const t=Math.min(1,Math.max(0,(now-L.t0-L.delay)/L.dur)); L.p = t>=1?L.to : L.from+(L.to-L.from)*ease(t); shapeLeaf(L,L.p); L._force=false; } });
   stackLayout();
   for(let k=1;k<=NP;k++){ if(!FACE[k]||FACE[k].st) continue; const el=(now-anim[k])/1000, live=(BOOK.live||[]).includes(k)&&curF===Math.ceil(k/2);
-    if((el>-2&&el<3.4)||live){ const tt=Math.max(0,el); if(tt!==FACE[k].lastT) drawFace(k,live&&el>3.4?el:tt); } }
+    if((el>-2&&el<3.4)||live){ const tt=Math.max(0,el); if(tt!==FACE[k].lastT&&(el<3.4||now-(FACE[k].lw||0)>45)){ FACE[k].lw=now; drawFace(k,live&&el>3.4?el:tt); } } }
   camTarget(now);
   const kk=1-Math.exp(-dt*3.6); for(const key in cam) cam[key]+=(camT[key]-cam[key])*kk;
   zoom+=(zoomT-zoom)*.15;
@@ -471,6 +504,8 @@ document.getElementById("vid").addEventListener("click",e=>{if(e.target.id==="vi
   const easeA=x=>{x=x<0?0:x>1?1:x;return 1-Math.pow(1-x,3);};
   P=[]; Object.keys(ANIM).forEach(k=>{ if(!AB[k]||!ACH[k]) return; P[k-1]=(g,t)=>{ g.drawImage(AB[k],0,0,TW,TH); ANIM[k].forEach((r,i)=>{ const p=easeA((t-.35-r.d-i*.12)/1.2); if(p<=0) return; g.save(); g.beginPath();
     if(r.dir==='up') g.rect(r.x-6,r.y+r.h*(1-p)-6,r.w+12,r.h*p+12); else g.rect(r.x-6,r.y-6,r.w*p+12,r.h+12); g.clip(); g.drawImage(ACH[k],0,0,TW,TH); g.restore(); }); }; });
+  const CB={}; await Promise.all(Object.keys(BOOK.cups||{}).map(async k=>{CB[k]=await ldA("anim/b"+String(k).padStart(2,"0")+".jpg");}));
+  Object.keys(CB).forEach(k=>{ if(!CB[k]) return; P[k-1]=(g,t)=>{ g.drawImage(CB[k],0,0,TW,TH); drawCups(g,BOOK.cups[k],t); }; });
   makeFace(0,IMX[0]||drawCover()); for(let k=1;k<=NP;k++){ if(P[k-1]) makeFace(k); else makeFace(k, IM[k-1]||blankPage()); } makeFace(LAST,IMX[1]||drawBack());
   buildLeaves();
   const q=new URLSearchParams(location.search).get("s");
